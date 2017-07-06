@@ -1,0 +1,26 @@
+.background-wine{
+    background-image: url('../../assets/img/vino-fondo.jpg');
+    background-size: cover;
+    color: white;
+    height: 400px;
+}
+
+.winery-background{
+    background-image: url('../../assets/img/vineria.jpg');
+    background-size: cover;
+}
+.winery-spot{
+    height: 400px;
+    color: white;
+    
+}
+.winery-spot h2{
+    margin-top: 150px;
+    font-size: 4em;
+}
+
+.contact_us{
+    background-image: url('../../assets/img/villa_fondo.jpg');
+    background-size: cover;
+    color: white;
+}
