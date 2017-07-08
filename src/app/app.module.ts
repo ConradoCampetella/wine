@@ -12,9 +12,11 @@ import { FooterComponent } from './footer/footer.component';
 import { WinesComponent } from './wines/wines.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
-import { WinesService } from "app/shared/wines.service";
+import { WinesService } from './shared/wines.service';
 import { MapComponent } from './map/map.component';
 import { ContactformComponent } from './contact/contactform/contactform.component';
+import { SigninComponent } from './auth/signin/signin.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ContactformComponent } from './contact/contactform/contactform.componen
     AboutComponent,
     ContactComponent,
     MapComponent,
-    ContactformComponent
+    ContactformComponent,
+    SigninComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
