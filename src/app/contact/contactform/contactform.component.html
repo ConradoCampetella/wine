@@ -7,7 +7,7 @@
         <span
           *ngIf="!contactForm.get('contact-name').valid && contactForm.get('contact-name').touched"
           class="help-block">
-          <span *ngIf="contactForm.get('contact-name').errors['required']">Please input you name</span>
+          <span *ngIf="contactForm.get('contact-name').errors['required']">Please input your name</span>
         </span>
       </div>
       <div class="form-group">
@@ -16,8 +16,8 @@
         <span
           *ngIf="!contactForm.get('contact-email').valid && contactForm.get('contact-email').touched"
           class="help-block">
-          <span *ngIf="contactForm.get('contact-email').errors['required']">Please input you email</span>
-          <span *ngIf="contactForm.get('contact-email').errors['email']">Please enter a valid email</span>
+          <span *ngIf="contactForm.get('contact-email').errors['required']">Please input your email</span>
+          <span *ngIf="contactForm.get('contact-email').errors['email'] && !contactForm.get('contact-email').errors['required']">Please enter a valid email</span>
         </span>
       </div>
       <div class="form-group">
