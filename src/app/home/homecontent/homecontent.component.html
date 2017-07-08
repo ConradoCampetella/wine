@@ -1,0 +1,49 @@
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron background-wine">
+  <div class="container">
+    <h1>Ernesto Catena</h1>
+    <p>A philosophy that surpasses the cup of concupiscent beauty and untamed land.</p>
+    <p><a class="btn btn-primary btn-lg" routerLink="/wines" role="button">Learn more &raquo;</a></p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-md-4" *ngFor="let mywine of wine;">
+      <h2>{{mywine.name}}</h2>
+      <h3><span>{{mywine.variety}}</span></h3>
+      <img src="{{mywine.img}}" alt="{{mywine.name}}" class="img-responsive">
+      <p>{{mywine.description}} </p>
+      <p><a class="btn btn-default" role="button">View details &raquo;</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="winery-background">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+      </div>
+      <div class="col-md-6 winery-spot">
+        <h2>Improve your sales</h2>
+        <p><a class="btn btn-primary" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-about></app-about>
+
+<div class="contact_us">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <app-map></app-map>
+      </div>
+      <div class="col-md-6 form">
+        <app-contactform></app-contactform>
+      </div>      
+    </div>
+  </div>
+</div>
