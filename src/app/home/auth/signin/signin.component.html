@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
       <h2 class="text-center">Log In</h2>
-      <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="signinForm" (ngSubmit)="onLogin()">
         <div class="form-group">
           <label for="signin-email">Email</label>
           <input type="text" id="signin-email" formControlName="signin-email" class="form-control">
