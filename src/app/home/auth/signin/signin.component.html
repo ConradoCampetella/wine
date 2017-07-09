@@ -17,6 +17,7 @@
           <span *ngIf="!signinForm.get('signin-password').valid && signinForm.get('signin-password').touched" class="help-block">
             <span *ngIf="signinForm.get('signin-password').errors['required']">Please input your password</span>
           </span>
+          <span *ngIf="loggingError" class="bg-danger">{{errorMessage}}</span>
         </div>
         <div class="text-center">
           <button type="submit" [disabled]="!signinForm.valid" class="btn btn-success">Send</button>

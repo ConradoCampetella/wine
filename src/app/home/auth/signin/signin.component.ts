@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from "app/shared/auth.service";
+import 'rxjs/Rx';
 
 @Component({
   selector: 'app-signin',
@@ -9,6 +10,8 @@ import { AuthService } from "app/shared/auth.service";
 })
 export class SigninComponent implements OnInit {
   signinForm:FormGroup;
+  loggingError: boolean = false;
+  errorMessage="";
   constructor(private auths: AuthService) { }
 
   ngOnInit() {
@@ -21,7 +24,15 @@ export class SigninComponent implements OnInit {
     onLogin(){
     const email = this.signinForm.get('signin-email').value;
     const password = this.signinForm.get('signin-password').value;
-    this.auths.loginUser(email, password);    
+    this.auths.loginUser(email, password).subscribe(
+      (data:string)=>{console.log(data)},
+      (error:string)=>{
+        this.errorMessage = error;
+        this.loggingError = true;
+        console.log(error);
+      }
+    );
+    
   }
 
 }
