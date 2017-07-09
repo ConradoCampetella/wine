@@ -18,11 +18,32 @@
           </span>
         </div>
         <div class="form-group">
+          <label for="signup-username">User Name</label>
+          <input type="text" id="signup-username" formControlName="signup-username" class="form-control">
+          <span *ngIf="!signupForm.get('signup-username').valid && signupForm.get('signup-username').touched" class="help-block">
+            <span *ngIf="signupForm.get('signup-username').errors['required']">Please input your User Name</span>
+          </span>
+        </div>
+        <div class="form-group">
           <label for="signup-email">Email</label>
           <input type="text" id="signup-email" formControlName="signup-email" class="form-control">
           <span *ngIf="!signupForm.get('signup-email').valid && signupForm.get('signup-email').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-email').errors['required']">Please input your email</span>
             <span *ngIf="signupForm.get('signup-email').errors['email'] && !signupForm.get('signup-email').errors['required']">Please enter a valid email</span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" formControlName="signup-password" class="form-control">
+          <span *ngIf="!signupForm.get('signup-password').valid && signupForm.get('signup-password').touched" class="help-block">
+            <span *ngIf="signupForm.get('signup-password').errors['required']">Please input your password</span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="signup-password"> Confirm your Password</label>
+          <input type="password" id="signup-passwordconfirm" formControlName="signup-passwordconfirm" class="form-control">
+          <span *ngIf="!signupForm.get('signup-passwordconfirm').valid && signupForm.get('signup-passwordconfirm').touched" class="help-block">
+            <span *ngIf="signupForm.get('signup-passwordconfirm').errors['required']">Please confirm your password</span>
           </span>
         </div>
         <div class="form-group">
