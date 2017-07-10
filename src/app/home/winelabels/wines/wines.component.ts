@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Wine} from '../../shared/wine.model';
-import {WinesService} from '../../shared/wines.service';
+import {Wine} from '../../../shared/wine.model';
+import {WinesService} from '../../../shared/wines.service';
 
 @Component({
   selector: 'app-wines',
