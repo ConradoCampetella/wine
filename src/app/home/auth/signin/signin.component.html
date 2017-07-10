@@ -8,7 +8,11 @@
           <input type="text" id="signin-email" formControlName="signin-email" class="form-control">
           <span *ngIf="!signinForm.get('signin-email').valid && signinForm.get('signin-email').touched" class="help-block">
             <span *ngIf="signinForm.get('signin-email').errors['required']">Please input your email</span>
-            <span *ngIf="signinForm.get('signin-email').errors['email'] && !signinForm.get('signin-email').errors['required']">Please enter a valid email</span>
+          <span *ngIf="signinForm.get('signin-email').errors['email'] && !signinForm.get('signin-email').errors['required']">Please enter a valid email</span>
+          </span>
+          <span *ngIf="signinForm.get('signin-email').valid && signinForm.get('signin-email').touched && signinForm.get('signin-email').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
         </div>
         <div class="form-group">
@@ -16,8 +20,13 @@
           <input type="password" id="signin-password" formControlName="signin-password" class="form-control">
           <span *ngIf="!signinForm.get('signin-password').valid && signinForm.get('signin-password').touched" class="help-block">
             <span *ngIf="signinForm.get('signin-password').errors['required']">Please input your password</span>
+          <span *ngIf="signinForm.get('signin-password').errors['minlength']">The password must contain at least six characters</span>
           </span>
-          <span *ngIf="loggingError" class="bg-danger">{{errorMessage}}</span>
+          <span *ngIf="signinForm.get('signin-password').valid && signinForm.get('signin-password').touched && signinForm.get('signin-password').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+          <span *ngIf="loggingError" class="help-block bg-danger">{{errorMessage}}</span>
         </div>
         <div class="text-center">
           <button type="submit" [disabled]="!signinForm.valid" class="btn btn-success">Send</button>

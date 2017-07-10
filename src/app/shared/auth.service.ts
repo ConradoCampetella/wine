@@ -68,7 +68,7 @@ export class AuthService {
         .catch(
         error => {
           console.log(error);
-          observer.error('incorrect user or password');
+          observer.error('Incorrect User or Password');
         }
         );
     });
