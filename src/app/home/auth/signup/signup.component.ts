@@ -11,7 +11,8 @@ import { User } from '../../../shared/user.model'
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   constructor(private auths: AuthService) { }
-  user: User;
+  password:string;
+  user:User;
 
   ngOnInit() {
     this.signupForm = new FormGroup({
@@ -22,9 +23,16 @@ export class SignupComponent implements OnInit {
       'signup-adress': new FormControl(null, [Validators.required]),
       'signup-city': new FormControl(null, [Validators.required]),
       'signup-country': new FormControl(null, [Validators.required]),
-      'signup-password': new FormControl(null, [Validators.required]),
-      'signup-passwordconfirm': new FormControl(null, [Validators.required])
+      'signup-password': new FormControl('', [Validators.required]),
+      'signup-passwordconfirm': new FormControl('', [Validators.required, this.passwordMatchValidator.bind(this)])
     });
+    this.signupForm.statusChanges.subscribe(
+      (status) => {
+        console.log(status);
+        this.password = this.signupForm.get('signup-password').value;
+        console.log(this.password);
+      }
+    );    
   }
   onSignup() {
     const name = this.signupForm.get('signup-name').value;
@@ -38,6 +46,15 @@ export class SignupComponent implements OnInit {
     this.user = new User(name, sirname, username, email, adress, city, country, password, "false");
     this.auths.signupUser(this.user);
 
+  }
+
+  passwordMatchValidator(control: FormControl): {[s: string]: boolean}{
+    if (this.password === control.value){
+        return null;
+    }
+    else{
+      return {'passwordsDoNotMatch':true};
+    }
   }
 
 }
