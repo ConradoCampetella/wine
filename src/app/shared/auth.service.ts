@@ -8,6 +8,7 @@ import 'rxjs/Rx';
 import { User } from './user.model';
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
+import { Subscription } from "rxjs/Subscription";
 
 @Injectable()
 export class AuthService {
@@ -52,24 +53,24 @@ export class AuthService {
   }
 
   loginUser(email: string, password: string) {
-    const errorMessage = Observable.create((observer:Observer<string>)=>{
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(
-      response => {
-        firebase.auth().currentUser.getIdToken()
-          .then(
-          (token: string) => {
-            observer.next('log in correct, continue to redirect');
-            this.token = token;
-            this.redirect();
-          });
-      })
-      .catch(
-      error => {
-        console.log(error);
-        observer.error('incorrect user or password');
-      }
-      );
+    const errorMessage = Observable.create((observer: Observer<string>) => {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(
+        response => {
+          firebase.auth().currentUser.getIdToken()
+            .then(
+            (token: string) => {
+              observer.next('log in correct, continue to redirect');
+              this.token = token;
+              this.redirect();
+            });
+        })
+        .catch(
+        error => {
+          console.log(error);
+          observer.error('incorrect user or password');
+        }
+        );
     });
     return errorMessage;
   }
@@ -90,4 +91,24 @@ export class AuthService {
   isAuthenticated() {
     return this.token != null;
   }
+
+  userNameExists(username: string) {
+   const response = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json')
+        .subscribe(
+        (response: Response) => {
+          console.log(response.json());
+          if (response.json()) {
+            observer.next("true");
+          }
+          else {
+            observer.next("false");
+          }
+        },
+        (error: Error) => { console.log(error); }
+        );
+    });
+    return response;
+  }
+
 }
