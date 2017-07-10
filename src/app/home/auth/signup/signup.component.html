@@ -9,6 +9,10 @@
           <span *ngIf="!signupForm.get('signup-name').valid && signupForm.get('signup-name').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-name').errors['required']">Please input your name</span>
           </span>
+          <span *ngIf="signupForm.get('signup-name').valid && signupForm.get('signup-name').touched && signupForm.get('signup-name').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="signup-sirname">Sirname</label>
@@ -16,12 +20,22 @@
           <span *ngIf="!signupForm.get('signup-sirname').valid && signupForm.get('signup-sirname').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-sirname').errors['required']">Please input your sirname</span>
           </span>
+          <span *ngIf="signupForm.get('signup-sirname').valid && signupForm.get('signup-sirname').touched && signupForm.get('signup-sirname').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="signup-username">User Name</label>
           <input type="text" id="signup-username" formControlName="signup-username" class="form-control">
           <span *ngIf="!signupForm.get('signup-username').valid && signupForm.get('signup-username').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-username').errors['required']">Please input your User Name</span>
+            <span *ngIf="signupForm.get('signup-username').errors['minlength']">The password must contain at least four characters</span>
+          </span>
+          <span *ngIf="pending"><img src="../../../../assets/img/pending.png" alt="pending-orange"></span>
+          <span *ngIf="signupForm.get('signup-username').valid && signupForm.get('signup-username').touched && signupForm.get('signup-username').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
         </div>
         <div class="form-group">
@@ -29,7 +43,11 @@
           <input type="text" id="signup-email" formControlName="signup-email" class="form-control">
           <span *ngIf="!signupForm.get('signup-email').valid && signupForm.get('signup-email').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-email').errors['required']">Please input your email</span>
-            <span *ngIf="signupForm.get('signup-email').errors['email'] && !signupForm.get('signup-email').errors['required']">Please enter a valid email</span>
+          <span *ngIf="signupForm.get('signup-email').errors['email'] && !signupForm.get('signup-email').errors['required']">Please enter a valid email</span>
+          </span>
+          <span *ngIf="signupForm.get('signup-email').valid && signupForm.get('signup-email').touched && signupForm.get('signup-email').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
         </div>
         <div class="form-group">
@@ -37,6 +55,11 @@
           <input type="password" id="signup-password" formControlName="signup-password" class="form-control">
           <span *ngIf="!signupForm.get('signup-password').valid && signupForm.get('signup-password').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-password').errors['required']">Please input your password</span>
+            <span *ngIf="signupForm.get('signup-password').errors['minlength']">The password must contain at least six characters</span>
+          </span>
+          <span *ngIf="signupForm.get('signup-password').valid && signupForm.get('signup-password').touched && signupForm.get('signup-password').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
         </div>
         <div class="form-group">
@@ -44,7 +67,11 @@
           <input type="password" id="signup-passwordconfirm" formControlName="signup-passwordconfirm" class="form-control">
           <span *ngIf="!signupForm.get('signup-passwordconfirm').valid && signupForm.get('signup-passwordconfirm').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-passwordconfirm').errors['required']">Please confirm your password</span>
-            <span *ngIf="!signupForm.get('signup-passwordconfirm').errors['required'] && signupForm.get('signup-passwordconfirm').errors['passwordsDoNotMatch']">The passwords must match</span>
+          <span *ngIf="!signupForm.get('signup-passwordconfirm').errors['required'] && signupForm.get('signup-passwordconfirm').errors['passwordsDoNotMatch']">The passwords must match</span>
+          </span>
+          <span *ngIf="signupForm.get('signup-passwordconfirm').valid && signupForm.get('signup-passwordconfirm').touched && signupForm.get('signup-passwordconfirm').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
         </div>
         <div class="form-group">
@@ -53,6 +80,10 @@
           <span *ngIf="!signupForm.get('signup-adress').valid && signupForm.get('signup-adress').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-adress').errors['required']">Please input your adress</span>
           </span>
+          <span *ngIf="signupForm.get('signup-adress').valid && signupForm.get('signup-adress').touched && signupForm.get('signup-adress').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="signup-city">City</label>
@@ -60,12 +91,20 @@
           <span *ngIf="!signupForm.get('signup-city').valid && signupForm.get('signup-city').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-city').errors['required']">Please input your city</span>
           </span>
+          <span *ngIf="signupForm.get('signup-city').valid && signupForm.get('signup-city').touched && signupForm.get('signup-city').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="signup-country">Country</label>
           <input type="text" id="signup-country" formControlName="signup-country" class="form-control">
           <span *ngIf="!signupForm.get('signup-country').valid && signupForm.get('signup-country').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-country').errors['required']">Please input your country</span>
+          </span>
+          <span *ngIf="signupForm.get('signup-country').valid && signupForm.get('signup-country').touched && signupForm.get('signup-country').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
         </div>
         <div class="text-center">

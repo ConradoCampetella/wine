@@ -14,6 +14,7 @@ export class SignupComponent implements OnInit {
   password:string;
   username:string;
   user:User;
+  pending:boolean =false;
 
   constructor(private auths: AuthService) { }
 
@@ -33,7 +34,12 @@ export class SignupComponent implements OnInit {
       (status) => {
         this.username = this.signupForm.get('signup-username').value;
         this.password = this.signupForm.get('signup-password').value;
-        console.log(this.signupForm.get('signup-username').status);
+        if(this.signupForm.get('signup-username').status==="PENDING"){
+          this.pending = true;
+        }
+        else{
+          this.pending = false;
+        }
       }
     );    
   }
