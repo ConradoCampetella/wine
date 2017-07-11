@@ -10,6 +10,7 @@ import { UserComponent } from './user/user.component';
 import { AuthService } from "app/shared/auth.service";
 import { AdminComponent } from './admin/admin.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

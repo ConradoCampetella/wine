@@ -8,7 +8,7 @@ import { FooterComponent } from "app/home/footer/footer.component";
 import { HeaderComponent } from "app/home/header/header.component";
 import { HomecontentComponent } from "app/home/homecontent/homecontent.component";
 import { MapComponent } from "app/home/map/map.component";
-import { WinesComponent } from "app/home/wines/wines.component";
+import { WinesComponent } from "app/home/winelabels/wines/wines.component";
 import { SigninComponent } from './auth/signin/signin.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { ContactformComponent } from "app/home/contact/contactform/contactform.component";
@@ -19,6 +19,8 @@ import { AppRoutingModule } from '../app-routing.module';
 import { HomeRoutingModule } from './home-routing.module';
 
 import { WinesService } from '../shared/wines.service';
+import { WinesdetailsComponent } from './winelabels/wines/winesdetails/winesdetails.component';
+import { WinelabelsComponent } from './winelabels/winelabels.component';
 
 
 
@@ -34,7 +36,9 @@ import { WinesService } from '../shared/wines.service';
         WinesComponent,
         SigninComponent,
         SignupComponent,
-        HomeComponent
+        HomeComponent,
+        WinesdetailsComponent,
+        WinelabelsComponent
     ],
     imports: [
         ReactiveFormsModule,
