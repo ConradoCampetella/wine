@@ -1,3 +1,19 @@
-<p>
-  wines works!
-</p>
+<div class="container">
+  <div class="row content">
+    <div class="col-xs-12">
+      <a role="button" [routerLink]="['/labels']" class="btn btn-info">&laquo; Back</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4" *ngFor="let mywine of wines; index as i">
+      <a role="button" [routerLink]="['/labels', id, i]"><img src="{{mywine.img}}" alt="mywine.name" class="img-responsive wines-img"></a>
+      <h3>{{mywine.name}}</h3>
+      <p><span>{{mywine.variety}}</span></p>
+      <p>{{mywine.description}}</p>
+      <p><a class="btn btn-default" [routerLink]="['/labels', id, i]" role="button">View details &raquo;</a></p>
+    </div>
+    <div class="col-xs-12 text-right">
+      <a role="button" [routerLink]="['/labels']" class="btn btn-info">&laquo; Back</a>
+    </div>
+  </div>
+</div>

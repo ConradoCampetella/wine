@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, Params } from "@angular/router";
+
 import {Wine} from '../../../shared/wine.model';
 import {WinesService} from '../../../shared/wines.service';
 
@@ -8,12 +10,19 @@ import {WinesService} from '../../../shared/wines.service';
   styleUrls: ['./wines.component.css']
 })
 export class WinesComponent implements OnInit {
-  public wine: Wine[];
-  constructor(private wineService: WinesService) { 
+  wines: Wine[];
+  id:number;
+
+  constructor(private wineService: WinesService,private route: ActivatedRoute, private router: Router) { 
   }
 
   ngOnInit() {
-    this.wine = this.wineService.getAllWines();
+    this.route.params.subscribe((params: Params)=>{
+      this.id = +params['wines'];
+      this.wineService.getAllWines(this.id).subscribe((response:any[])=>{
+          this.wines = response;
+      });
+    });
   }
 
 }

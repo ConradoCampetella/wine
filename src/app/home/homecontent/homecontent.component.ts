@@ -12,7 +12,7 @@ export class HomecontentComponent implements OnInit {
   constructor(private wineService: WinesService) { }
 
   ngOnInit() {
-    this.wine = this.wineService.getAllWines();
+    
   }
 
 }

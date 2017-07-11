@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { WinesService } from "app/shared/wines.service";
+import { Label } from "app/shared/label.model";
+import { Wine } from "app/shared/wine.model";
 
 @Component({
   selector: 'app-winelabels',
@@ -7,9 +12,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WinelabelsComponent implements OnInit {
 
-  constructor() { }
+  labels: Label[];
+  wine: Wine[];
+
+
+  constructor(private wineService: WinesService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.wineService.getAllLabels().subscribe(
+      (response: any[]) => { this.labels = response; },
+      (error: Error) => { console.log(error); }
+    );    
   }
 
 }

@@ -1,3 +1,10 @@
-<p>
-  winelabels works!
-</p>
+<div class="container">
+    <div class="row contenido">
+        <div class="col-md-4" *ngFor="let label of labels; index as i">
+            <a role="button"><img src="{{label.img}}" alt="label.name" class="img-responsive"></a>
+            <h3>{{label.name}}</h3>
+            <p><span>{{label.description}}</span></p>
+            <p><a class="btn btn-default" [routerLink]="['/labels', i]" role="button">View details &raquo;</a></p>
+        </div>
+    </div>
+</div>

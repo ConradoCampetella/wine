@@ -11,6 +11,8 @@ import { Observer } from "rxjs/Observer";
 import { Subscription } from "rxjs/Subscription";
 
 @Injectable()
+
+
 export class AuthService {
   token: string;
   user: User;

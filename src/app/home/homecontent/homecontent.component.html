@@ -7,18 +7,7 @@
   </div>
 </div>
 
-<div class="container">
-  <!-- Example row of columns -->
-  <div class="row">
-    <div class="col-md-4" *ngFor="let mywine of wine;">
-      <h2>{{mywine.name}}</h2>
-      <h3><span>{{mywine.variety}}</span></h3>
-      <img src="{{mywine.img}}" alt="{{mywine.name}}" class="img-responsive">
-      <p>{{mywine.description}} </p>
-      <p><a class="btn btn-default" role="button">View details &raquo;</a></p>
-    </div>
-  </div>
-</div>
+<app-winelabels></app-winelabels>
 
 <div class="winery-background">
   <div class="container">
