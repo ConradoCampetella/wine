@@ -6,6 +6,7 @@ import { UserRoutingModule } from "app/user/user-routing.module";
 import { UserHeaderComponent } from './user-header/user-header.component';
 import { UserFooterComponent } from './user-footer/user-footer.component';
 import { UserInitComponent } from './user-init/user-init.component';
+import { UserWinesComponent } from './user-wines/user-wines.component';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { UserInitComponent } from './user-init/user-init.component';
         UserComponent,
         UserHeaderComponent,
         UserFooterComponent,
-        UserInitComponent
+        UserInitComponent,
+        UserWinesComponent
     ],
     imports:[
         SharedModule,
