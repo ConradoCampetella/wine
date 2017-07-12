@@ -49,6 +49,6 @@ import { WinelabelsComponent } from './winelabels/winelabels.component';
         HomeRoutingModule
     ],
     exports: [],
-    providers: [WinesService]
+    providers: []
 })
 export class HomeModule { }

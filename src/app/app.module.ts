@@ -9,6 +9,7 @@ import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
 import { AuthService } from "app/shared/auth.service";
 import { AdminComponent } from './admin/admin.component';
+import { WinesService } from "app/shared/wines.service";
 
 
 @NgModule({
@@ -23,7 +24,10 @@ import { AdminComponent } from './admin/admin.component';
     HomeModule,
     UserModule
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    WinesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

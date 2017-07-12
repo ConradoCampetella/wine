@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-header.component.css']
 })
 export class UserHeaderComponent implements OnInit {
-
+  isIn = false;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changeInClass(){
+    this.isIn = !this.isIn;
   }
 
 }
