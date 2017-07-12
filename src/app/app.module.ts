@@ -5,25 +5,29 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import {HomeModule} from './home/home.module';
-import { UserComponent } from './user/user.component';
+import { HomeModule } from './home/home.module';
+import { UserModule } from './user/user.module';
 import { AuthService } from "app/shared/auth.service";
 import { AdminComponent } from './admin/admin.component';
+import { WinesService } from "app/shared/wines.service";
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent,
     AdminComponent
   ],
   imports: [
     BrowserModule,
-    HomeModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HomeModule,
+    UserModule
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    WinesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

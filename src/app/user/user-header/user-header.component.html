@@ -1,0 +1,36 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+        aria-controls="navbar" (click)="changeInClass()">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+      <a class="navbar-brand" routerLink="/user">The Best Wines</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse" [ngClass]="{ 'in': isIn }">
+      <ul class="nav navbar-nav">
+        <li routerLinkActive="active"><a routerLink="/user/index">Overview</a></li>
+        <li routerLinkActive="active"><a routerLink="/user/products">Products</a></li>
+        <li routerLinkActive="active"><a routerLink="/user/shoppingcart">Shopping Cart</a></li>
+        <li routerLinkActive="active"><a routerLink="/user/orderhistory">Order History</a></li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown text-right" appDropdown>
+          <a class="dropdown-toggle cursor_pointer" role="button">Account <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a>Signed as: </a></li>
+            <hr>
+            <li><a class="cursor_pointer">Setings</a></li>
+            <li><a class="cursor_pointer">Send a Message</a></li>
+            <hr>
+            <li><a class="cursor_pointer">Log out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
