@@ -1,27 +1,62 @@
 <div class="container">
   <h3>Take your time, make your order</h3>
-  <table class="table table-bordered">
-    <tr class="info">
-      <th>Label</th>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Variety</th>
-      <th>Description</th>
-      <th>Image</th>
-      <th>Price</th>
-      <th>Order</th>
-    </tr>
-    <ng-container *ngFor="let label of labels; index as il">
-      <tr *ngFor="let wine of label.wines; index as iw">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="text-center">
+        <button class="btn btn-default" [ngClass]="{ 'btn-primary': butOne, 'btn-default': !butOne }" (click)="changePages(1)">1</button>
+        <button class="btn btn-default" [ngClass]="{ 'btn-primary': butTwo, 'btn-default': !butTwo }" (click)="changePages(2)">2</button>
+        <button class="btn btn-default" [ngClass]="{ 'btn-primary': butThree, 'btn-default': !butThree }" (click)="changePages(3)">3</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="userProd-Flabel">Filter by Label: </label>
+          <select name="userProd-Flabel" id="userProd-Flabel">
+          <option value=""></option>
+          <option value="Animal">Animal</option>
+          <option value="Siesta">Siesta</option>
+          <option value="Tikal">Tikal</option>
+          <option value="Alma Negra">Alma Negra</option>
+          <option value="Padrillos">Tikal</option>
+        </select>
+        <button type="button" class="btn btn-default">Apply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-bordered">
+      <tr class="info">
+        <th>Label</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Variety</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Order</th>
+      </tr>
+      <ng-container *ngFor="let label of labels | paginate: {itemsPerPage:2, currentPage: p}; index as il">
+        <tr *ngFor="let wine of label.wines; index as iw">
           <td>{{label.name}}</td>
-          <td>{{wine.wineId}}</td>
+          <td><a class="btn btn-info" role="button">{{wine.wineId}}</a></td>
           <td>{{wine.name}}</td>
           <td>{{wine.variety}}</td>
           <td>{{wine.description}}</td>
-          <td><img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive"></td>
-          <td>{{wine.price}}</td>
-          <td><button class="btn btn-primary">Order</button></td>
-      </tr>
-    </ng-container>
-  </table>
+          <td><img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive img-thumbnail center-block"></td>
+          <td>{{wine.price | currency:'USD':true}}</td>
+          <td><button class="btn btn-primary" (click)=onAdd(iw) appPagBut><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Add</button></td>
+        </tr>
+      </ng-container>
+    </table>
+
+    <div class="text-center">
+      <button class="btn btn-default" [ngClass]="{ 'btn-primary': butOne, 'btn-default': !butOne }" (click)="changePages(1)">1</button>
+      <button class="btn btn-default" [ngClass]="{ 'btn-primary': butTwo, 'btn-default': !butTwo }" (click)="changePages(2)">2</button>
+      <button class="btn btn-default" [ngClass]="{ 'btn-primary': butThree, 'btn-default': !butThree }" (click)="changePages(3)">3</button>
+    </div>
+  </div>
 </div>

@@ -2,3 +2,7 @@ td img.img-responsive{
     height: 100px;
     width: auto;
 }
+table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
