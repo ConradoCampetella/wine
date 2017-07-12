@@ -10,7 +10,7 @@ import {WinesService} from '../../../../shared/wines.service';
   styleUrls: ['./winesdetails.component.css']
 })
 export class WinesdetailsComponent implements OnInit {
-  wine: Wine;
+  wine:Wine = new Wine('','','','',99);
   ilabel:number;
   iwine:number;
 
