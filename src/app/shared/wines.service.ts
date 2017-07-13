@@ -73,6 +73,18 @@ export class WinesService {
         return Observable.throw('No Labels were Found');
       });
   }
+  
+  getOneLabel(index:number){
+    return this.http.get('https://ng-wine-app.firebaseio.com/labels/'+index+'.json')
+      .map((response: Response)=>{
+        const label: Label[] = response.json();
+        return label;
+      })
+      .catch((error:Response)=>{
+       return Observable.throw(error);
+      });
+  }
+
   getAllWines(index:number) {
     return this.http.get('https://ng-wine-app.firebaseio.com/labels/'+index+'/wines.json')
       .map((response:Response)=>{

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { SharedModule } from "app/shared/shared.module";
 import { UserComponent } from "app/user/user.component";
@@ -18,6 +19,7 @@ import { UserWinesComponent } from './user-wines/user-wines.component';
         UserWinesComponent
     ],
     imports:[
+        ReactiveFormsModule,
         SharedModule,
         UserRoutingModule
     ],

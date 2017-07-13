@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import { WinesService } from "app/shared/wines.service";
 import { Label } from "app/shared/label.model";
@@ -11,14 +12,23 @@ import { Label } from "app/shared/label.model";
 export class UserWinesComponent implements OnInit {
   labels: Label[];
   p: number = 1;
+  ipp: number = 2;
   butOne = true;
   butTwo = false;
   butThree = false;
+  userProdFilterForm: FormGroup;
+  filter: boolean = false;
+  filterLabel: string = "";
+
+
   constructor(private wineService: WinesService) { }
 
   ngOnInit() {
     this.wineService.getAllLabels().subscribe((response: any[]) => {
       this.labels = response;
+    });
+    this.userProdFilterForm = new FormGroup({
+      'userProd-Flabel': new FormControl(null, [Validators.required])
     });
   }
 
@@ -39,7 +49,21 @@ export class UserWinesComponent implements OnInit {
     }
   }
 
-  onAdd(index:number){
-    
+  onAdd(index: number) {
+
+  }
+
+  onFilter() {
+    this.ipp = 5;
+    this.p = 1;
+    this.filter = true;
+    this.filterLabel = this.userProdFilterForm.get('userProd-Flabel').value;
+    console.log(this.filter + "label: " + this.filterLabel);
+  }
+  onRemoveFilter() {
+    this.ipp = 2;
+    this.p = 1;
+    this.filter = false;
+    this.filterLabel = "";
   }
 }
