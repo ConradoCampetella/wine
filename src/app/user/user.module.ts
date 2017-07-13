@@ -8,6 +8,7 @@ import { UserHeaderComponent } from './user-header/user-header.component';
 import { UserFooterComponent } from './user-footer/user-footer.component';
 import { UserInitComponent } from './user-init/user-init.component';
 import { UserWinesComponent } from './user-wines/user-wines.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { UserWinesComponent } from './user-wines/user-wines.component';
         UserHeaderComponent,
         UserFooterComponent,
         UserInitComponent,
-        UserWinesComponent
+        UserWinesComponent,
+        ShoppingCartComponent
     ],
     imports:[
         ReactiveFormsModule,

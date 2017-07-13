@@ -44,8 +44,8 @@
         <th>Order</th>
       </tr>
       <ng-container *ngFor="let label of labels | paginate: {itemsPerPage:ipp, currentPage: p}; index as il">
-        <ng-container *ngIf="!filter || label.name === filterLabel">
-          <tr *ngFor="let wine of label.wines; index as iw">
+        <ng-container *ngIf="!filter || label.name === filterLabel" >
+          <tr *ngFor="let wine of label.wines; index as iw" [ngClass]="classSuccess(wine)">
             <td>{{label.name}}</td>
             <td><a class="btn btn-info" role="button">{{wine.wineId}}</a></td>
             <td>{{wine.name}}</td>
@@ -53,7 +53,8 @@
             <td>{{wine.description}}</td>
             <td><img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive img-thumbnail center-block"></td>
             <td>{{wine.price | currency:'USD':true}}</td>
-            <td><button class="btn btn-primary" (click)=onAdd(iw) appPagBut><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Add</button></td>
+            <td *ngIf="!classSuccess(wine)"><button class="btn btn-primary" (click)=onAdd(wine)><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Add</button></td>
+            <td *ngIf="classSuccess(wine)"><button class="btn btn-success" (click)=onAdd(wine)><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Added</button></td>
           </tr>
         </ng-container>
       </ng-container>
