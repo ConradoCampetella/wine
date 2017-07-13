@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { SharedModule } from "app/shared/shared.module";
 import { UserComponent } from "app/user/user.component";
@@ -6,6 +7,8 @@ import { UserRoutingModule } from "app/user/user-routing.module";
 import { UserHeaderComponent } from './user-header/user-header.component';
 import { UserFooterComponent } from './user-footer/user-footer.component';
 import { UserInitComponent } from './user-init/user-init.component';
+import { UserWinesComponent } from './user-wines/user-wines.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 
 @NgModule({
@@ -13,9 +16,12 @@ import { UserInitComponent } from './user-init/user-init.component';
         UserComponent,
         UserHeaderComponent,
         UserFooterComponent,
-        UserInitComponent
+        UserInitComponent,
+        UserWinesComponent,
+        ShoppingCartComponent
     ],
     imports:[
+        ReactiveFormsModule,
         SharedModule,
         UserRoutingModule
     ],

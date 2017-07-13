@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 text-right">
+      <h3>Take your time, make your order...</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <form class="form-inline" [formGroup]="userProdFilterForm" (ngSubmit)="onFilter()">
+        <div class="form-group">
+          <label for="userProd-Flabel">Filter by Label: </label>
+          <select name="userProd-Flabel" id="userProd-Flabel" formControlName="userProd-Flabel">
+          <option value="Animal">Animal</option>
+          <option value="Siesta">Siesta</option>
+          <option value="Alma Negra">Alma Negra</option>
+          <option value="Tikal">Tikal</option>
+          <option value="Padrillos">Padrillos</option>
+        </select>
+          <button type="submit" class="btn btn-success">Apply Filter</button>
+          <button type="button" class="btn btn-warning" (click)="onRemoveFilter()">Remove Filter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="text-center" *ngIf="!filter">
+        <button class="btn btn-default" [ngClass]="{ 'btn-primary': butOne, 'btn-default': !butOne }" (click)="changePages(1)">1</button>
+        <button class="btn btn-default" [ngClass]="{ 'btn-primary': butTwo, 'btn-default': !butTwo }" (click)="changePages(2)">2</button>
+        <button class="btn btn-default" [ngClass]="{ 'btn-primary': butThree, 'btn-default': !butThree }" (click)="changePages(3)">3</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-bordered">
+      <tr class="info">
+        <th>Label</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Variety</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Order</th>
+      </tr>
+      <ng-container *ngFor="let label of labels | paginate: {itemsPerPage:ipp, currentPage: p}; index as il">
+        <ng-container *ngIf="!filter || label.name === filterLabel" >
+          <tr *ngFor="let wine of label.wines; index as iw" [ngClass]="classSuccess(wine)">
+            <td>{{label.name}}</td>
+            <td><a class="btn btn-info" role="button">{{wine.wineId}}</a></td>
+            <td>{{wine.name}}</td>
+            <td>{{wine.variety}}</td>
+            <td>{{wine.description}}</td>
+            <td><img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive img-thumbnail center-block"></td>
+            <td>{{wine.price | currency:'USD':true}}</td>
+            <td *ngIf="!classSuccess(wine)"><button class="btn btn-primary" (click)=onAdd(wine)><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Add</button></td>
+            <td *ngIf="classSuccess(wine)"><button class="btn btn-success" (click)=onAdd(wine)><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Added</button></td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </table>
+
+    <div class="text-center" *ngIf="!filter">
+      <button class="btn btn-default" [ngClass]="{ 'btn-primary': butOne, 'btn-default': !butOne }" (click)="changePages(1)">1</button>
+      <button class="btn btn-default" [ngClass]="{ 'btn-primary': butTwo, 'btn-default': !butTwo }" (click)="changePages(2)">2</button>
+      <button class="btn btn-default" [ngClass]="{ 'btn-primary': butThree, 'btn-default': !butThree }" (click)="changePages(3)">3</button>
+    </div>
+  </div>
+</div>
