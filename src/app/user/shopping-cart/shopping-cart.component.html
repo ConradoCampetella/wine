@@ -23,25 +23,31 @@
         <th>Remove</th>
       </tr>
       <tr *ngFor="let sc of scList">
-        <th>{{sc.wine.wineId}}</th>
-        <th>{{sc.wine.name}}</th>
-        <th>{{sc.wine.variety}}</th>
-        <th>{{sc.wine.description}}</th>
-        <th>
+        <td><a [routerLink]="['/wines', sc.wine.wineId]" class="btn btn-info" role="button">{{sc.wine.wineId}}</a></td>
+        <td>{{sc.wine.name}}</td>
+        <td>{{sc.wine.variety}}</td>
+        <td>{{sc.wine.description}}</td>
+        <td>
           <div class="btn-group btn-group-sm" role="group" aria-label="...">
             <button type="button" class="btn btn-default" (click)="reduceValue(sc.wine)">-</button>
             <button type="button" class="btn btn-default">{{sc.quantity}}</button>
             <button type="button" class="btn btn-default" (click)="plusValue(sc.wine)">+</button>
           </div>
-        </th>
-        <th>{{sc.wine.price | currency:'USD':true}}</th>
-        <th>{{sc.quantity*sc.wine.price | currency:'USD':true}}</th>
-        <th class="text-center"><button class="btn btn-danger" (click)="onDelete(sc)">Remove</button></th>
+        </td>
+        <td>{{sc.wine.price | currency:'USD':true}}</td>
+        <td>{{sc.quantity*sc.wine.price | currency:'USD':true}}</td>
+        <td class="text-center"><button class="btn btn-danger" (click)="onDelete(sc)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
       </tr>
     </table>
     <div class="row" *ngIf="!isEmpty">
-      <div class="col-xs-12">
-        <h4>Total:{{total | currency:'USD':true}}</h4>
+      <div class="col-xs-12 text-right">
+        <h2>Total:{{total | currency:'USD':true}}</h2>
+      </div>
+    </div>
+    <div class="row" *ngIf="!isEmpty">
+      <div class="col-xs-12 text-right">
+        <button class="btn btn-success">Confirm Order</button>
+        <button class="btn btn-danger">Clear Cart</button>
       </div>
     </div>
   </div>
