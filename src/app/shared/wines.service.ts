@@ -10,6 +10,7 @@ import { AuthService } from "app/shared/auth.service";
 import { Observer } from "rxjs/Observer";
 import { Observable } from "rxjs/Observable";
 import { ShoppingCart } from "app/shared/shoppingCart.model";
+import { Order } from "app/shared/orders.model";
 
 
 @Injectable()
@@ -161,6 +162,16 @@ export class WinesService {
   clearShoppingList(){
     this.shoppingCart = [];
     this.router.navigate(['/user/wines']);
+  }
+
+  //making orders
+  generateOrder(){
+    const username = this.auths.getUserName();
+    const orderID:string = username+Date.now();
+    const order:Order = new Order(orderID, Date.now(),this.shoppingCart, "waiting for approve");
+    firebase.database().ref('orders').child(username).child(orderID).set(order);
+    this.shoppingCart = [];
+    this.router.navigate(['/user/orderhistory']);
   }
 
 }
