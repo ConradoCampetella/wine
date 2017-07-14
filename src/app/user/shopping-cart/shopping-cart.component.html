@@ -7,7 +7,7 @@
   <div class="row" *ngIf="isEmpty">
     <div class="col-xs-12">
       <h3>The shopping Cart is empty</h3>
-      <a class="btn btn-default" routerLink="/user/wines">To Products</a>
+      <a class="btn btn-default" routerLink="/user/wines">&laquo; To Products</a>
     </div>
   </div>
   <div class="row" *ngIf="!isEmpty">
@@ -47,7 +47,7 @@
     <div class="row" *ngIf="!isEmpty">
       <div class="col-xs-12 text-right">
         <button class="btn btn-success">Confirm Order</button>
-        <button class="btn btn-danger">Clear Cart</button>
+        <button class="btn btn-danger" (click)="onClearCart()">Clear Cart</button>
       </div>
     </div>
   </div>

@@ -158,4 +158,9 @@ export class WinesService {
     return this.shoppingCart;
   }
 
+  clearShoppingList(){
+    this.shoppingCart = [];
+    this.router.navigate(['/user/wines']);
+  }
+
 }

@@ -53,7 +53,11 @@ export class ShoppingCartComponent implements OnInit {
     for (let sc of this.scList) {
       this.total += sc.wine.price * sc.quantity;
     }
-
+  }
+  onClearCart() {
+    if (confirm("Are you sure you want to clear the Cart")) {
+      this.wineService.clearShoppingList();
+    }
   }
 
 }
