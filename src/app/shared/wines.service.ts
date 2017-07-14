@@ -10,12 +10,13 @@ import { AuthService } from "app/shared/auth.service";
 import { Observer } from "rxjs/Observer";
 import { Observable } from "rxjs/Observable";
 import { ShoppingCart } from "app/shared/shoppingCart.model";
+import { Order } from "app/shared/orders.model";
 
 
 @Injectable()
 export class WinesService {
   shoppingCart: ShoppingCart[] = [];
-  label: Label[]=[];
+  label: Label[] = [];
 
   /* --- labels and wines to send to the database
   label: Label[] = [
@@ -110,13 +111,13 @@ export class WinesService {
       });
   }
 
-  getOneWineWithId(id: string){
-    if(this.label.length != 0 ){
+  getOneWineWithId(id: string) {
+    if (this.label.length != 0) {
       const ilabel = this.label.findIndex(label => label.wines.find(wine => wine.wineId == id) != null);
       return this.label[ilabel].wines.find(wine => wine.wineId == id);
     }
-    else{
-      return new Wine('','','','','',1);
+    else {
+      this.router.navigate(['/user/wines']);
     }
   }
 
@@ -158,9 +159,56 @@ export class WinesService {
     return this.shoppingCart;
   }
 
-  clearShoppingList(){
+  clearShoppingList() {
     this.shoppingCart = [];
     this.router.navigate(['/user/wines']);
   }
 
+  //making orders
+  generateOrder() {
+    const username = this.auths.getUserName();
+    const orderID: string = username + Date.now();
+    const order: Order = new Order(orderID, Date.now(), this.shoppingCart, 'waiting for approve');
+    this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
+      .map((response: Response) => {
+        const res: any[] = response.json();
+        return res;
+      })
+      .subscribe((res) => {
+        if (res) {
+          const index = res.length;
+          firebase.database().ref('orders').child(username).child(index.toString()).set(order)
+            .then(response => {
+              this.shoppingCart = [];
+              this.router.navigate(['/user/orderhistory']);
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        }
+          else{
+          firebase.database().ref('orders').child(username).child('0').set(order)
+            .then(response => {
+              this.shoppingCart = [];
+              this.router.navigate(['/user/orderhistory']);
+            })
+            .catch(error => {
+              console.log(error);
+            })
+          }
+      })
+
+
+  }
+
+  obtainOrders(username: string) {
+    return this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
+      .map((response: Response) => {
+        const orders: Order[] = response.json();
+        return orders;
+      })
+      .catch((error: Response) => {
+        return Observable.throw('No Orders were Found');
+      });
+  }
 }

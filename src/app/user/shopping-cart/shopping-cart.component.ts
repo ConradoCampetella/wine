@@ -59,5 +59,8 @@ export class ShoppingCartComponent implements OnInit {
       this.wineService.clearShoppingList();
     }
   }
+  onConfirmOrder(){
+    this.wineService.generateOrder();
+  }
 
 }

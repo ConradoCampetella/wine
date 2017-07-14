@@ -46,7 +46,7 @@
     </div>
     <div class="row" *ngIf="!isEmpty">
       <div class="col-xs-12 text-right">
-        <button class="btn btn-success">Confirm Order</button>
+        <button class="btn btn-success" (click)="onConfirmOrder()">Confirm Order</button>
         <button class="btn btn-danger" (click)="onClearCart()">Clear Cart</button>
       </div>
     </div>

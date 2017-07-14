@@ -113,4 +113,8 @@ export class AuthService {
     return response;
   }
 
+  getUserName(){
+    return firebase.auth().currentUser.displayName;
+  }
+
 }

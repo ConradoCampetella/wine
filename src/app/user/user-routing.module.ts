@@ -6,6 +6,7 @@ import { UserInitComponent } from "app/user/user-init/user-init.component";
 import { UserWinesComponent } from "app/user/user-wines/user-wines.component";
 import { ShoppingCartComponent } from "app/user/shopping-cart/shopping-cart.component";
 import { UserWineDetailComponent } from "app/user/user-wines/user-wine-detail/user-wine-detail.component";
+import { UserOrderComponent } from "app/user/user-order/user-order.component";
 
 
 const userRoutes: Routes = [
@@ -16,6 +17,8 @@ const userRoutes: Routes = [
             { path: 'wines', component: UserWinesComponent },
             { path: 'wines/:id', component: UserWineDetailComponent },
             { path: 'shoppingcart', component: ShoppingCartComponent },
+            { path: 'orderhistory', component: UserOrderComponent },
+            { path: 'orderhistory/:id', component: UserOrderComponent }
         ]
     }
 ]

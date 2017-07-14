@@ -10,6 +10,7 @@ import { UserInitComponent } from './user-init/user-init.component';
 import { UserWinesComponent } from './user-wines/user-wines.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { UserWineDetailComponent } from './user-wines/user-wine-detail/user-wine-detail.component';
+import { UserOrderComponent } from './user-order/user-order.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { UserWineDetailComponent } from './user-wines/user-wine-detail/user-wine
         UserInitComponent,
         UserWinesComponent,
         ShoppingCartComponent,
-        UserWineDetailComponent
+        UserWineDetailComponent,
+        UserOrderComponent
     ],
     imports:[
         ReactiveFormsModule,
