@@ -15,9 +15,9 @@ import { ShoppingCart } from "app/shared/shoppingCart.model";
 @Injectable()
 export class WinesService {
   shoppingCart: ShoppingCart[] = [];
+  label: Label[]=[];
 
-
-  /* --- labels and wines to send to the database*/
+  /* --- labels and wines to send to the database
   label: Label[] = [
     new Label('Animal', 'Wine made from Organic Vineyards, Smells and tastes their natural state.', '../../assets/img/label-animal.jpg', [
       new Wine('AN-EB', 'Extra Brut', 'Method of processing Charmat', '../../assets/img/animal_extrabrut.jpg', 'Elegant & memoralble', 99),
@@ -62,7 +62,7 @@ export class WinesService {
   updateLavelsAndWines() {
     firebase.database().ref('/labels').set(this.label);
   }
-
+  */
 
   constructor(private http: Http, private router: Router, private auths: AuthService) {
   }
@@ -70,6 +70,7 @@ export class WinesService {
     return this.http.get('https://ng-wine-app.firebaseio.com/labels.json')
       .map((response: Response) => {
         const labels: Label[] = response.json();
+        this.label = response.json();
         return labels;
       })
       .catch((error: Response) => {
@@ -109,6 +110,16 @@ export class WinesService {
       });
   }
 
+  getOneWineWithId(id: string){
+    if(this.label.length != 0 ){
+      const ilabel = this.label.findIndex(label => label.wines.find(wine => wine.wineId == id) != null);
+      return this.label[ilabel].wines.find(wine => wine.wineId == id);
+    }
+    else{
+      return new Wine('','','','','',1);
+    }
+  }
+
   // shopping cart list service
 
   addToShoppingCart(wine: Wine, i: number) {
@@ -122,7 +133,6 @@ export class WinesService {
   }
   removeFromShoppingCart(sc) {
     const index = this.shoppingCart.indexOf(sc);
-    console.log(index);
     if (index != -1) {
       this.shoppingCart.splice(index, 1);
     }

@@ -9,6 +9,7 @@ import { UserFooterComponent } from './user-footer/user-footer.component';
 import { UserInitComponent } from './user-init/user-init.component';
 import { UserWinesComponent } from './user-wines/user-wines.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { UserWineDetailComponent } from './user-wines/user-wine-detail/user-wine-detail.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
         UserFooterComponent,
         UserInitComponent,
         UserWinesComponent,
-        ShoppingCartComponent
+        ShoppingCartComponent,
+        UserWineDetailComponent
     ],
     imports:[
         ReactiveFormsModule,

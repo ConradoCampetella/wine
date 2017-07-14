@@ -47,7 +47,7 @@
         <ng-container *ngIf="!filter || label.name === filterLabel" >
           <tr *ngFor="let wine of label.wines; index as iw" [ngClass]="classSuccess(wine)">
             <td>{{label.name}}</td>
-            <td><a class="btn btn-info" role="button">{{wine.wineId}}</a></td>
+            <td><a [routerLink]="['/wines', wine.wineId]" class="btn btn-info" role="button">{{wine.wineId}}</a></td>
             <td>{{wine.name}}</td>
             <td>{{wine.variety}}</td>
             <td>{{wine.description}}</td>
