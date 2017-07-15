@@ -1,9 +1,9 @@
 import { Directive, HostListener, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[appPagBut]'
+  selector: '[orderBut]'
 })
-export class PaginationButtonDirective {
+export class OrderButtonDirective {
   @HostBinding('class.btn-default') isDefault = true;
   @HostBinding('class.btn-success') isSuccess = false;
 

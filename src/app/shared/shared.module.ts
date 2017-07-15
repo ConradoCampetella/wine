@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DropdownDirective } from "app/shared/dropdown.directive";
 import { NgxPaginationModule } from 'ngx-pagination';
-import { PaginationButtonDirective } from "app/shared/paginationButton.directive";
+import { OrderButtonDirective } from "app/shared/orderButton.directive";
 
 
 @NgModule({
   declarations: [
     DropdownDirective,
-    PaginationButtonDirective
+    OrderButtonDirective
   ],
   imports: [],
   exports: [
     DropdownDirective,
-    PaginationButtonDirective,
+    OrderButtonDirective,
     CommonModule,
     NgxPaginationModule
   ]
