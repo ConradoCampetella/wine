@@ -17,8 +17,7 @@ const userRoutes: Routes = [
             { path: 'wines', component: UserWinesComponent },
             { path: 'wines/:id', component: UserWineDetailComponent },
             { path: 'shoppingcart', component: ShoppingCartComponent },
-            { path: 'orderhistory', component: UserOrderComponent },
-            { path: 'orderhistory/:id', component: UserOrderComponent }
+            { path: 'orderhistory', component: UserOrderComponent }
         ]
     }
 ]

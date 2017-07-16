@@ -17,6 +17,7 @@ import { Order } from "app/shared/orders.model";
 export class WinesService {
   shoppingCart: ShoppingCart[] = [];
   label: Label[] = [];
+  edit: string;
 
   /* --- labels and wines to send to the database
   label: Label[] = [
@@ -186,7 +187,7 @@ export class WinesService {
               console.log(error);
             })
         }
-          else{
+        else {
           firebase.database().ref('orders').child(username).child('0').set(order)
             .then(response => {
               this.shoppingCart = [];
@@ -195,7 +196,7 @@ export class WinesService {
             .catch(error => {
               console.log(error);
             })
-          }
+        }
       })
 
 
@@ -211,4 +212,53 @@ export class WinesService {
         return Observable.throw('No Orders were Found');
       });
   }
+  getEditOrder() {
+    return this.edit;
+  }
+  clearEditOrder() {
+    this.edit = null;
+  }
+  modifyOrder(orderM: Order) {
+    this.shoppingCart = orderM.sclOrder;
+    this.edit = orderM.orderId;
+    this.router.navigate(['/user/shoppingcart']);
+  }
+  modifyOrderConfirm(orderId) {
+    const username = this.auths.getUserName();
+    this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
+      .map((response: Response) => {
+        const res: Order[] = response.json();
+        return res;
+      })
+      .subscribe((response: Order[]) => {
+        const index = response.findIndex(res => res.orderId == orderId);
+        const order: Order = new Order(orderId, Date.now(), this.shoppingCart, 'waiting for approve');
+        firebase.database().ref('orders').child(username).child(index.toString()).set(order)
+          .then(response => {
+            this.shoppingCart = [];
+            this.clearEditOrder();
+            this.router.navigate(['/user/orderhistory']);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      });
+  }
+
+  destroyOrder(orderId) {
+    const username = this.auths.getUserName();
+    this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
+      .map((response: Response) => {
+        const res: Order[] = response.json();
+        return res;
+      })
+      .subscribe((response: Order[]) => {
+        const index = response.findIndex(res => res.orderId == orderId);
+        firebase.database().ref('orders').child(username).child(index.toString()).remove();
+      });
+  }
+
+
+
+
 }

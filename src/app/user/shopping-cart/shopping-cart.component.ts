@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { WinesService } from "app/shared/wines.service";
 import { ShoppingCart } from "app/shared/shoppingCart.model";
+import { ActivatedRoute, Params } from "@angular/router";
 
 
 @Component({
@@ -15,11 +16,14 @@ export class ShoppingCartComponent implements OnInit {
   isEmpty: boolean = false;
   total = 0;
   value = 0;
+  edit: string;
 
 
   constructor(private wineService: WinesService) { }
 
   ngOnInit() {
+    this.edit = this.wineService.getEditOrder();
+
     this.scList = this.wineService.getShoppingCart();
     if (this.scList.length > 0) {
       this.isEmpty = false;
@@ -29,7 +33,6 @@ export class ShoppingCartComponent implements OnInit {
       this.isEmpty = true;
     }
   }
-
 
   onDelete(sc) {
     this.wineService.removeFromShoppingCart(sc);
@@ -55,12 +58,24 @@ export class ShoppingCartComponent implements OnInit {
     }
   }
   onClearCart() {
-    if (confirm("Are you sure you want to clear the Cart")) {
-      this.wineService.clearShoppingList();
+    if (this.edit) {
+      if (confirm("Are you sure you want to clear the Cart and Cancel the order Changes")) {
+        this.wineService.clearShoppingList();
+        this.wineService.clearEditOrder();
+      }
     }
+    else {
+      if (confirm("Are you sure you want to clear the Cart")) {
+        this.wineService.clearShoppingList();
+      }
+    }
+
   }
-  onConfirmOrder(){
+  onConfirmOrder() {
     this.wineService.generateOrder();
+  }
+  onModifyOrder() {
+    this.wineService.modifyOrderConfirm(this.edit);
   }
 
 }

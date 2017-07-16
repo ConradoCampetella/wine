@@ -16,7 +16,7 @@ export class UserOrderComponent implements OnInit {
   clickedBtn: string;
   orderDetail: Order;
   detailTotal: number;
-  detailProgress:number=0;
+  detailProgress: number = 0;
 
   constructor(private auths: AuthService, private wineService: WinesService) { }
 
@@ -69,15 +69,59 @@ export class UserOrderComponent implements OnInit {
     }
   }
 
-  calculateDetailProgress(){
-    switch(this.orderDetail.status){
+  calculateDetailProgress() {
+    switch (this.orderDetail.status) {
       case 'waiting for approve': {
-        this.detailProgress = 100/6;
+        this.detailProgress = 100 / 6;
         break;
       }
-      default:{
+      case 'Approved': {
+        this.detailProgress = 2 * 100 / 6;
+        break;
+      }
+      case 'Paid': {
+        this.detailProgress = 3 * 100 / 6;
+        break;
+      }
+      case 'Shipped': {
+        this.detailProgress = 4 * 100 / 6;
+        break;
+      }
+      case 'On its way': {
+        this.detailProgress = 5 * 100 / 6;
+        break;
+      }
+      case 'Arrive - Complete': {
+        this.detailProgress = 100;
+        break;
+      }
+      default: {
         this.detailProgress = 10;
       }
     }
+  }
+  buttonDisabled(status) {
+    if (status === 'waiting for approve') {
+      return false;
+    }
+    else if (status === 'Approved') {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+  onModify(orderId) {
+    const orderM = this.orders.find(order => order.orderId == orderId);
+    this.wineService.modifyOrder(orderM);
+  }
+  onDestroy(orderId) {
+    if (confirm("ARE YOU SURE THAT YOU WANT TO DELETE THE ORDER")) {
+      this.wineService.destroyOrder(orderId);
+      const index = this.orders.findIndex(order => order.orderId == orderId);
+      this.orders.splice(index);
+    }
+
   }
 }
