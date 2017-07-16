@@ -46,8 +46,10 @@
     </div>
     <div class="row" *ngIf="!isEmpty">
       <div class="col-xs-12 text-right">
-        <button class="btn btn-success" (click)="onConfirmOrder()">Confirm Order</button>
-        <button class="btn btn-danger" (click)="onClearCart()">Clear Cart</button>
+        <button *ngIf="edit" class="btn btn-warning" (click)="onModifyOrder()">Modify Order</button>
+        <button *ngIf="!edit" class="btn btn-success" (click)="onConfirmOrder()">Confirm Order</button>
+        <button *ngIf="edit" class="btn btn-danger" (click)="onClearCart()">Cancel</button>
+        <button *ngIf="!edit" class="btn btn-danger" (click)="onClearCart()">Clear Cart</button>
       </div>
     </div>
   </div>
