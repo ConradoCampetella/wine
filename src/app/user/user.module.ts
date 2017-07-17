@@ -11,6 +11,8 @@ import { UserWinesComponent } from './user-wines/user-wines.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { UserWineDetailComponent } from './user-wines/user-wine-detail/user-wine-detail.component';
 import { UserOrderComponent } from './user-order/user-order.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { UserMessageComponent } from './user-message/user-message.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { UserOrderComponent } from './user-order/user-order.component';
         UserWinesComponent,
         ShoppingCartComponent,
         UserWineDetailComponent,
-        UserOrderComponent
+        UserOrderComponent,
+        UserSettingsComponent,
+        UserMessageComponent
     ],
     imports:[
         ReactiveFormsModule,
