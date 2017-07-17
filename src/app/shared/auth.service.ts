@@ -73,7 +73,7 @@ export class AuthService {
     return errorMessage;
   }
 
-  getLoggedUser(){
+  getLoggedUser() {
     return this.user;
   }
 
@@ -95,7 +95,7 @@ export class AuthService {
   }
 
   userNameExists(username: string) {
-   const response = Observable.create((observer: Observer<string>) => {
+    const response = Observable.create((observer: Observer<string>) => {
       this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json')
         .subscribe(
         (response: Response) => {
@@ -112,8 +112,28 @@ export class AuthService {
     return response;
   }
 
-  getUserName(){
+  getUserName() {
     return firebase.auth().currentUser.displayName;
   }
+
+  modifyUserName() {
+
+  }
+  modifyPassword(userInfo: User) {
+    return firebase.auth().currentUser.updatePassword(userInfo.password);
+  }
+
+  modifyUserInfo(userInfo: User) {
+    return this.http.patch('https://ng-wine-app.firebaseio.com/users/' + userInfo.username + '.json?auth=' + this.token, userInfo);
+  }
+
+  updateUser(username:string) {
+    return this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json?auth=' + this.token)
+      .map((response: Response) => {
+        const user = response.json();
+        return user;
+      });
+  }
+
 
 }

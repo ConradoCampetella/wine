@@ -20,6 +20,10 @@ export class UserSettingsComponent implements OnInit {
   modifyPassword: boolean = false;
   modifyUser: boolean = false;
   userAsync: boolean = false;
+  updateInfoSuccess: boolean = false;
+  updateInfoError: boolean = false;
+  updatePasswordSuccess: boolean = false;
+  updatePasswordError: boolean = false;
 
 
   constructor(private auths: AuthService) { }
@@ -35,8 +39,8 @@ export class UserSettingsComponent implements OnInit {
       'settings-city': new FormControl({ value: this.user.city, disabled: true }, [Validators.required]),
       'settings-country': new FormControl({ value: this.user.country, disabled: true }, [Validators.required]),
       'settings-password': new FormControl({ value: this.user.password, disabled: true }, [Validators.required, Validators.minLength(6)]),
-      'settings-oldpassword': new FormControl({ value: this.user.password, disabled: true }, [Validators.required, Validators.minLength(6), this.oldPasswordMatchValidator.bind(this)]),
-      'settings-newpassword': new FormControl({ value: this.user.password, disabled: true }, [Validators.required, Validators.minLength(6)]),
+      'settings-oldpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6), this.oldPasswordMatchValidator.bind(this)]),
+      'settings-newpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]),
       'settings-passwordconfirm': new FormControl({ value: '', disabled: true }, [Validators.required, this.passwordMatchValidator.bind(this)])
     });
     this.settingsForm.statusChanges.subscribe(
@@ -105,6 +109,8 @@ export class UserSettingsComponent implements OnInit {
       this.settingsForm.controls['settings-adress'].setValue(this.user.adress);
       this.settingsForm.controls['settings-city'].setValue(this.user.city);
       this.settingsForm.controls['settings-country'].setValue(this.user.country);
+      this.updateInfoSuccess = false;
+      this.updateInfoError = false;
     }
     else {
       this.modify = true;
@@ -145,9 +151,37 @@ export class UserSettingsComponent implements OnInit {
 
   }
 
+  onUpdateInfo() {
+    this.updateInfoSuccess = false;
+    this.updateInfoError = false;
+    const name = this.settingsForm.controls['settings-name'].value;
+    const sirname = this.settingsForm.controls['settings-sirname'].value;
+    const adress = this.settingsForm.controls['settings-adress'].value;
+    const city = this.settingsForm.controls['settings-city'].value;
+    const country = this.settingsForm.controls['settings-country'].value;
+    const userMod = new User(name, sirname, this.user.username, this.user.email, adress, city, country, this.user.password, this.user.admin);
+    this.auths.modifyUserInfo(userMod).subscribe(
+      response => {
+        this.updateInfoSuccess = true;
+        this.auths.updateUser(this.user.username).subscribe((response) => {
+          this.user = response;
+          this.settingsForm.controls['settings-name'].setValue(this.user.name);
+          this.settingsForm.controls['settings-sirname'].setValue(this.user.sirname);
+          this.settingsForm.controls['settings-adress'].setValue(this.user.adress);
+          this.settingsForm.controls['settings-city'].setValue(this.user.city);
+          this.settingsForm.controls['settings-country'].setValue(this.user.country);
+        })
+      },
+      error => {
+        this.updateInfoError = true;
+      });
+  }
+
   onModifyPassword() {
     if (this.modifyPassword) {
       this.modifyPassword = false;
+      this.updatePasswordSuccess = false;
+      this.updatePasswordError = false;
       this.settingsForm.controls['settings-oldpassword'].disable();
       this.settingsForm.controls['settings-newpassword'].disable();
       this.settingsForm.controls['settings-passwordconfirm'].disable();
@@ -171,8 +205,27 @@ export class UserSettingsComponent implements OnInit {
     else {
       return true;
     }
+  }
+  onUpdatePassword() {
+    this.updatePasswordSuccess = false;
+    this.updatePasswordError = false;
+    this.user.password = this.settingsForm.controls['settings-newpassword'].value;
+    this.auths.modifyPassword(this.user)
+      .then(res => {
+        this.auths.modifyUserInfo(this.user).subscribe(response => {
+          this.updatePasswordSuccess = true;
+          this.auths.updateUser(this.user.username).subscribe((response) => {
+            this.user = response;
+            this.settingsForm.controls['settings-password'].setValue(this.user.password);
+          })
+        })
+      })
+      .catch(err => {
+        this.updatePasswordError = true;
+      })
 
   }
+
 
   onModifyUser() {
     if (this.modifyUser) {
@@ -188,6 +241,9 @@ export class UserSettingsComponent implements OnInit {
   }
   onClearUser() {
     this.settingsForm.controls['settings-username'].setValue('');
+  }
+  onUpdateUserName() {
+    this.settingsForm.controls['settings-username'].value;
   }
 
 }
