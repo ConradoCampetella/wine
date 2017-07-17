@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+
+import { AuthService } from "app/shared/auth.service";
 
 @Component({
   selector: 'app-user-header',
@@ -7,13 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserHeaderComponent implements OnInit {
   isIn = false;
-  constructor() { }
+  username:string;
+
+  constructor(private auths:AuthService, private router: Router) { }
 
   ngOnInit() {
+    this.username = this.auths.getUserName();
   }
 
   changeInClass(){
     this.isIn = !this.isIn;
+  }
+  onLogOut(){
+    this.auths.logout();
+    this.router.navigate(['/home']);
   }
 
 }

@@ -27,7 +27,6 @@ export class AuthService {
         firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(response => {
           firebase.database().ref('users').child(user.username).set(user).then((response: Response) => {
             firebase.auth().currentUser.updateProfile({ displayName: user.username, photoURL: "" });
-            console.log(response);
           })
         })
       });
@@ -36,15 +35,12 @@ export class AuthService {
   redirect() {
     const username = firebase.auth().currentUser.displayName;
     this.getToken();
-    console.log(firebase.auth().currentUser.displayName);
     this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json?auth=' + this.token)
       .map((response: Response) => {
         this.user = response.json();
         return this.user;
       })
       .subscribe((user: User) => {
-        console.log(this.user);
-        console.log(this.user.admin);
         if (this.user.admin.toString() == "true") {
           this.router.navigate(['/admin']);
         }
@@ -77,6 +73,10 @@ export class AuthService {
     return errorMessage;
   }
 
+  getLoggedUser(){
+    return this.user;
+  }
+
   logout() {
     firebase.auth().signOut();
     this.token = null;
@@ -99,7 +99,6 @@ export class AuthService {
       this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json')
         .subscribe(
         (response: Response) => {
-          console.log(response.json());
           if (response.json()) {
             observer.next("true");
           }

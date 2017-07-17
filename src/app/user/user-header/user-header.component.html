@@ -22,12 +22,12 @@
         <li class="dropdown text-right" appDropdown>
           <a class="dropdown-toggle cursor_pointer" role="button">Account <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a>Signed as: </a></li>
+            <li><a>Signed as: <strong>{{username}}</strong></a></li>
             <hr>
-            <li><a class="cursor_pointer">Setings</a></li>
-            <li><a class="cursor_pointer">Send a Message</a></li>
+            <li><a class="cursor_pointer" routerLink="/user/settings">Settings</a></li>
+            <li><a class="cursor_pointer" routerLink="/user/message">Send a Message</a></li>
             <hr>
-            <li><a class="cursor_pointer">Log out</a></li>
+            <li><a class="cursor_pointer" (click)="onLogOut()">Log out</a></li>
           </ul>
         </li>
       </ul>
