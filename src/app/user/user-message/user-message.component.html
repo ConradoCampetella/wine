@@ -7,22 +7,49 @@
       <form [formGroup]="messageForm" class="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="message-type">Type of Message</label>
-          <select name="message-type" id="message-type" class="form-control">
-            <option value="0">Message</option>
-            <option value="1">Problem</option>
-            <option value="2">Query</option>
+          <select name="message-type" id="message-type" class="form-control" formControlName="message-type">
+            <option value="Message">Message</option>
+            <option value="Problem">Problem</option>
+            <option value="Query">Query</option>
           </select>
+          <span *ngIf="!messageForm.get('message-type').valid && messageForm.get('message-type').touched" class="help-block">
+            <span *ngIf="messageForm.get('message-type').errors['required']">Please input your email</span>
+          </span>
+          <span *ngIf="messageForm.get('message-type').valid && messageForm.get('message-type').touched && messageForm.get('message-type').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="message-subject">Subject</label>
-          <input type="text" id="message-subject" name="message-subject" class="form-control">
+          <input type="text" id="message-subject" name="message-subject" class="form-control" formControlName="message-subject">
+          <span *ngIf="!messageForm.get('message-subject').valid && messageForm.get('message-subject').touched" class="help-block">
+            <span *ngIf="messageForm.get('message-subject').errors['required']">Please input your email</span>
+          </span>
+          <span *ngIf="messageForm.get('message-subject').valid && messageForm.get('message-subject').touched && messageForm.get('message-subject').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="message-message">Message</label>
-          <textarea name="message-message" id="message-message" cols="6" rows="6" class="form-control"></textarea>
+          <textarea name="message-message" id="message-message" cols="6" rows="6" class="form-control" formControlName="message-message"></textarea>
+          <span *ngIf="!messageForm.get('message-message').valid && messageForm.get('message-message').touched" class="help-block">
+            <span *ngIf="messageForm.get('message-message').errors['required']">Please input your email</span>
+          </span>
+          <span *ngIf="messageForm.get('message-message').valid && messageForm.get('message-message').touched && messageForm.get('message-message').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        <div *ngIf="messageSuccess" class="help-block bg-success">
+          <p>Message Send</p>
+        </div>
+        <div *ngIf="messageError" class="help-block bg-warning">
+          <p>Message couldn´t be Send - Please try again later</p>
+        </div>
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-success">Submit</button>
+          <button type="submit" [disabled]="!messageForm.valid" class="btn btn-success">Submit</button>
           <button type="reset" class="btn btn-warning">Reset</button>
         </div>
       </form>

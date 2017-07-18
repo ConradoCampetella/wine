@@ -11,6 +11,7 @@ import { Observer } from "rxjs/Observer";
 import { Subscription } from "rxjs/Subscription";
 import { Order } from "app/shared/orders.model";
 import { Subject } from "rxjs/Rx";
+import { Message } from "app/shared/message.model";
 
 @Injectable()
 
@@ -200,6 +201,43 @@ export class AuthService {
         const user = response.json();
         return user;
       });
+  }
+
+  //---------------------------------
+
+  sendMessage(msg: Message) {
+    const response = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/messages.json?auth=' + this.token)
+        .map((response:Response)=>{
+          const message:Message[] = response.json();
+          return message;
+        })
+        .subscribe((response:Message[])=>{
+          if (response){
+            const index = response.length;
+            this.http.put('https://ng-wine-app.firebaseio.com/messages/'+index+'.json?auth=' + this.token,msg)
+              .subscribe(
+                (res)=>{
+                  observer.next('Success');
+                },
+                (err)=>{
+                  observer.error('Error');
+                });
+          }
+          else{
+            this.http.put('https://ng-wine-app.firebaseio.com/messages/'+0+'.json?auth=' + this.token,msg)
+              .subscribe(
+                (res)=>{
+                  observer.next('Success');
+                },
+                (err)=>{
+                  observer.error('Error');
+                });
+          }
+        });
+    });
+      return response;
+
   }
 
 
