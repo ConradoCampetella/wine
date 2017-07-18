@@ -1,3 +1,60 @@
-<p>
-  user-threads works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>Threads</h2>
+    </div>
+  </div>
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-bordered">
+        <tr class="info">
+          <th>ID</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>State</th>
+          <th>Details</th>
+          <th>Close</th>
+        </tr>
+        <tr>
+
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-right">
+      <button class="btn btn-info" (click)="onOpenNewThread()">Open a New Thread <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <div *ngIf="newThread" class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="threadForm" (ngSubmit)="onSubmitThread()">
+        <div class="form-group">
+          <label for="threadType">Type</label>
+          <select name="threadType" id="threadType" class="form-control" formControlName="threadType">
+            <option value="Information">Information</option>
+            <option value="Query">Query</option>
+            <option value="Problem with the web">Problem with the web</option>
+            <option value="Problem with an order">Problem with an order</option>
+            <option value="Problem with a product">Problem with a product</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="threadDescription">Description</label>
+          <input type="text" name="threadDescription" id="threadDescription" class="form-control" formControlName="threadDescription">
+        </div>
+        <div class="form-group">
+          <label for="threadMessage">Message</label>
+          <textarea name="threadMessage" id="threadMessage" cols="30" rows="10" class="form-control" formControlName="threadMessage"></textarea>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-success">Open Thread</button>
+          <button type="reset" class="btn btn-warning">Clear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

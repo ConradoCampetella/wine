@@ -12,6 +12,7 @@ import { Subscription } from "rxjs/Subscription";
 import { Order } from "app/shared/orders.model";
 import { Subject } from "rxjs/Rx";
 import { Message } from "app/shared/message.model";
+import { Thread } from "app/shared/thread.model";
 
 @Injectable()
 
@@ -204,41 +205,47 @@ export class AuthService {
   }
 
   //---------------------------------
-
-  sendMessage(msg: Message) {
-    const response = Observable.create((observer: Observer<string>) => {
-      this.http.get('https://ng-wine-app.firebaseio.com/messages.json?auth=' + this.token)
+  openNewThread(type:string, description:string, message:Message ){
+    const threadId = this.getUserName()+Date.now();
+    const msg:Message[]=[message]
+    const thread:Thread = new Thread (threadId, message.usermail, type, description, true, msg);
+    const response = Observable.create((observer: Observer<string>)=>{
+      this.http.get('https://ng-wine-app.firebaseio.com/threads.json?auth=' + this.token)
         .map((response:Response)=>{
-          const message:Message[] = response.json();
-          return message;
+          const trs : Thread[] = response.json();
+          return trs;
         })
-        .subscribe((response:Message[])=>{
-          if (response){
-            const index = response.length;
-            this.http.put('https://ng-wine-app.firebaseio.com/messages/'+index+'.json?auth=' + this.token,msg)
-              .subscribe(
-                (res)=>{
-                  observer.next('Success');
-                },
-                (err)=>{
-                  observer.error('Error');
-                });
-          }
-          else{
-            this.http.put('https://ng-wine-app.firebaseio.com/messages/'+0+'.json?auth=' + this.token,msg)
-              .subscribe(
-                (res)=>{
-                  observer.next('Success');
-                },
-                (err)=>{
-                  observer.error('Error');
-                });
-          }
-        });
+        .subscribe(
+          (res:Thread[])=>{
+            if(res){
+              const index = res.length;
+              this.http.put('https://ng-wine-app.firebaseio.com/threads/'+index+'.json?auth=' + this.token, thread)
+                .subscribe(
+                  (res)=>{
+                    observer.next('success');
+                  },
+                  (err)=>{
+                    observer.error('error - putting Thread');
+                  });
+            }
+            else{
+              this.http.put('https://ng-wine-app.firebaseio.com/threads/'+0+'.json?auth=' + this.token, thread)
+                .subscribe(
+                  (res)=>{
+                    observer.next('success');
+                  },
+                  (err)=>{
+                    observer.error('error - putting Thread');
+                  });
+            }
+          }, 
+          (error)=>{
+            observer.error('error - getting Threads');
+          });
     });
-      return response;
-
+    return response;
   }
 
 
+  
 }
