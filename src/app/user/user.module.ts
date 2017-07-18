@@ -12,7 +12,6 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { UserWineDetailComponent } from './user-wines/user-wine-detail/user-wine-detail.component';
 import { UserOrderComponent } from './user-order/user-order.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
-import { UserMessageComponent } from './user-threads/user-message/user-message.component';
 import { UserThreadsComponent } from './user-threads/user-threads.component';
 
 
@@ -27,7 +26,6 @@ import { UserThreadsComponent } from './user-threads/user-threads.component';
         UserWineDetailComponent,
         UserOrderComponent,
         UserSettingsComponent,
-        UserMessageComponent,
         UserThreadsComponent
     ],
     imports:[
