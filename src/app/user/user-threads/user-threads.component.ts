@@ -15,11 +15,14 @@ export class UserThreadsComponent implements OnInit {
   msgForm: FormGroup;
   threads: Thread[];
   threadDetail: Thread;
+  idThreadClicked: string;
   newThread: boolean = false;
   newThreadSuccess: boolean = false;
   newThreadError: boolean = false;
   details: boolean = false;
   addMsg: boolean = false;
+  addMsgSuccess: boolean = false;
+  addMsgError: boolean = false;
   user: User;
 
   constructor(private auths: AuthService) { }
@@ -67,28 +70,68 @@ export class UserThreadsComponent implements OnInit {
 
   }
   onDetails(idThread) {
-    this.details = true;
     this.threadDetail = this.threads.find(tr => tr.idThread == idThread);
+    if (this.idThreadClicked === idThread) {
+      this.idThreadClicked = "";
+      this.details = false;
+    }
+    else {
+      this.idThreadClicked = idThread;
+      this.details = true;
+    }
   }
+
+  onClassActive(idThread) {
+    if (this.idThreadClicked === idThread) {
+      return 'active';
+    }
+    else {
+      return null;
+    }
+  }
+
+  onClickedButton(idThread) {
+    if (this.idThreadClicked === idThread) {
+      return 'glyphicon glyphicon-arrow-up';
+    }
+    else {
+      return 'glyphicon glyphicon-arrow-down';
+    }
+  }
+
+
   onAddMessage() {
-    this.addMsg = true;
+    this.addMsg = !this.addMsg;
   }
   onConfimrMsg() {
+    this.addMsgSuccess = false;
+    this.addMsgError = false;
     const msg = new Message(this.user.email, Date.now(), this.msgForm.get('msgMessage').value);
     this.auths.addMessageInThread(this.threadDetail.idThread, msg)
       .subscribe(
       (res) => {
         this.auths.getThreads().subscribe(
           (res) => {
+            this.addMsgSuccess = true;
             this.threads = res.filter((tr) => tr.usermail == this.user.email);
+            this.threadDetail = this.threads.find(tr => tr.idThread == this.idThreadClicked);
           },
           (err) => {
+            this.addMsgError = true;
             console.log(err);
           });
       },
       (err) => {
+        this.addMsgError = true;
         console.log(err);
       });
+  }
+  
+  onClose(idThread){
+    if(confirm("Are you sure you Want to close the Threads. Once close can NOT be Re- Open")){
+      
+    }
+
   }
 
 

@@ -17,14 +17,14 @@
           <th>Details</th>
           <th>Close</th>
         </tr>
-        <tr *ngFor="let thread of threads">
+        <tr *ngFor="let thread of threads" [ngClass]="onClassActive(thread.idThread)">
           <td>{{thread.idThread}}</td>
           <td>{{thread.type}}</td>
           <td *ngIf="thread.open">Open</td>
           <td *ngIf="!thread.open">Close</td>
           <td>{{thread.description}}</td>
-          <td class="text-center"><button class="btn btn-info" (click)="onDetails(thread.idThread)">Details</button></td>
-          <td class="text-center"><button class="btn btn-warning">Close</button></td>
+          <td class="text-center"><button class="btn btn-info" (click)="onDetails(thread.idThread)">Details  <span  [ngClass]="onClickedButton(thread.idThread)" aria-hidden="true"></span></button></td>
+          <td class="text-center"><button class="btn btn-warning" [disabled]="!thread.open" (click)="onClose(thread.idThread)">Close</button></td>
         </tr>
       </table>
     </div>
@@ -32,7 +32,8 @@
 
   <div *ngIf="details">
     <div class="row" *ngFor="let msg of threadDetail.messages; index as i">
-      <div class="col-xs-12 col-sm-5 col-md-4 col-sm-offset-1 col-md-offset-1">
+
+      <div *ngIf="msg.usermail === user.email" class="col-xs-12 col-sm-5 col-md-4 col-sm-offset-2 col-md-offset-2">
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Send by: {{msg.usermail}}</h3>
@@ -45,10 +46,26 @@
           </div>
         </div>
       </div>
+
+      <div *ngIf="msg.usermail != user.email" class="col-xs-12 col-sm-5 col-md-4 col-sm-offset-5 col-md-offset-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Send by: {{msg.usermail}}</h3>
+          </div>
+          <div class="panel-body">
+            <p>{{msg.message}}</p>
+          </div>
+          <div class="panel-footer">
+            Send on: {{msg.date | date:'medium'}}
+          </div>
+        </div>
+      </div>
+
     </div>
+
     <div class="row">
       <div class="col-xs-12 text-right">
-        <button class="btn btn-primary" (click)="onAddMessage()">Add Message</button>
+        <button class="btn btn-primary" [disabled]="!threadDetail.open" (click)="onAddMessage()">Add Message    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button>
       </div>
     </div>
     <hr>
@@ -59,6 +76,15 @@
         <div class="form-group">
           <label for="msgMessage">Message</label>
           <textarea name="msgMessage" id="msgMessage" cols="30" rows="10" class="form-control" formControlName="msgMessage"></textarea>
+          <span *ngIf="!msgForm.get('msgMessage').valid && msgForm.get('msgMessage').touched" class="help-block">
+            <span *ngIf="msgForm.get('msgMessage').errors['required']">Please enter a message</span>
+          </span>
+          <span *ngIf="msgForm.get('msgMessage').valid && msgForm.get('msgMessage').touched && msgForm.get('msgMessage').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+          <span *ngIf="addMsgError" class="help-block bg-danger">Couldn´t send the message - Please try again later</span>
+          <span *ngIf="addMsgSuccess" class="help-block bg-success">New Message correctly send</span>
         </div>
         <div class="text-center">
           <button type="submit" class="btn btn-success">Send Message</button>
@@ -71,7 +97,7 @@
 
   <div class="row">
     <div class="col-xs-12 text-right">
-      <button class="btn btn-primary" (click)="onOpenNewThread()">Open a New Thread <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+      <button class="btn btn-primary" (click)="onOpenNewThread()">Open a New Thread   <span class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
     </div>
   </div>
   <div *ngIf="newThread" class="row">
@@ -86,17 +112,40 @@
             <option value="Problem with an order">Problem with an order</option>
             <option value="Problem with a product">Problem with a product</option>
           </select>
+          <span *ngIf="!threadForm.get('threadType').valid && threadForm.get('threadType').touched" class="help-block">
+            <span *ngIf="threadForm.get('threadType').errors['required']">Please select the type of Thread</span>
+          </span>
+          <span *ngIf="threadForm.get('threadType').valid && threadForm.get('threadType').touched && threadForm.get('threadType').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="threadDescription">Description</label>
           <input type="text" name="threadDescription" id="threadDescription" class="form-control" formControlName="threadDescription">
+          <span *ngIf="!threadForm.get('threadDescription').valid && threadForm.get('threadDescription').touched" class="help-block">
+            <span *ngIf="threadForm.get('threadDescription').errors['required']">Please enter the description of the Thread</span>
+          </span>
+          <span *ngIf="threadForm.get('threadDescription').valid && threadForm.get('threadDescription').touched && threadForm.get('threadDescription').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
         </div>
         <div class="form-group">
           <label for="threadMessage">Message</label>
           <textarea name="threadMessage" id="threadMessage" cols="30" rows="10" class="form-control" formControlName="threadMessage"></textarea>
+          <span *ngIf="!threadForm.get('threadMessage').valid && threadForm.get('threadMessage').touched" class="help-block">
+            <span *ngIf="threadForm.get('threadMessage').errors['required']">Please enter a message</span>
+          </span>
+          <span *ngIf="threadForm.get('threadMessage').valid && threadForm.get('threadMessage').touched && threadForm.get('threadMessage').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+          <span *ngIf="newThreadError" class="help-block bg-danger">Couldn´t create the Thread - Please try again later</span>
+          <span *ngIf="newThreadSuccess" class="help-block bg-success">New Thread correctly opened</span>
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-success">Open Thread</button>
+          <button type="submit" [disabled]="!threadForm.valid" class="btn btn-success">Open Thread</button>
           <button type="reset" class="btn btn-warning">Clear</button>
         </div>
       </form>
