@@ -24,7 +24,8 @@ export class UserSettingsComponent implements OnInit {
   updateInfoError: boolean = false;
   updatePasswordSuccess: boolean = false;
   updatePasswordError: boolean = false;
-
+  updateUserNameSuccess: boolean = false;
+  updateUserNameError: boolean = false;
 
   constructor(private auths: AuthService) { }
 
@@ -230,6 +231,8 @@ export class UserSettingsComponent implements OnInit {
   onModifyUser() {
     if (this.modifyUser) {
       this.modifyUser = false;
+      this.updateUserNameError = false;
+      this.updateUserNameSuccess = false;
       this.settingsForm.controls['settings-username'].disable();
       this.settingsForm.controls['settings-username'].markAsPristine;
       this.settingsForm.controls['settings-username'].setValue(this.user.username);
@@ -243,7 +246,28 @@ export class UserSettingsComponent implements OnInit {
     this.settingsForm.controls['settings-username'].setValue('');
   }
   onUpdateUserName() {
-    this.settingsForm.controls['settings-username'].value;
+    this.updateUserNameError = false;
+    this.updateUserNameSuccess = false;
+    const oldUserName: string = this.user.username;
+    this.user.username = this.settingsForm.controls['settings-username'].value;
+    this.auths.modifyUserName(this.user)
+      .then(res => {
+        this.auths.modifyUserNameOrders(oldUserName, this.user.username).subscribe(
+          (res) => {
+            if (res) {
+              this.auths.modifyUserNameUsers(oldUserName, this.user.username).subscribe(
+                (res) => {
+                  this.updateUserNameSuccess = true;
+                  this.settingsForm.controls['settings-username'].markAsPristine;
+                  this.settingsForm.controls['settings-username'].setValue(this.user.username);
+                },
+                (err) => { this.updateUserNameError = true; }
+              );
+            }
+          },
+          (err) => { this.updateUserNameError = true; });
+      })
+      .catch(err => { console.log("Error - Update profile") });
   }
 
 }

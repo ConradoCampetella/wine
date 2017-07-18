@@ -9,6 +9,8 @@ import { User } from './user.model';
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
 import { Subscription } from "rxjs/Subscription";
+import { Order } from "app/shared/orders.model";
+import { Subject } from "rxjs/Rx";
 
 @Injectable()
 
@@ -16,6 +18,8 @@ import { Subscription } from "rxjs/Subscription";
 export class AuthService {
   token: string;
   user: User;
+  orders: Order[];
+  userNameHeader = new Subject();
 
   constructor(private router: Router, private http: Http) { }
 
@@ -26,7 +30,10 @@ export class AuthService {
       ).then(response => {
         firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(response => {
           firebase.database().ref('users').child(user.username).set(user).then((response: Response) => {
-            firebase.auth().currentUser.updateProfile({ displayName: user.username, photoURL: "" });
+            firebase.auth().currentUser.updateProfile({ displayName: user.username, photoURL: "" })
+              .then(res => {
+                this.redirect();
+              });
           })
         })
       });
@@ -116,9 +123,69 @@ export class AuthService {
     return firebase.auth().currentUser.displayName;
   }
 
-  modifyUserName() {
-
+  modifyUserName(userInfo: User) {
+    return firebase.auth().currentUser.updateProfile({ displayName: userInfo.username, photoURL: '' });
   }
+
+  modifyUserNameOrders(oldUserName: string, newUserName: string) {
+    const response = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/orders/' + oldUserName + '.json?auth=' + this.token)
+        .map((response: Response) => {
+          const orders: Order[] = response.json();
+          return orders;
+        })
+        .catch((error: Response) => {
+          return Observable.throw('No Orders were Found');
+        })
+        .subscribe((response: Order[]) => {
+          this.orders = response;
+          this.http.put('https://ng-wine-app.firebaseio.com/orders/' + newUserName + '.json?auth=' + this.token, this.orders)
+            .subscribe(
+            response => {
+              return this.http.delete('https://ng-wine-app.firebaseio.com/orders/' + oldUserName + '.json?auth=' + this.token)
+                .subscribe(
+                (res) => { observer.next('Update Orders Correct'); },
+                (error) => { observer.error('Error - Delete Order'); }
+                );
+            },
+            error => {
+              observer.error('Error - Put Orders New User');
+            });
+        });
+    });
+    return response;
+  }
+
+  modifyUserNameUsers(oldUserName: string, newUserName: string) {
+    const response = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/users/' + oldUserName + '.json')
+        .map((response: Response) => {
+          const user: User = response.json();
+          return user;
+        })
+        .catch((error: Response) => {
+          return Observable.throw('No Orders were Found');
+        })
+        .subscribe((response: User) => {
+          this.user = response;
+          this.user.username = newUserName;
+          this.http.put('https://ng-wine-app.firebaseio.com/users/' + newUserName + '.json?auth=' + this.token, this.user)
+            .subscribe(
+            response => {
+              return this.http.delete('https://ng-wine-app.firebaseio.com/users/' + oldUserName + '.json?auth=' + this.token)
+                .subscribe(
+                (res) => { observer.next('Update User Correct'); this.userNameHeader.next(newUserName) },
+                (error) => { observer.error('Error - Delete user'); }
+                );
+            },
+            error => {
+              observer.error('Error - Put Users new User');
+            });
+        });
+    });
+    return response;
+  }
+
   modifyPassword(userInfo: User) {
     return firebase.auth().currentUser.updatePassword(userInfo.password);
   }
@@ -127,7 +194,7 @@ export class AuthService {
     return this.http.patch('https://ng-wine-app.firebaseio.com/users/' + userInfo.username + '.json?auth=' + this.token, userInfo);
   }
 
-  updateUser(username:string) {
+  updateUser(username: string) {
     return this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json?auth=' + this.token)
       .map((response: Response) => {
         const user = response.json();
