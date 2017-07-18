@@ -10,18 +10,29 @@ import { AuthService } from "app/shared/auth.service";
 })
 export class UserHeaderComponent implements OnInit {
   isIn = false;
-  username:string;
+  username: string;
 
-  constructor(private auths:AuthService, private router: Router) { }
+  constructor(private auths: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.username = this.auths.getUserName();
+    this.auths.userNameHeader.subscribe(
+      (username: string) => {
+        if (username) {
+          this.username = username;
+        }
+        else {
+          this.username = this.auths.getUserName();
+        }
+
+      }
+    );
   }
 
-  changeInClass(){
+  changeInClass() {
     this.isIn = !this.isIn;
   }
-  onLogOut(){
+  onLogOut() {
     this.auths.logout();
     this.router.navigate(['/home']);
   }
