@@ -245,7 +245,46 @@ export class AuthService {
     });
     return response;
   }
-
+  getThreads(){
+    return this.http.get('https://ng-wine-app.firebaseio.com/threads.json?auth=' + this.token)
+      .map((response:Response)=>{
+        const trs:Thread[] = response.json();
+        return trs;
+      });
+  }
+  
+  addMessageInThread(trId:string, msg:Message){
+    const response = Observable.create((observer:Observer<string>)=>{
+      this.getThreads().subscribe(
+        (res:Thread[])=>{
+          const index = res.findIndex(thr=>thr.idThread==trId);
+          this.http.get('https://ng-wine-app.firebaseio.com/threads/'+index+'/messages.json?auth=' + this.token)
+            .map((response:Response)=>{
+              const message = response.json();
+              return message;
+            })
+            .subscribe(
+              (res)=>{
+                const i = res.length;
+                this.http.put('https://ng-wine-app.firebaseio.com/threads/'+index+'/messages/'+i+'.json?auth=' + this.token,msg)
+                  .subscribe(
+                    (res)=>{
+                      observer.next("sucess");
+                    },
+                    (err)=>{
+                      observer.error("error - put message");
+                    });
+              },
+              (err)=>{
+                observer.error("error - get messages");
+              });
+        },
+        (err)=>{
+          observer.error("error - get threads");
+        });
+    });
+    return response;
+  }
 
   
 }
