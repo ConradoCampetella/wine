@@ -4,6 +4,7 @@
       <h2>Order History</h2>
     </div>
   </div>
+  <hr>
   <div class="row">
     <table class="table table-bordered">
       <tr class="info">
@@ -44,7 +45,8 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="progress">
-        <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="detailProgress" aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': detailProgress+'%'}">
+        <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="detailProgress" aria-valuemin="0" aria-valuemax="100"
+          [ngStyle]="{'width': detailProgress+'%'}">
           {{detailProgress | number:'1.0-1'}}%
         </div>
       </div>
@@ -87,8 +89,12 @@
   </div>
   <div class="row">
     <div class="col-xs-12 text-right">
-      <h3>Total: {{detailTotal | currency:'USD':true}}</h3>
+      <button class="btn btn-success text-left" (click)="onOrderToCart()"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Add Order into Cart</button>
     </div>
   </div>
-
+  <div class="row">
+    <div class="col-xs-12 text-right">
+      <h3>Total: <strong>{{detailTotal | currency:'USD':true}}</strong></h3>
+    </div>
+  </div>
 </div>

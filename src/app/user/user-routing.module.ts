@@ -8,7 +8,7 @@ import { ShoppingCartComponent } from "app/user/shopping-cart/shopping-cart.comp
 import { UserWineDetailComponent } from "app/user/user-wines/user-wine-detail/user-wine-detail.component";
 import { UserOrderComponent } from "app/user/user-order/user-order.component";
 import { UserSettingsComponent } from "app/user/user-settings/user-settings.component";
-import { UserMessageComponent } from "app/user/user-message/user-message.component";
+import { UserThreadsComponent } from "app/user/user-threads/user-threads.component";
 
 
 const userRoutes: Routes = [
@@ -21,7 +21,7 @@ const userRoutes: Routes = [
             { path: 'shoppingcart', component: ShoppingCartComponent },
             { path: 'orderhistory', component: UserOrderComponent },
             { path: 'settings', component: UserSettingsComponent },
-            { path: 'message', component: UserMessageComponent },
+            { path: 'threads', component: UserThreadsComponent },
         ]
     }
 ]

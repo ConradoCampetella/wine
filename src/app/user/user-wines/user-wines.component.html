@@ -1,9 +1,13 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 text-right">
-      <h3>Take your time, make your order...</h3>
+    <div class="col-xs-12 col-sm-6 text-left">
+      <h2>Our Wines</h2>
+    </div>
+    <div class="col-xs-12 col-sm-6 text-right">
+      <h2><small>Take your time, make your order...</small></h2>
     </div>
   </div>
+  <hr>
   <div class="row">
     <div class="col-xs-12">
       <form class="form-inline" [formGroup]="userProdFilterForm" (ngSubmit)="onFilter()">
@@ -44,7 +48,7 @@
         <th>Order</th>
       </tr>
       <ng-container *ngFor="let label of labels | paginate: {itemsPerPage:ipp, currentPage: p}; index as il">
-        <ng-container *ngIf="!filter || label.name === filterLabel" >
+        <ng-container *ngIf="!filter || label.name === filterLabel">
           <tr *ngFor="let wine of label.wines; index as iw" [ngClass]="classSuccess(wine)">
             <td>{{label.name}}</td>
             <td><a [routerLink]="['/wines', wine.wineId]" class="btn btn-info" role="button">{{wine.wineId}}</a></td>

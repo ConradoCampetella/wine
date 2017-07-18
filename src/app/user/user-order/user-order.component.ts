@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
 
 import { AuthService } from "app/shared/auth.service";
 import { WinesService } from "app/shared/wines.service";
@@ -18,7 +19,7 @@ export class UserOrderComponent implements OnInit {
   detailTotal: number;
   detailProgress: number = 0;
 
-  constructor(private auths: AuthService, private wineService: WinesService) { }
+  constructor(private auths: AuthService, private wineService: WinesService, private router:Router) { }
 
   ngOnInit() {
     this.username = this.auths.getUserName();
@@ -123,5 +124,11 @@ export class UserOrderComponent implements OnInit {
       this.orders.splice(index);
     }
 
+  }
+  onOrderToCart(){
+    for (let mySL of this.orderDetail.sclOrder){
+      this.wineService.addToShoppingCart(mySL.wine,mySL.quantity);
+      this.router.navigate(['/user/shoppingcart']);
+    }
   }
 }
