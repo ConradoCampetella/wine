@@ -205,119 +205,107 @@ export class AuthService {
   }
 
   //---------------------------------
-  openNewThread(type:string, description:string, message:Message ){
-    const threadId = this.getUserName()+Date.now();
-    const msg:Message[]=[message]
-    const thread:Thread = new Thread (threadId, message.usermail, type, description, true, msg);
-    const response = Observable.create((observer: Observer<string>)=>{
+  openNewThread(type: string, description: string, message: Message) {
+    const threadId = this.getUserName() + Date.now();
+    const msg: Message[] = [message]
+    const thread: Thread = new Thread(threadId, message.usermail, type, description, true, msg);
+    const response = Observable.create((observer: Observer<string>) => {
       this.http.get('https://ng-wine-app.firebaseio.com/threads.json?auth=' + this.token)
-        .map((response:Response)=>{
-          const trs : Thread[] = response.json();
+        .map((response: Response) => {
+          const trs: Thread[] = response.json();
           return trs;
         })
         .subscribe(
-          (res:Thread[])=>{
-            if(res){
-              const index = res.length;
-              this.http.put('https://ng-wine-app.firebaseio.com/threads/'+index+'.json?auth=' + this.token, thread)
-                .subscribe(
-                  (res)=>{
-                    observer.next('success');
-                  },
-                  (err)=>{
-                    observer.error('error - putting Thread');
-                  });
-            }
-            else{
-              this.http.put('https://ng-wine-app.firebaseio.com/threads/'+0+'.json?auth=' + this.token, thread)
-                .subscribe(
-                  (res)=>{
-                    observer.next('success');
-                  },
-                  (err)=>{
-                    observer.error('error - putting Thread');
-                  });
-            }
-          }, 
-          (error)=>{
-            observer.error('error - getting Threads');
-          });
+        (res: Thread[]) => {
+          if (res) {
+            const index = res.length;
+            this.http.put('https://ng-wine-app.firebaseio.com/threads/' + index + '.json?auth=' + this.token, thread)
+              .subscribe(
+              (res) => {
+                observer.next('success');
+              },
+              (err) => {
+                observer.error('error - putting Thread');
+              });
+          }
+          else {
+            this.http.put('https://ng-wine-app.firebaseio.com/threads/' + 0 + '.json?auth=' + this.token, thread)
+              .subscribe(
+              (res) => {
+                observer.next('success');
+              },
+              (err) => {
+                observer.error('error - putting Thread');
+              });
+          }
+        },
+        (error) => {
+          observer.error('error - getting Threads');
+        });
     });
     return response;
   }
-  getThreads(){
+  getThreads() {
     return this.http.get('https://ng-wine-app.firebaseio.com/threads.json?auth=' + this.token)
-      .map((response:Response)=>{
-        const trs:Thread[] = response.json();
+      .map((response: Response) => {
+        const trs: Thread[] = response.json();
         return trs;
       });
   }
-  
-  addMessageInThread(trId:string, msg:Message){
-    const response = Observable.create((observer:Observer<string>)=>{
+
+  addMessageInThread(trId: string, msg: Message) {
+    const response = Observable.create((observer: Observer<string>) => {
       this.getThreads().subscribe(
-        (res:Thread[])=>{
-          const index = res.findIndex(thr=>thr.idThread==trId);
-          this.http.get('https://ng-wine-app.firebaseio.com/threads/'+index+'/messages.json?auth=' + this.token)
-            .map((response:Response)=>{
+        (res: Thread[]) => {
+          const index = res.findIndex(thr => thr.idThread == trId);
+          this.http.get('https://ng-wine-app.firebaseio.com/threads/' + index + '/messages.json?auth=' + this.token)
+            .map((response: Response) => {
               const message = response.json();
               return message;
             })
             .subscribe(
-              (res)=>{
-                const i = res.length;
-                this.http.put('https://ng-wine-app.firebaseio.com/threads/'+index+'/messages/'+i+'.json?auth=' + this.token,msg)
-                  .subscribe(
-                    (res)=>{
-                      observer.next("sucess");
-                    },
-                    (err)=>{
-                      observer.error("error - put message");
-                    });
-              },
-              (err)=>{
-                observer.error("error - get messages");
-              });
+            (res) => {
+              const i = res.length;
+              this.http.put('https://ng-wine-app.firebaseio.com/threads/' + index + '/messages/' + i + '.json?auth=' + this.token, msg)
+                .subscribe(
+                (res) => {
+                  observer.next("sucess");
+                },
+                (err) => {
+                  observer.error("error - put message");
+                });
+            },
+            (err) => {
+              observer.error("error - get messages");
+            });
         },
-        (err)=>{
+        (err) => {
           observer.error("error - get threads");
         });
     });
     return response;
   }
 
-  modifyThreadState(trId:string, open:boolean){
-    const response = Observable.create((observer:Observer<string>)=>{
+  modifyThreadState(trId: string, open: boolean) {
+    const response = Observable.create((observer: Observer<string>) => {
       this.getThreads().subscribe(
-        (res:Thread[])=>{
-          const index = res.findIndex(thr=>thr.idThread==trId);
-          this.http.get('https://ng-wine-app.firebaseio.com/threads/'+index+'/messages.json?auth=' + this.token)
-            .map((response:Response)=>{
-              const message = response.json();
-              return message;
-            })
+        (res: Thread[]) => {
+          const index = res.findIndex(thr => thr.idThread == trId);
+          this.http.patch('https://ng-wine-app.firebaseio.com/threads/' + index + '.json?auth=' + this.token,'{"open": '+open.toString()+'}')
             .subscribe(
-              (res)=>{
-                const i = res.length;
-                this.http.patch('https://ng-wine-app.firebaseio.com/threads/'+index+'/messages/'+i+'.json?auth=' + this.token,{"open": open})
-                  .subscribe(
-                    (res)=>{
-                      observer.next("sucess");
-                    },
-                    (err)=>{
-                      observer.error("error - put message");
-                    });
-              },
-              (err)=>{
-                observer.error("error - get messages");
-              });
+            (res) => {
+              observer.next("sucess");
+            },
+            (err) => {
+              observer.error("error - put message");
+            });
         },
-        (err)=>{
+        (err) => {
           observer.error("error - get threads");
         });
     });
     return response;
   }
 
-  
+
 }

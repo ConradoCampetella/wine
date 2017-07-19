@@ -20,9 +20,9 @@
         <tr *ngFor="let thread of threads" [ngClass]="onClassActive(thread.idThread)">
           <td>{{thread.idThread}}</td>
           <td>{{thread.type}}</td>
-          <td *ngIf="thread.open">Open</td>
-          <td *ngIf="!thread.open">Close</td>
           <td>{{thread.description}}</td>
+          <td *ngIf="thread.open">Open</td>
+          <td *ngIf="!thread.open">Close</td>          
           <td class="text-center"><button class="btn btn-info" (click)="onDetails(thread.idThread)">Details  <span  [ngClass]="onClickedButton(thread.idThread)" aria-hidden="true"></span></button></td>
           <td class="text-center"><button class="btn btn-warning" [disabled]="!thread.open" (click)="onClose(thread.idThread)">Close</button></td>
         </tr>
