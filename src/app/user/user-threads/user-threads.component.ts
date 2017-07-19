@@ -62,6 +62,14 @@ export class UserThreadsComponent implements OnInit {
     this.auths.openNewThread(type, description, message)
       .subscribe(
       (res) => {
+        this.auths.getThreads().subscribe(
+          (res) => {
+            this.threads = res.filter((tr) => tr.usermail == this.user.email);
+            this.newThread = false;
+          },
+          (err) => {
+            console.log(err);
+          });
         this.newThreadSuccess = true;
       },
       (err) => {
@@ -115,6 +123,7 @@ export class UserThreadsComponent implements OnInit {
             this.addMsgSuccess = true;
             this.threads = res.filter((tr) => tr.usermail == this.user.email);
             this.threadDetail = this.threads.find(tr => tr.idThread == this.idThreadClicked);
+            this.addMsg = false;
           },
           (err) => {
             this.addMsgError = true;
@@ -126,10 +135,24 @@ export class UserThreadsComponent implements OnInit {
         console.log(err);
       });
   }
-  
-  onClose(idThread){
-    if(confirm("Are you sure you Want to close the Threads. Once close can NOT be Re- Open")){
-      
+
+  onClose(idThread) {
+    if (confirm("Are you sure you Want to close the Threads. Once close can NOT be Re-Open")) {
+      this.auths.modifyThreadState(idThread, false).subscribe(
+        (res) => {
+          this.auths.getThreads().subscribe(
+            (res) => {
+              this.threads = res.filter((tr) => tr.usermail == this.user.email);
+              this.threadDetail = this.threads.find(tr => tr.idThread == this.idThreadClicked);
+            },
+            (err) => {
+              console.log(err);
+            });
+
+        },
+        (err) => {
+          console.log(err);
+        });
     }
 
   }
