@@ -34,10 +34,16 @@ export class AuthService {
           firebase.database().ref('users').child(user.username).set(user).then((resp: Response) => {
             firebase.auth().currentUser.updateProfile({ displayName: user.username, photoURL: '' })
               .then(respo => {
-                this.redirect();
+                this.loginUser(user.email, user.password).subscribe(
+                  (loginResp)=>{
+                    console.log(loginResp);
+                  },
+                  (error)=>{
+                    console.log(error);
+                  });
               });
-          })
-        })
+          });
+        });
       });
   }
 
@@ -263,7 +269,7 @@ export class AuthService {
             })
             .subscribe(
             (resp) => {
-              const i = res.length;
+              const i = resp.length;
               this.http.put('https://ng-wine-app.firebaseio.com/threads/' + index + '/messages/' + i + '.json?auth=' + this.token, msg)
                 .subscribe(
                 (respo) => {
