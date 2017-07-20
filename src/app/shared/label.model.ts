@@ -1,4 +1,4 @@
-import { Wine } from "app/shared/wine.model";
+import { Wine } from 'app/shared/wine.model';
 
 export class Label {
     public name: string;

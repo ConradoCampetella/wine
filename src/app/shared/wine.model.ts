@@ -12,6 +12,6 @@ export class Wine {
         this.img = img;
         this.price = price;
         this.description = description;
-        this.wineId=wineId;
+        this.wineId = wineId;
     }
 }

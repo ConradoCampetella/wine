@@ -1,4 +1,4 @@
-import { ShoppingCart } from "app/shared/shoppingCart.model";
+import { ShoppingCart } from '../shared/shoppingCart.model';
 
 export class Order {
     public orderId: string;

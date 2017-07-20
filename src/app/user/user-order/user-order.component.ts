@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
-import { AuthService } from "app/shared/auth.service";
-import { WinesService } from "app/shared/wines.service";
-import { Order } from "app/shared/orders.model";
+import { AuthService } from '../../shared/auth.service';
+import { WinesService } from '../../shared/wines.service';
+import { Order } from '../../shared/orders.model';
 
 @Component({
   selector: 'app-user-order',
@@ -13,13 +13,13 @@ import { Order } from "app/shared/orders.model";
 export class UserOrderComponent implements OnInit {
   orders: Order[];
   username: string;
-  details: boolean = false;
+  details = false;
   clickedBtn: string;
   orderDetail: Order;
   detailTotal: number;
-  detailProgress: number = 0;
+  detailProgress = 0;
 
-  constructor(private auths: AuthService, private wineService: WinesService, private router:Router) { }
+  constructor(private auths: AuthService, private wineService: WinesService, private router: Router) { }
 
   ngOnInit() {
     this.username = this.auths.getUserName();
@@ -31,14 +31,13 @@ export class UserOrderComponent implements OnInit {
   }
 
   onDetails(orderClicked: string) {
-    this.orderDetail = this.orders.find(order => order.orderId == orderClicked);
+    this.orderDetail = this.orders.find(order => order.orderId === orderClicked);
     this.calculateDetailTotal();
     this.calculateDetailProgress()
     if (this.clickedBtn === orderClicked) {
-      this.clickedBtn = "";
+      this.clickedBtn = '';
       this.details = false;
-    }
-    else {
+    } else {
       this.clickedBtn = orderClicked;
       this.details = true;
     }
@@ -47,16 +46,14 @@ export class UserOrderComponent implements OnInit {
   onClickedButton(orderId) {
     if (this.clickedBtn === orderId) {
       return 'glyphicon glyphicon-arrow-up';
-    }
-    else {
+    } else {
       return 'glyphicon glyphicon-arrow-down';
     }
   }
   onClassActive(orderId) {
     if (this.clickedBtn === orderId) {
       return 'active';
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -64,7 +61,7 @@ export class UserOrderComponent implements OnInit {
   calculateDetailTotal() {
     if (this.orderDetail) {
       this.detailTotal = 0;
-      for (let sc of this.orderDetail.sclOrder) {
+      for (const sc of this.orderDetail.sclOrder) {
         this.detailTotal += sc.quantity * sc.wine.price;
       }
     }
@@ -104,30 +101,28 @@ export class UserOrderComponent implements OnInit {
   buttonDisabled(status) {
     if (status === 'waiting for approve') {
       return false;
-    }
-    else if (status === 'Approved') {
+    } else if (status === 'Approved') {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
 
   onModify(orderId) {
-    const orderM = this.orders.find(order => order.orderId == orderId);
+    const orderM = this.orders.find(order => order.orderId === orderId);
     this.wineService.modifyOrder(orderM);
   }
   onDestroy(orderId) {
-    if (confirm("ARE YOU SURE THAT YOU WANT TO DELETE THE ORDER")) {
+    if (confirm('ARE YOU SURE THAT YOU WANT TO DELETE THE ORDER')) {
       this.wineService.destroyOrder(orderId);
-      const index = this.orders.findIndex(order => order.orderId == orderId);
+      const index = this.orders.findIndex(order => order.orderId === orderId);
       this.orders.splice(index);
     }
 
   }
-  onOrderToCart(){
-    for (let mySL of this.orderDetail.sclOrder){
-      this.wineService.addToShoppingCart(mySL.wine,mySL.quantity);
+  onOrderToCart() {
+    for (const mySL of this.orderDetail.sclOrder) {
+      this.wineService.addToShoppingCart(mySL.wine, mySL.quantity);
       this.router.navigate(['/user/shoppingcart']);
     }
   }

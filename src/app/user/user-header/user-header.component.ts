@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
-import { AuthService } from "app/shared/auth.service";
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-user-header',
@@ -20,11 +20,9 @@ export class UserHeaderComponent implements OnInit {
       (username: string) => {
         if (username) {
           this.username = username;
-        }
-        else {
+        } else {
           this.username = this.auths.getUserName();
         }
-
       }
     );
   }
@@ -36,5 +34,4 @@ export class UserHeaderComponent implements OnInit {
     this.auths.logout();
     this.router.navigate(['/home']);
   }
-
 }

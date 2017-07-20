@@ -1,7 +1,7 @@
 import { Directive, HostListener, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[orderBut]'
+  selector: '[appOrderBut]'
 })
 export class OrderButtonDirective {
   @HostBinding('class.btn-default') isDefault = true;

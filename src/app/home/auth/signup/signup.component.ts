@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from "app/shared/auth.service";
+import { AuthService } from '../../../shared/auth.service';
 import { User } from '../../../shared/user.model'
 import { Observable } from 'rxjs/Observable';
 
@@ -11,10 +11,10 @@ import { Observable } from 'rxjs/Observable';
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
-  password:string;
-  username:string;
-  user:User;
-  pending:boolean =false;
+  password: string;
+  username: string;
+  user: User;
+  pending = false;
 
   constructor(private auths: AuthService) { }
 
@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
     this.signupForm = new FormGroup({
       'signup-name': new FormControl(null, [Validators.required]),
       'signup-sirname': new FormControl(null, [Validators.required]),
-      'signup-username': new FormControl(null, [Validators.required,Validators.minLength(4)], this.userNameExists.bind(this)),
+      'signup-username': new FormControl(null, [Validators.required, Validators.minLength(4)], this.userNameExists.bind(this)),
       'signup-email': new FormControl(null, [Validators.required, Validators.email]),
       'signup-adress': new FormControl(null, [Validators.required]),
       'signup-city': new FormControl(null, [Validators.required]),
@@ -34,14 +34,13 @@ export class SignupComponent implements OnInit {
       (status) => {
         this.username = this.signupForm.get('signup-username').value;
         this.password = this.signupForm.get('signup-password').value;
-        if(this.signupForm.get('signup-username').status==="PENDING"){
+        if (this.signupForm.get('signup-username').status === 'PENDING') {
           this.pending = true;
-        }
-        else{
+        } else {
           this.pending = false;
         }
       }
-    );    
+    );
   }
   onSignup() {
     const name = this.signupForm.get('signup-name').value;
@@ -52,34 +51,31 @@ export class SignupComponent implements OnInit {
     const adress = this.signupForm.get('signup-adress').value;
     const city = this.signupForm.get('signup-city').value;
     const country = this.signupForm.get('signup-country').value;
-    this.user = new User(name, sirname, username, email, adress, city, country, password, "false");
+    this.user = new User(name, sirname, username, email, adress, city, country, password, 'false');
     this.auths.signupUser(this.user);
 
   }
 
-  passwordMatchValidator(control: FormControl): {[s: string]: boolean}{
-    if (this.password === control.value){
-        return null;
-    }
-    else{
-      return {'passwordsDoNotMatch':true};
+  passwordMatchValidator(control: FormControl): { [s: string]: boolean } {
+    if (this.password === control.value) {
+      return null;
+    } else {
+      return { 'passwordsDoNotMatch': true };
     }
   }
-  userNameExists(control: FormControl): Promise<any> | Observable <any>{
-    const promise = new Promise <any>((resolve, reject)=>{
-      console.log (this.auths.userNameExists(this.username));
-      setTimeout(()=>{
-        this.auths.userNameExists(this.username).subscribe((response:Response)=>{
-          if (response.toString() === "true"){
-            resolve({'userNameExists':true});
-          }
-          else{
+  userNameExists(control: FormControl): Promise<any> | Observable<any> {
+    const promise = new Promise<any>((resolve, reject) => {
+      console.log(this.auths.userNameExists(this.username));
+      setTimeout(() => {
+        this.auths.userNameExists(this.username).subscribe((response: Response) => {
+          if (response.toString() === 'true') {
+            resolve({ 'userNameExists': true });
+          } else {
             resolve(null);
           }
         });
-      },1000);
+      }, 1000);
     });
     return promise;
   }
-
 }

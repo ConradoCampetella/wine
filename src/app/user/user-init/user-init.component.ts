@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
-import { AuthService } from "app/shared/auth.service";
-import { WinesService } from "app/shared/wines.service";
-import { User } from "app/shared/user.model";
-import { Thread } from "app/shared/thread.model";
-import { Order } from "app/shared/orders.model";
-import { ShoppingCart } from "app/shared/shoppingCart.model";
+import { AuthService } from '../../shared/auth.service';
+import { WinesService } from '../../shared/wines.service';
+import { User } from '../../shared/user.model';
+import { Thread } from '../../shared/thread.model';
+import { Order } from '../../shared/orders.model';
+import { ShoppingCart } from '../../shared/shoppingCart.model';
 
 @Component({
   selector: 'app-user-init',
@@ -24,10 +24,20 @@ export class UserInitComponent implements OnInit {
   ordApproved: number;
   ordPaid: number;
   ordCompleted: number;
-  ordTotal: number = 0;
+  ordTotal = 0;
   dateOrders: { month: string, quantity: number, porcent: number }[] = [
-    { month: 'January', quantity: 0, porcent: 0 }, { month: 'February', quantity: 0, porcent: 0 }, { month: 'March', quantity: 0, porcent: 0 }, { month: 'April', quantity: 0, porcent: 0 }, { month: 'May', quantity: 0, porcent: 0 }, { month: 'June', quantity: 0, porcent: 0 },
-    { month: 'July', quantity: 0, porcent: 0 }, { month: 'August', quantity: 0, porcent: 0 }, { month: 'September', quantity: 0, porcent: 0 }, { month: 'October', quantity: 0, porcent: 0 }, { month: 'November', quantity: 0, porcent: 0 }, { month: 'December', quantity: 0, porcent: 0 }
+    { month: 'January', quantity: 0, porcent: 0 },
+    { month: 'February', quantity: 0, porcent: 0 },
+    { month: 'March', quantity: 0, porcent: 0 },
+    { month: 'April', quantity: 0, porcent: 0 },
+    { month: 'May', quantity: 0, porcent: 0 },
+    { month: 'June', quantity: 0, porcent: 0 },
+    { month: 'July', quantity: 0, porcent: 0 },
+    { month: 'August', quantity: 0, porcent: 0 },
+    { month: 'September', quantity: 0, porcent: 0 },
+    { month: 'October', quantity: 0, porcent: 0 },
+    { month: 'November', quantity: 0, porcent: 0 },
+    { month: 'December', quantity: 0, porcent: 0 }
   ];
   scFavWines: ShoppingCart[] = [];
   scFavWinesPercent: number[] = [];
@@ -62,8 +72,8 @@ export class UserInitComponent implements OnInit {
 
   calculateThreads() {
     this.thrMade = this.threads.length;
-    this.thrClose = this.threads.filter(tr => tr.open == false).length;
-    this.thrOpen = this.threads.filter(tr => tr.open == true).length;
+    this.thrClose = this.threads.filter(tr => tr.open === false).length;
+    this.thrOpen = this.threads.filter(tr => tr.open === true).length;
   }
 
   calculateOrders() {
@@ -74,7 +84,7 @@ export class UserInitComponent implements OnInit {
   }
 
   calculateYearOrders() {
-    for (let ord of this.orders) {
+    for (const ord of this.orders) {
       const date = new Date(ord.date);
       switch (date.getMonth()) {
         case 0:
@@ -128,7 +138,7 @@ export class UserInitComponent implements OnInit {
       }
     }
     let i = 0;
-    for (let daOrd of this.dateOrders) {
+    for (const daOrd of this.dateOrders) {
       this.dateOrders[i].porcent = daOrd.quantity / this.ordTotal * 100;
       i++;
     }
@@ -137,14 +147,13 @@ export class UserInitComponent implements OnInit {
 
   orderDatesOrderArray() {
     const date = new Date(Date.now());
-    let dateOrders2: any[] = [];
+    const dateOrders2: any[] = [];
     let m = date.getMonth();
-    for (let daOrd of this.dateOrders) {
+    for (const daOrd of this.dateOrders) {
       dateOrders2.push(this.dateOrders[m]);
-      if (m == 0) {
+      if (m === 0) {
         m = 11;
-      }
-      else {
+      } else {
         m--;
       }
     }
@@ -154,21 +163,20 @@ export class UserInitComponent implements OnInit {
   calculateFavWines() {
     this.scFavWines = [];
     this.scFavWinesPercent = [];
-    for (let ord of this.orders) {
-      for (let sc of ord.sclOrder) {
+    for (const ord of this.orders) {
+      for (const sc of ord.sclOrder) {
         const i = this.scFavWines.findIndex(scF => scF.wine.wineId === sc.wine.wineId);
-        if (i != -1) {
+        if (i !== -1) {
           this.scFavWines[i].quantity = this.scFavWines[i].quantity + sc.quantity;
-        }
-        else {
+        } else {
           this.scFavWines.push(sc);
         }
       }
     }
-    this.scFavWines.sort((a, b) => { return b.quantity - a.quantity });
+    this.scFavWines.sort((a, b) => b.quantity - a.quantity);
     this.scFavWines = this.scFavWines.slice(0, 10);
     let i = 0;
-    for (let sc of this.scFavWines) {
+    for (const sc of this.scFavWines) {
       this.scFavWinesPercent.push(sc.quantity * 100 / this.scFavWines[0].quantity);
       i++;
     }
@@ -177,26 +185,20 @@ export class UserInitComponent implements OnInit {
   classProgressBar(percent) {
     if (percent > 80) {
       return 'progress-bar progress-bar-success';
-    }
-    else if (percent > 60) {
+    } else if (percent > 60) {
       return 'progress-bar progress-bar-info';
-    }
-    else if (percent > 40) {
+    } else if (percent > 40) {
       return 'progress-bar';
-    }
-    else if (percent > 20) {
+    } else if (percent > 20) {
       return 'progress-bar progress-bar-warning';
-    }
-    else if (percent >= 0) {
+    } else if (percent >= 0) {
       return 'progress-bar progress-bar-danger';
     }
   }
   onAddFavWines() {
-    for (let sc of this.scFavWines) {
+    for (const sc of this.scFavWines) {
       this.winesService.addToShoppingCart(sc.wine, 1);
-      this.router.navigate(["/user/shoppingcart"]);
+      this.router.navigate(['/user/shoppingcart']);
     }
   }
-
-
 }

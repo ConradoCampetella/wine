@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from "@angular/router";
-import { LocationStrategy } from "@angular/common";
+import { ActivatedRoute, Params } from '@angular/router';
+import { LocationStrategy } from '@angular/common';
 
-import { WinesService } from "app/shared/wines.service";
-import { Wine } from "app/shared/wine.model";
-import { ShoppingCart } from "app/shared/shoppingCart.model";
+import { WinesService } from '../../../shared/wines.service';
+import { Wine } from '../../../shared/wine.model';
+import { ShoppingCart } from '../../../shared/shoppingCart.model';
 
 @Component({
   selector: 'app-user-wine-detail',
@@ -16,7 +16,7 @@ export class UserWineDetailComponent implements OnInit {
   wine: Wine;
   winesAdd: Wine[] = [];
   scList: ShoppingCart[];
-  
+
   constructor(private wineService: WinesService, private route: ActivatedRoute, private platformStrategy: LocationStrategy) { }
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class UserWineDetailComponent implements OnInit {
       this.idWine = params['id'];
       this.wine = this.wineService.getOneWineWithId(this.idWine);
       this.scList = this.wineService.getShoppingCart();
-      for (let sc of this.scList) {
+      for (const sc of this.scList) {
         this.winesAdd.push(sc.wine);
       }
     })
@@ -34,10 +34,9 @@ export class UserWineDetailComponent implements OnInit {
   }
 
   classSuccess() {
-    if (this.winesAdd.find(wineAdd => wineAdd.wineId == this.wine.wineId)) {
+    if (this.winesAdd.find(wineAdd => wineAdd.wineId === this.wine.wineId)) {
       return 'success';
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -45,5 +44,4 @@ export class UserWineDetailComponent implements OnInit {
     this.winesAdd.push(this.wine);
     this.wineService.addToShoppingCart(this.wine, 1);
   }
-
 }

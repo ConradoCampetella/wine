@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { WinesService } from "app/shared/wines.service";
-import { ShoppingCart } from "app/shared/shoppingCart.model";
-import { ActivatedRoute, Params } from "@angular/router";
+import { WinesService } from '../../shared/wines.service';
+import { ShoppingCart } from '../../shared/shoppingCart.model';
+import { ActivatedRoute, Params } from '@angular/router';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 export class ShoppingCartComponent implements OnInit {
 
   scList: ShoppingCart[];
-  isEmpty: boolean = false;
+  isEmpty = false;
   total = 0;
   value = 0;
   edit: string;
@@ -28,8 +28,7 @@ export class ShoppingCartComponent implements OnInit {
     if (this.scList.length > 0) {
       this.isEmpty = false;
       this.calculateTotal();
-    }
-    else {
+    } else {
       this.isEmpty = true;
     }
   }
@@ -53,23 +52,21 @@ export class ShoppingCartComponent implements OnInit {
   }
   calculateTotal() {
     this.total = 0;
-    for (let sc of this.scList) {
+    for (const sc of this.scList) {
       this.total += sc.wine.price * sc.quantity;
     }
   }
   onClearCart() {
     if (this.edit) {
-      if (confirm("Are you sure you want to clear the Cart and Cancel the order Changes")) {
+      if (confirm('Are you sure you want to clear the Cart and Cancel the order Changes')) {
         this.wineService.clearShoppingList();
         this.wineService.clearEditOrder();
       }
-    }
-    else {
-      if (confirm("Are you sure you want to clear the Cart")) {
+    } else {
+      if (confirm('Are you sure you want to clear the Cart')) {
         this.wineService.clearShoppingList();
       }
     }
-
   }
   onConfirmOrder() {
     this.wineService.generateOrder();
@@ -77,5 +74,4 @@ export class ShoppingCartComponent implements OnInit {
   onModifyOrder() {
     this.wineService.modifyOrderConfirm(this.edit);
   }
-
 }

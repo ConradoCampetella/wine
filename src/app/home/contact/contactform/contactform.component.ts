@@ -19,7 +19,7 @@ export class ContactformComponent implements OnInit {
     });
 
   }
-  onSubmit(){
+  onSubmit() {
     this.contactForm.reset();
   }
 

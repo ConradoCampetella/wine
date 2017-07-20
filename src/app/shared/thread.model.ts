@@ -1,4 +1,4 @@
-import { Message } from "app/shared/message.model";
+import { Message } from './message.model';
 
 export class Thread {
     public idThread: string;
@@ -16,5 +16,4 @@ export class Thread {
         this.open = open;
         this.messages = messages;
     }
-
 }

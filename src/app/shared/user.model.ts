@@ -9,7 +9,16 @@ export class User {
     public password: string;
     public admin: string;
 
-    constructor(name: string, sirname: string, username:string ,email: string, adress: string, city: string, country: string, password: string, admin: string) {
+    constructor(name: string,
+                sirname: string,
+                username: string,
+                email: string,
+                adress: string,
+                city: string,
+                country: string,
+                password: string,
+                admin: string
+            ) {
         this.name = name;
         this.sirname = sirname;
         this.username = username;

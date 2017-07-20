@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { UserComponent } from "app/user/user.component";
-import { UserInitComponent } from "app/user/user-init/user-init.component";
-import { UserWinesComponent } from "app/user/user-wines/user-wines.component";
-import { ShoppingCartComponent } from "app/user/shopping-cart/shopping-cart.component";
-import { UserWineDetailComponent } from "app/user/user-wines/user-wine-detail/user-wine-detail.component";
-import { UserOrderComponent } from "app/user/user-order/user-order.component";
-import { UserSettingsComponent } from "app/user/user-settings/user-settings.component";
-import { UserThreadsComponent } from "app/user/user-threads/user-threads.component";
+import { UserComponent } from '../user/user.component';
+import { UserInitComponent } from '../user/user-init/user-init.component';
+import { UserWinesComponent } from '../user/user-wines/user-wines.component';
+import { ShoppingCartComponent } from '../user/shopping-cart/shopping-cart.component';
+import { UserWineDetailComponent } from '../user/user-wines/user-wine-detail/user-wine-detail.component';
+import { UserOrderComponent } from '../user/user-order/user-order.component';
+import { UserSettingsComponent } from '../user/user-settings/user-settings.component';
+import { UserThreadsComponent } from '../user/user-threads/user-threads.component';
 
 
 const userRoutes: Routes = [

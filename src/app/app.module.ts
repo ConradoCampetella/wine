@@ -7,9 +7,9 @@ import { AppComponent } from './app.component';
 
 import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
-import { AuthService } from "app/shared/auth.service";
+import { AuthService } from './shared/auth.service';
 import { AdminComponent } from './admin/admin.component';
-import { WinesService } from "app/shared/wines.service";
+import { WinesService } from './shared/wines.service';
 
 
 @NgModule({

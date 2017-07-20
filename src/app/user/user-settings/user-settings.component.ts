@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Observable } from "rxjs/Rx";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Rx';
 
-import { AuthService } from "app/shared/auth.service";
-import { User } from "app/shared/user.model";
+import { AuthService } from '../../shared/auth.service';
+import { User } from '../../shared/user.model';
 
 @Component({
   selector: 'app-user-settings',
@@ -15,17 +15,17 @@ export class UserSettingsComponent implements OnInit {
   password: string;
   username: string;
   user: User;
-  pending: boolean = false;
-  modify: boolean = false;
-  modifyPassword: boolean = false;
-  modifyUser: boolean = false;
-  userAsync: boolean = false;
-  updateInfoSuccess: boolean = false;
-  updateInfoError: boolean = false;
-  updatePasswordSuccess: boolean = false;
-  updatePasswordError: boolean = false;
-  updateUserNameSuccess: boolean = false;
-  updateUserNameError: boolean = false;
+  pending = false;
+  modify = false;
+  modifyPassword = false;
+  modifyUser = false;
+  userAsync = false;
+  updateInfoSuccess = false;
+  updateInfoError = false;
+  updatePasswordSuccess = false;
+  updatePasswordError = false;
+  updateUserNameSuccess = false;
+  updateUserNameError = false;
 
   constructor(private auths: AuthService) { }
 
@@ -34,24 +34,26 @@ export class UserSettingsComponent implements OnInit {
     this.settingsForm = new FormGroup({
       'settings-name': new FormControl({ value: this.user.name, disabled: true }, [Validators.required]),
       'settings-sirname': new FormControl({ value: this.user.sirname, disabled: true }, [Validators.required]),
-      'settings-username': new FormControl({ value: this.user.username, disabled: true }, [Validators.required, Validators.minLength(4)], this.userNameExists.bind(this)),
+      'settings-username': new FormControl({ value: this.user.username, disabled: true }, [Validators.required, Validators.minLength(4)],
+        this.userNameExists.bind(this)),
       'settings-email': new FormControl({ value: this.user.email, disabled: true }, [Validators.required, Validators.email]),
       'settings-adress': new FormControl({ value: this.user.adress, disabled: true }, [Validators.required]),
       'settings-city': new FormControl({ value: this.user.city, disabled: true }, [Validators.required]),
       'settings-country': new FormControl({ value: this.user.country, disabled: true }, [Validators.required]),
       'settings-password': new FormControl({ value: this.user.password, disabled: true }, [Validators.required, Validators.minLength(6)]),
-      'settings-oldpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6), this.oldPasswordMatchValidator.bind(this)]),
+      'settings-oldpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6),
+        this.oldPasswordMatchValidator.bind(this)]),
       'settings-newpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]),
-      'settings-passwordconfirm': new FormControl({ value: '', disabled: true }, [Validators.required, this.passwordMatchValidator.bind(this)])
+      'settings-passwordconfirm': new FormControl({ value: '', disabled: true }, [Validators.required,
+          this.passwordMatchValidator.bind(this)])
     });
     this.settingsForm.statusChanges.subscribe(
       (status) => {
         this.username = this.settingsForm.get('settings-username').value;
         this.password = this.settingsForm.get('settings-newpassword').value;
-        if (this.settingsForm.get('settings-username').status === "PENDING") {
+        if (this.settingsForm.get('settings-username').status === 'PENDING') {
           this.pending = true;
-        }
-        else {
+        } else {
           this.pending = false;
         }
       }
@@ -61,8 +63,7 @@ export class UserSettingsComponent implements OnInit {
   passwordMatchValidator(control: FormControl): { [s: string]: boolean } {
     if (this.password === control.value) {
       return null;
-    }
-    else {
+    } else {
       return { 'passwordsDoNotMatch': true };
     }
   }
@@ -70,8 +71,7 @@ export class UserSettingsComponent implements OnInit {
   oldPasswordMatchValidator(control: FormControl): { [s: string]: boolean } {
     if (this.user.password === control.value) {
       return null;
-    }
-    else {
+    } else {
       return { 'passwordsDoNotMatch': true };
     }
   }
@@ -81,10 +81,9 @@ export class UserSettingsComponent implements OnInit {
     const promise = new Promise<any>((resolve, reject) => {
       setTimeout(() => {
         this.auths.userNameExists(this.username).subscribe((response: Response) => {
-          if (response.toString() === "true") {
+          if (response.toString() === 'true') {
             resolve({ 'userNameExists': true });
-          }
-          else {
+          } else {
             resolve(null);
           }
         });
@@ -95,11 +94,11 @@ export class UserSettingsComponent implements OnInit {
   onModify() {
     if (this.modify) {
       this.modify = false;
-      this.settingsForm.controls['settings-name'].markAsPristine;
-      this.settingsForm.controls['settings-sirname'].markAsPristine;
-      this.settingsForm.controls['settings-adress'].markAsPristine;
-      this.settingsForm.controls['settings-city'].markAsPristine;
-      this.settingsForm.controls['settings-country'].markAsPristine;
+      this.settingsForm.controls['settings-name'].markAsPristine();
+      this.settingsForm.controls['settings-sirname'].markAsPristine();
+      this.settingsForm.controls['settings-adress'].markAsPristine();
+      this.settingsForm.controls['settings-city'].markAsPristine();
+      this.settingsForm.controls['settings-country'].markAsPristine();
       this.settingsForm.controls['settings-name'].disable();
       this.settingsForm.controls['settings-sirname'].disable();
       this.settingsForm.controls['settings-adress'].disable();
@@ -112,8 +111,7 @@ export class UserSettingsComponent implements OnInit {
       this.settingsForm.controls['settings-country'].setValue(this.user.country);
       this.updateInfoSuccess = false;
       this.updateInfoError = false;
-    }
-    else {
+    } else {
       this.modify = true;
       this.settingsForm.controls['settings-name'].enable();
       this.settingsForm.controls['settings-sirname'].enable();
@@ -138,18 +136,15 @@ export class UserSettingsComponent implements OnInit {
       && this.settingsForm.controls['settings-city'].pristine
       && this.settingsForm.controls['settings-country'].pristine) {
       return true;
-    }
-    else if (this.settingsForm.controls['settings-name'].valid
+    } else if (this.settingsForm.controls['settings-name'].valid
       && this.settingsForm.controls['settings-sirname'].valid
       && this.settingsForm.controls['settings-adress'].valid
       && this.settingsForm.controls['settings-city'].valid
       && this.settingsForm.controls['settings-country'].valid) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
-
   }
 
   onUpdateInfo() {
@@ -160,9 +155,10 @@ export class UserSettingsComponent implements OnInit {
     const adress = this.settingsForm.controls['settings-adress'].value;
     const city = this.settingsForm.controls['settings-city'].value;
     const country = this.settingsForm.controls['settings-country'].value;
-    const userMod = new User(name, sirname, this.user.username, this.user.email, adress, city, country, this.user.password, this.user.admin);
+    const userMod = new User(name, sirname, this.user.username, this.user.email, adress,
+      city, country, this.user.password, this.user.admin);
     this.auths.modifyUserInfo(userMod).subscribe(
-      response => {
+      res => {
         this.updateInfoSuccess = true;
         this.auths.updateUser(this.user.username).subscribe((response) => {
           this.user = response;
@@ -186,24 +182,25 @@ export class UserSettingsComponent implements OnInit {
       this.settingsForm.controls['settings-oldpassword'].disable();
       this.settingsForm.controls['settings-newpassword'].disable();
       this.settingsForm.controls['settings-passwordconfirm'].disable();
-    }
-    else {
+    } else {
       this.modifyPassword = true;
       this.settingsForm.controls['settings-oldpassword'].enable();
       this.settingsForm.controls['settings-newpassword'].enable();
       this.settingsForm.controls['settings-passwordconfirm'].enable();
     }
   }
+
   onClearPassword() {
     this.settingsForm.controls['settings-oldpassword'].setValue('');
     this.settingsForm.controls['settings-newpassword'].setValue('');
     this.settingsForm.controls['settings-passwordconfirm'].setValue('');
   }
   modifyPasswordValid() {
-    if (this.settingsForm.controls['settings-oldpassword'].valid && this.settingsForm.controls['settings-newpassword'].valid && this.settingsForm.controls['settings-passwordconfirm'].valid) {
+    if (this.settingsForm.controls['settings-oldpassword'].valid
+      && this.settingsForm.controls['settings-newpassword'].valid
+      && this.settingsForm.controls['settings-passwordconfirm'].valid) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -213,7 +210,7 @@ export class UserSettingsComponent implements OnInit {
     this.user.password = this.settingsForm.controls['settings-newpassword'].value;
     this.auths.modifyPassword(this.user)
       .then(res => {
-        this.auths.modifyUserInfo(this.user).subscribe(response => {
+        this.auths.modifyUserInfo(this.user).subscribe(respo => {
           this.updatePasswordSuccess = true;
           this.auths.updateUser(this.user.username).subscribe((response) => {
             this.user = response;
@@ -224,9 +221,7 @@ export class UserSettingsComponent implements OnInit {
       .catch(err => {
         this.updatePasswordError = true;
       })
-
   }
-
 
   onModifyUser() {
     if (this.modifyUser) {
@@ -234,31 +229,32 @@ export class UserSettingsComponent implements OnInit {
       this.updateUserNameError = false;
       this.updateUserNameSuccess = false;
       this.settingsForm.controls['settings-username'].disable();
-      this.settingsForm.controls['settings-username'].markAsPristine;
+      this.settingsForm.controls['settings-username'].markAsPristine();
       this.settingsForm.controls['settings-username'].setValue(this.user.username);
-    }
-    else {
+    } else {
       this.modifyUser = true;
       this.settingsForm.controls['settings-username'].enable();
     }
   }
+
   onClearUser() {
     this.settingsForm.controls['settings-username'].setValue('');
   }
+
   onUpdateUserName() {
     this.updateUserNameError = false;
     this.updateUserNameSuccess = false;
     const oldUserName: string = this.user.username;
     this.user.username = this.settingsForm.controls['settings-username'].value;
     this.auths.modifyUserName(this.user)
-      .then(res => {
+      .then(response => {
         this.auths.modifyUserNameOrders(oldUserName, this.user.username).subscribe(
           (res) => {
             if (res) {
               this.auths.modifyUserNameUsers(oldUserName, this.user.username).subscribe(
-                (res) => {
+                (resp) => {
                   this.updateUserNameSuccess = true;
-                  this.settingsForm.controls['settings-username'].markAsPristine;
+                  this.settingsForm.controls['settings-username'].markAsPristine();
                   this.settingsForm.controls['settings-username'].setValue(this.user.username);
                 },
                 (err) => { this.updateUserNameError = true; }
@@ -267,7 +263,7 @@ export class UserSettingsComponent implements OnInit {
           },
           (err) => { this.updateUserNameError = true; });
       })
-      .catch(err => { console.log("Error - Update profile") });
+      .catch(err => { console.log('Error - Update profile') });
   }
 
 }

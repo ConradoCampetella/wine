@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  changeInClass(){
+  changeInClass() {
     this.isIn = !this.isIn;
   }
 
