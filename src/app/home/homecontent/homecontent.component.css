@@ -43,7 +43,7 @@
             font-weight: bold;
         }
         .contact_us{
-            background-image: url('');
+            background-image: none;
         }
         .form{
             background-image: url('../../../assets/img/villa_fondo.jpg');
