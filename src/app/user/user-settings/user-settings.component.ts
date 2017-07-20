@@ -94,53 +94,53 @@ export class UserSettingsComponent implements OnInit {
   onModify() {
     if (this.modify) {
       this.modify = false;
-      this.settingsForm.controls['settings-name'].markAsPristine();
-      this.settingsForm.controls['settings-sirname'].markAsPristine();
-      this.settingsForm.controls['settings-adress'].markAsPristine();
-      this.settingsForm.controls['settings-city'].markAsPristine();
-      this.settingsForm.controls['settings-country'].markAsPristine();
-      this.settingsForm.controls['settings-name'].disable();
-      this.settingsForm.controls['settings-sirname'].disable();
-      this.settingsForm.controls['settings-adress'].disable();
-      this.settingsForm.controls['settings-city'].disable();
-      this.settingsForm.controls['settings-country'].disable();
-      this.settingsForm.controls['settings-name'].setValue(this.user.name);
-      this.settingsForm.controls['settings-sirname'].setValue(this.user.sirname);
-      this.settingsForm.controls['settings-adress'].setValue(this.user.adress);
-      this.settingsForm.controls['settings-city'].setValue(this.user.city);
-      this.settingsForm.controls['settings-country'].setValue(this.user.country);
+      this.settingsForm.get('settings-name').markAsPristine();
+      this.settingsForm.get('settings-sirname').markAsPristine();
+      this.settingsForm.get('settings-adress').markAsPristine();
+      this.settingsForm.get('settings-city').markAsPristine();
+      this.settingsForm.get('settings-country').markAsPristine();
+      this.settingsForm.get('settings-name').disable();
+      this.settingsForm.get('settings-sirname').disable();
+      this.settingsForm.get('settings-adress').disable();
+      this.settingsForm.get('settings-city').disable();
+      this.settingsForm.get('settings-country').disable();
+      this.settingsForm.get('settings-name').setValue(this.user.name);
+      this.settingsForm.get('settings-sirname').setValue(this.user.sirname);
+      this.settingsForm.get('settings-adress').setValue(this.user.adress);
+      this.settingsForm.get('settings-city').setValue(this.user.city);
+      this.settingsForm.get('settings-country').setValue(this.user.country);
       this.updateInfoSuccess = false;
       this.updateInfoError = false;
     } else {
       this.modify = true;
-      this.settingsForm.controls['settings-name'].enable();
-      this.settingsForm.controls['settings-sirname'].enable();
-      this.settingsForm.controls['settings-adress'].enable();
-      this.settingsForm.controls['settings-city'].enable();
-      this.settingsForm.controls['settings-country'].enable();
+      this.settingsForm.get('settings-name').enable();
+      this.settingsForm.get('settings-sirname').enable();
+      this.settingsForm.get('settings-adress').enable();
+      this.settingsForm.get('settings-city').enable();
+      this.settingsForm.get('settings-country').enable();
     }
 
   }
 
   onClear() {
-    this.settingsForm.controls['settings-name'].setValue('');
-    this.settingsForm.controls['settings-sirname'].setValue('');
-    this.settingsForm.controls['settings-adress'].setValue('');
-    this.settingsForm.controls['settings-city'].setValue('');
-    this.settingsForm.controls['settings-country'].setValue('');
+    this.settingsForm.get('settings-name').setValue('');
+    this.settingsForm.get('settings-sirname').setValue('');
+    this.settingsForm.get('settings-adress').setValue('');
+    this.settingsForm.get('settings-city').setValue('');
+    this.settingsForm.get('settings-country').setValue('');
   }
   modifyValid() {
-    if (this.settingsForm.controls['settings-name'].pristine
-      && this.settingsForm.controls['settings-sirname'].pristine
-      && this.settingsForm.controls['settings-adress'].pristine
-      && this.settingsForm.controls['settings-city'].pristine
-      && this.settingsForm.controls['settings-country'].pristine) {
+    if (this.settingsForm.get('settings-name').pristine
+      && this.settingsForm.get('settings-sirname').pristine
+      && this.settingsForm.get('settings-adress').pristine
+      && this.settingsForm.get('settings-city').pristine
+      && this.settingsForm.get('settings-country').pristine) {
       return true;
-    } else if (this.settingsForm.controls['settings-name'].valid
-      && this.settingsForm.controls['settings-sirname'].valid
-      && this.settingsForm.controls['settings-adress'].valid
-      && this.settingsForm.controls['settings-city'].valid
-      && this.settingsForm.controls['settings-country'].valid) {
+    } else if (this.settingsForm.get('settings-name').valid
+      && this.settingsForm.get('settings-sirname').valid
+      && this.settingsForm.get('settings-adress').valid
+      && this.settingsForm.get('settings-city').valid
+      && this.settingsForm.get('settings-country').valid) {
       return false;
     } else {
       return true;
@@ -150,11 +150,11 @@ export class UserSettingsComponent implements OnInit {
   onUpdateInfo() {
     this.updateInfoSuccess = false;
     this.updateInfoError = false;
-    const name = this.settingsForm.controls['settings-name'].value;
-    const sirname = this.settingsForm.controls['settings-sirname'].value;
-    const adress = this.settingsForm.controls['settings-adress'].value;
-    const city = this.settingsForm.controls['settings-city'].value;
-    const country = this.settingsForm.controls['settings-country'].value;
+    const name = this.settingsForm.get('settings-name').value;
+    const sirname = this.settingsForm.get('settings-sirname').value;
+    const adress = this.settingsForm.get('settings-adress').value;
+    const city = this.settingsForm.get('settings-city').value;
+    const country = this.settingsForm.get('settings-country').value;
     const userMod = new User(name, sirname, this.user.username, this.user.email, adress,
       city, country, this.user.password, this.user.admin);
     this.auths.modifyUserInfo(userMod).subscribe(
@@ -162,11 +162,11 @@ export class UserSettingsComponent implements OnInit {
         this.updateInfoSuccess = true;
         this.auths.updateUser(this.user.username).subscribe((response) => {
           this.user = response;
-          this.settingsForm.controls['settings-name'].setValue(this.user.name);
-          this.settingsForm.controls['settings-sirname'].setValue(this.user.sirname);
-          this.settingsForm.controls['settings-adress'].setValue(this.user.adress);
-          this.settingsForm.controls['settings-city'].setValue(this.user.city);
-          this.settingsForm.controls['settings-country'].setValue(this.user.country);
+          this.settingsForm.get('settings-name').setValue(this.user.name);
+          this.settingsForm.get('settings-sirname').setValue(this.user.sirname);
+          this.settingsForm.get('settings-adress').setValue(this.user.adress);
+          this.settingsForm.get('settings-city').setValue(this.user.city);
+          this.settingsForm.get('settings-country').setValue(this.user.country);
         })
       },
       error => {
@@ -179,26 +179,26 @@ export class UserSettingsComponent implements OnInit {
       this.modifyPassword = false;
       this.updatePasswordSuccess = false;
       this.updatePasswordError = false;
-      this.settingsForm.controls['settings-oldpassword'].disable();
-      this.settingsForm.controls['settings-newpassword'].disable();
-      this.settingsForm.controls['settings-passwordconfirm'].disable();
+      this.settingsForm.get('settings-oldpassword').disable();
+      this.settingsForm.get('settings-newpassword').disable();
+      this.settingsForm.get('settings-passwordconfirm').disable();
     } else {
       this.modifyPassword = true;
-      this.settingsForm.controls['settings-oldpassword'].enable();
-      this.settingsForm.controls['settings-newpassword'].enable();
-      this.settingsForm.controls['settings-passwordconfirm'].enable();
+      this.settingsForm.get('settings-oldpassword').enable();
+      this.settingsForm.get('settings-newpassword').enable();
+      this.settingsForm.get('settings-passwordconfirm').enable();
     }
   }
 
   onClearPassword() {
-    this.settingsForm.controls['settings-oldpassword'].setValue('');
-    this.settingsForm.controls['settings-newpassword'].setValue('');
-    this.settingsForm.controls['settings-passwordconfirm'].setValue('');
+    this.settingsForm.get('settings-oldpassword').setValue('');
+    this.settingsForm.get('settings-newpassword').setValue('');
+    this.settingsForm.get('settings-passwordconfirm').setValue('');
   }
   modifyPasswordValid() {
-    if (this.settingsForm.controls['settings-oldpassword'].valid
-      && this.settingsForm.controls['settings-newpassword'].valid
-      && this.settingsForm.controls['settings-passwordconfirm'].valid) {
+    if (this.settingsForm.get('settings-oldpassword').valid
+      && this.settingsForm.get('settings-newpassword').valid
+      && this.settingsForm.get('settings-passwordconfirm').valid) {
       return false;
     } else {
       return true;
@@ -207,14 +207,14 @@ export class UserSettingsComponent implements OnInit {
   onUpdatePassword() {
     this.updatePasswordSuccess = false;
     this.updatePasswordError = false;
-    this.user.password = this.settingsForm.controls['settings-newpassword'].value;
+    this.user.password = this.settingsForm.get('settings-newpassword').value;
     this.auths.modifyPassword(this.user)
       .then(res => {
         this.auths.modifyUserInfo(this.user).subscribe(respo => {
           this.updatePasswordSuccess = true;
           this.auths.updateUser(this.user.username).subscribe((response) => {
             this.user = response;
-            this.settingsForm.controls['settings-password'].setValue(this.user.password);
+            this.settingsForm.get('settings-password').setValue(this.user.password);
           })
         })
       })
@@ -228,24 +228,24 @@ export class UserSettingsComponent implements OnInit {
       this.modifyUser = false;
       this.updateUserNameError = false;
       this.updateUserNameSuccess = false;
-      this.settingsForm.controls['settings-username'].disable();
-      this.settingsForm.controls['settings-username'].markAsPristine();
-      this.settingsForm.controls['settings-username'].setValue(this.user.username);
+      this.settingsForm.get('settings-username').disable();
+      this.settingsForm.get('settings-username').markAsPristine();
+      this.settingsForm.get('settings-username').setValue(this.user.username);
     } else {
       this.modifyUser = true;
-      this.settingsForm.controls['settings-username'].enable();
+      this.settingsForm.get('settings-username').enable();
     }
   }
 
   onClearUser() {
-    this.settingsForm.controls['settings-username'].setValue('');
+    this.settingsForm.get('settings-username').setValue('');
   }
 
   onUpdateUserName() {
     this.updateUserNameError = false;
     this.updateUserNameSuccess = false;
     const oldUserName: string = this.user.username;
-    this.user.username = this.settingsForm.controls['settings-username'].value;
+    this.user.username = this.settingsForm.get('settings-username').value;
     this.auths.modifyUserName(this.user)
       .then(response => {
         this.auths.modifyUserNameOrders(oldUserName, this.user.username).subscribe(
@@ -254,8 +254,8 @@ export class UserSettingsComponent implements OnInit {
               this.auths.modifyUserNameUsers(oldUserName, this.user.username).subscribe(
                 (resp) => {
                   this.updateUserNameSuccess = true;
-                  this.settingsForm.controls['settings-username'].markAsPristine();
-                  this.settingsForm.controls['settings-username'].setValue(this.user.username);
+                  this.settingsForm.get('settings-username').markAsPristine();
+                  this.settingsForm.get('settings-username').setValue(this.user.username);
                 },
                 (err) => { this.updateUserNameError = true; }
               );
