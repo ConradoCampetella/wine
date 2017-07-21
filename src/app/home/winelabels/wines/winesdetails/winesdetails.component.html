@@ -5,6 +5,7 @@
     </div>
   </div>
   <div class="row">
+    <div *ngIf="spinnerVisible"><app-spinner></app-spinner></div>
     <div class="col-md-6">
       <img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive">
     </div>

@@ -28,9 +28,12 @@
           </span>
           <span *ngIf="loggingError" class="help-block bg-danger">{{errorMessage}}</span>
         </div>
-        <div class="text-center">
+        <div *ngIf="spinnerVisible" class="spinner">
+          <app-little-spinner></app-little-spinner>
+        </div>
+        <div class="text-center">          
           <button type="submit" [disabled]="!signinForm.valid" class="btn btn-success">Send</button>
-          <button type="reset" class="btn btn-warning">Clear</button>
+          <button type="reset" class="btn btn-warning" (click)="onClear()">Clear</button>
         </div>
       </form>
     </div>

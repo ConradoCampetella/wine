@@ -15,15 +15,15 @@ import { ShoppingCart } from '../../shared/shoppingCart.model';
 })
 export class UserInitComponent implements OnInit {
   user: User;
-  threads: Thread[];
-  thrOpen: number;
-  thrClose: number;
-  thrMade: number;
-  orders: Order[];
-  ordNotApproved: number;
-  ordApproved: number;
-  ordPaid: number;
-  ordCompleted: number;
+  threads: Thread[] = [];
+  thrOpen = 0;
+  thrClose = 0;
+  thrMade = 0;
+  orders: Order[] = [];
+  ordNotApproved = 0;
+  ordApproved = 0;
+  ordPaid = 0;
+  ordCompleted = 0;
   ordTotal = 0;
   dateOrders: { month: string, quantity: number, porcent: number }[] = [
     { month: 'January', quantity: 0, porcent: 0 },

@@ -12,6 +12,8 @@ export class SigninComponent implements OnInit {
   signinForm: FormGroup;
   loggingError = false;
   errorMessage = '';
+  spinnerVisible = false;
+
   constructor(private auths: AuthService) { }
 
   ngOnInit() {
@@ -22,15 +24,23 @@ export class SigninComponent implements OnInit {
   }
 
   onLogin() {
+    this.spinnerVisible = true;
     const email = this.signinForm.get('signin-email').value;
     const password = this.signinForm.get('signin-password').value;
     this.auths.loginUser(email, password).subscribe(
-      (data: string) => { console.log(data) },
+      (data: string) => {
+        console.log(data);
+      },
       (error: string) => {
+        this.spinnerVisible = false;
         this.errorMessage = error;
         this.loggingError = true;
         console.log(error);
       }
     );
+  }
+  onClear() {
+    this.loggingError = false;
+    this.signinForm.reset();
   }
 }

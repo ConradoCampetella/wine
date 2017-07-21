@@ -24,28 +24,43 @@ export class AuthService {
   userNameHeader = new Subject();
 
   constructor(private router: Router, private http: Http) { }
-
   signupUser(user: User) {
-    firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-      .catch(
-      error => console.log(error)
-      ).then(response => {
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(res => {
-          firebase.database().ref('users').child(user.username).set(user).then((resp: Response) => {
-            firebase.auth().currentUser.updateProfile({ displayName: user.username, photoURL: '' })
-              .then(respo => {
-                this.loginUser(user.email, user.password).subscribe(
-                  (loginResp)=>{
-                    console.log(loginResp);
-                  },
-                  (error)=>{
-                    console.log(error);
-                  });
-              });
-          });
+    const singUp = Observable.create((observer: Observer<string>) => {
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+        .catch(error => {
+          observer.error('user not created');
+        })
+        .then(res => {
+          firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+            .catch(error => {
+              observer.error('user created but login fail');
+            })
+            .then(resp => {
+              firebase.auth().currentUser.updateProfile({ displayName: user.username, photoURL: '' })
+                .catch(error => {
+                  observer.error('update profile fail');
+                })
+                .then(respo => {
+                  firebase.database().ref('users').child(user.username).set(user)
+                    .catch(error => {
+                      observer.error('update database fail');
+                    })
+                    .then((respon: Response) => {
+                      this.loginUser(user.email, user.password).subscribe(
+                        (respons) => {
+                          observer.next('success');
+                        },
+                        (error) => {
+                          observer.error('re-Loggin fail');
+                        });
+                    });
+                });
+            });
         });
-      });
+    });
+    return singUp;
   }
+
 
   redirect() {
     const username = firebase.auth().currentUser.displayName;
@@ -296,7 +311,7 @@ export class AuthService {
         (res: Thread[]) => {
           const index = res.findIndex(thr => thr.idThread === trId);
           this.http.patch('https://ng-wine-app.firebaseio.com/threads/' + index + '.json?auth=' + this.token,
-               '{"open": ' + open.toString() + '}')
+            '{"open": ' + open.toString() + '}')
             .subscribe(
             (resp) => {
               observer.next('sucess');

@@ -12,6 +12,7 @@ import { WinesService } from '../../../shared/wines.service';
 export class WinesComponent implements OnInit {
   wines: Wine[];
   id: number;
+  spinnerVisible = true;
 
   constructor(private wineService: WinesService, private route: ActivatedRoute, private router: Router) {
   }
@@ -19,9 +20,13 @@ export class WinesComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.id = +params['wines'];
-      this.wineService.getAllWines(this.id).subscribe((response: any[]) => {
-        this.wines = response;
-      });
+      this.wineService.getAllWines(this.id).subscribe(
+        (response: any[]) => {
+          this.wines = response;
+          this.spinnerVisible = false;
+        }, (error) => {
+          console.log(error)
+        });
     });
   }
 
