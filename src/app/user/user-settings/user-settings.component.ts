@@ -22,10 +22,13 @@ export class UserSettingsComponent implements OnInit {
   userAsync = false;
   updateInfoSuccess = false;
   updateInfoError = false;
+  updateInfoSpinner = false;
   updatePasswordSuccess = false;
   updatePasswordError = false;
+  updatePasswordSpinner = false;
   updateUserNameSuccess = false;
   updateUserNameError = false;
+  updateUserNameSpinner = false;
 
   constructor(private auths: AuthService) { }
 
@@ -42,10 +45,10 @@ export class UserSettingsComponent implements OnInit {
       'settings-country': new FormControl({ value: this.user.country, disabled: true }, [Validators.required]),
       'settings-password': new FormControl({ value: this.user.password, disabled: true }, [Validators.required, Validators.minLength(6)]),
       'settings-oldpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6),
-        this.oldPasswordMatchValidator.bind(this)]),
+      this.oldPasswordMatchValidator.bind(this)]),
       'settings-newpassword': new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]),
       'settings-passwordconfirm': new FormControl({ value: '', disabled: true }, [Validators.required,
-          this.passwordMatchValidator.bind(this)])
+      this.passwordMatchValidator.bind(this)])
     });
     this.settingsForm.statusChanges.subscribe(
       (status) => {
@@ -111,6 +114,7 @@ export class UserSettingsComponent implements OnInit {
       this.settingsForm.get('settings-country').setValue(this.user.country);
       this.updateInfoSuccess = false;
       this.updateInfoError = false;
+      this.updateInfoSpinner = false;
     } else {
       this.modify = true;
       this.settingsForm.get('settings-name').enable();
@@ -150,6 +154,7 @@ export class UserSettingsComponent implements OnInit {
   onUpdateInfo() {
     this.updateInfoSuccess = false;
     this.updateInfoError = false;
+    this.updateInfoSpinner = true;
     const name = this.settingsForm.get('settings-name').value;
     const sirname = this.settingsForm.get('settings-sirname').value;
     const adress = this.settingsForm.get('settings-adress').value;
@@ -167,9 +172,13 @@ export class UserSettingsComponent implements OnInit {
           this.settingsForm.get('settings-adress').setValue(this.user.adress);
           this.settingsForm.get('settings-city').setValue(this.user.city);
           this.settingsForm.get('settings-country').setValue(this.user.country);
-        })
+          this.updateInfoSpinner = false;
+        }, (error) => {
+          this.updateInfoSpinner = false;
+        });
       },
       error => {
+        this.updateInfoSpinner = false;
         this.updateInfoError = true;
       });
   }
@@ -179,6 +188,7 @@ export class UserSettingsComponent implements OnInit {
       this.modifyPassword = false;
       this.updatePasswordSuccess = false;
       this.updatePasswordError = false;
+      this.updatePasswordSpinner = false;
       this.settingsForm.get('settings-oldpassword').disable();
       this.settingsForm.get('settings-newpassword').disable();
       this.settingsForm.get('settings-passwordconfirm').disable();
@@ -207,20 +217,27 @@ export class UserSettingsComponent implements OnInit {
   onUpdatePassword() {
     this.updatePasswordSuccess = false;
     this.updatePasswordError = false;
+    this.updatePasswordSpinner = true;
     this.user.password = this.settingsForm.get('settings-newpassword').value;
     this.auths.modifyPassword(this.user)
       .then(res => {
         this.auths.modifyUserInfo(this.user).subscribe(respo => {
           this.updatePasswordSuccess = true;
-          this.auths.updateUser(this.user.username).subscribe((response) => {
-            this.user = response;
-            this.settingsForm.get('settings-password').setValue(this.user.password);
-          })
-        })
+          this.auths.updateUser(this.user.username).subscribe(
+            (response) => {
+              this.user = response;
+              this.settingsForm.get('settings-password').setValue(this.user.password);
+              this.updatePasswordSpinner = false;
+            },
+            (error) => {
+              this.updatePasswordSpinner = false;
+            });
+        });
       })
       .catch(err => {
+        this.updatePasswordSpinner = false;
         this.updatePasswordError = true;
-      })
+      });
   }
 
   onModifyUser() {
@@ -228,6 +245,7 @@ export class UserSettingsComponent implements OnInit {
       this.modifyUser = false;
       this.updateUserNameError = false;
       this.updateUserNameSuccess = false;
+      this.updateUserNameSpinner = false;
       this.settingsForm.get('settings-username').disable();
       this.settingsForm.get('settings-username').markAsPristine();
       this.settingsForm.get('settings-username').setValue(this.user.username);
@@ -244,6 +262,7 @@ export class UserSettingsComponent implements OnInit {
   onUpdateUserName() {
     this.updateUserNameError = false;
     this.updateUserNameSuccess = false;
+    this.updateUserNameSpinner = true;
     const oldUserName: string = this.user.username;
     this.user.username = this.settingsForm.get('settings-username').value;
     this.auths.modifyUserName(this.user)
@@ -253,17 +272,26 @@ export class UserSettingsComponent implements OnInit {
             if (res) {
               this.auths.modifyUserNameUsers(oldUserName, this.user.username).subscribe(
                 (resp) => {
+                  this.updateUserNameSpinner = false;
                   this.updateUserNameSuccess = true;
                   this.settingsForm.get('settings-username').markAsPristine();
                   this.settingsForm.get('settings-username').setValue(this.user.username);
                 },
-                (err) => { this.updateUserNameError = true; }
-              );
+                (err) => {
+                  this.updateUserNameSpinner = false;
+                  this.updateUserNameError = true;
+                });
             }
           },
-          (err) => { this.updateUserNameError = true; });
+          (err) => {
+            this.updateUserNameSpinner = false;
+            this.updateUserNameError = true;
+          });
       })
-      .catch(err => { console.log('Error - Update profile') });
+      .catch(err => {
+        this.updateUserNameSpinner = false;
+        this.updateUserNameError = true;
+      });
   }
 
 }

@@ -19,12 +19,15 @@ export class UserThreadsComponent implements OnInit {
   newThread = false;
   newThreadSuccess = false;
   newThreadError = false;
+  newThreadSpinner = false;
   details = false;
   addMsg = false;
   addMsgSuccess = false;
   addMsgError = false;
+  addMsgSpinner = false;
   user: User;
   spinnerVisible = true;
+
 
   constructor(private auths: AuthService) { }
 
@@ -55,6 +58,7 @@ export class UserThreadsComponent implements OnInit {
   onSubmitThread() {
     this.newThreadSuccess = false;
     this.newThreadError = false;
+    this.newThreadSpinner = true;
     const threadId = '';
     const type = this.threadForm.get('threadType').value;
     const description = this.threadForm.get('threadDescription').value;
@@ -64,6 +68,8 @@ export class UserThreadsComponent implements OnInit {
     this.auths.openNewThread(type, description, message)
       .subscribe(
       (res) => {
+        this.newThreadSpinner = false;
+        this.newThreadSuccess = true;
         this.auths.getThreads().subscribe(
           (resp) => {
             this.threads = resp.filter((tr) => tr.usermail === this.user.email);
@@ -72,9 +78,9 @@ export class UserThreadsComponent implements OnInit {
           (err) => {
             console.log(err);
           });
-        this.newThreadSuccess = true;
       },
       (err) => {
+        this.newThreadSpinner = false;
         this.newThreadError = true;
       });
 
@@ -112,25 +118,27 @@ export class UserThreadsComponent implements OnInit {
   onConfimrMsg() {
     this.addMsgSuccess = false;
     this.addMsgError = false;
+    this.addMsgSpinner = true;
     const msg = new Message(this.user.email, Date.now(), this.msgForm.get('msgMessage').value);
     this.auths.addMessageInThread(this.threadDetail.idThread, msg)
       .subscribe(
       (resp) => {
         this.auths.getThreads().subscribe(
           (res) => {
+            this.addMsgSpinner = false;
             this.addMsgSuccess = true;
             this.threads = res.filter((tr) => tr.usermail === this.user.email);
             this.threadDetail = this.threads.find(tr => tr.idThread === this.idThreadClicked);
             this.addMsg = false;
           },
           (err) => {
+            this.addMsgSpinner = false;
             this.addMsgError = true;
-            console.log(err);
           });
       },
       (err) => {
+        this.addMsgSpinner = false;
         this.addMsgError = true;
-        console.log(err);
       });
   }
 

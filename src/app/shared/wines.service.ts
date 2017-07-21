@@ -19,7 +19,7 @@ export class WinesService {
   label: Label[] = [];
   edit: string;
 
-  constructor(private http: Http, private router: Router, private auths: AuthService) {}
+  constructor(private http: Http, private router: Router, private auths: AuthService) { }
 
   getAllLabels() {
     return this.http.get('https://ng-wine-app.firebaseio.com/labels.json')
@@ -121,35 +121,41 @@ export class WinesService {
     const username = this.auths.getUserName();
     const orderID: string = username + Date.now();
     const order: Order = new Order(orderID, Date.now(), this.shoppingCart, 'waiting for approve');
-    this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
-      .map((response: Response) => {
-        const res: any[] = response.json();
-        return res;
-      })
-      .subscribe((res) => {
-        if (res) {
-          const index = res.length;
-          firebase.database().ref('orders').child(username).child(index.toString()).set(order)
-            .then(response => {
-              this.shoppingCart = [];
-              this.router.navigate(['/user/orderhistory']);
-            })
-            .catch(error => {
-              console.log(error);
-            })
-        } else {
-          firebase.database().ref('orders').child(username).child('0').set(order)
-            .then(response => {
-              this.shoppingCart = [];
-              this.router.navigate(['/user/orderhistory']);
-            })
-            .catch(error => {
-              console.log(error);
-            })
-        }
-      })
-
-
+    const genOrd = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
+        .map((response: Response) => {
+          const res: any[] = response.json();
+          return res;
+        })
+        .subscribe((res) => {
+          if (res) {
+            const index = res.length;
+            firebase.database().ref('orders').child(username).child(index.toString()).set(order)
+              .then(response => {
+                this.shoppingCart = [];
+                observer.next('success');
+                this.router.navigate(['/user/orderhistory']);
+              })
+              .catch(error => {
+                observer.error(error);
+              })
+          } else {
+            firebase.database().ref('orders').child(username).child('0').set(order)
+              .then(response => {
+                this.shoppingCart = [];
+                observer.next('success');
+                this.router.navigate(['/user/orderhistory']);
+              })
+              .catch(error => {
+                observer.error(error);
+              })
+          }
+        },
+        (err) => {
+          observer.error(err);
+        });
+    });
+    return genOrd;
   }
 
   obtainOrders(username: string) {
@@ -175,24 +181,32 @@ export class WinesService {
   }
   modifyOrderConfirm(orderId) {
     const username = this.auths.getUserName();
-    this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
-      .map((response: Response) => {
-        const res: Order[] = response.json();
-        return res;
-      })
-      .subscribe((response: Order[]) => {
-        const index = response.findIndex(res => res.orderId === orderId);
-        const order: Order = new Order(orderId, Date.now(), this.shoppingCart, 'waiting for approve');
-        firebase.database().ref('orders').child(username).child(index.toString()).set(order)
-          .then(res => {
-            this.shoppingCart = [];
-            this.clearEditOrder();
-            this.router.navigate(['/user/orderhistory']);
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      });
+    const modORder = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
+        .map((response: Response) => {
+          const res: Order[] = response.json();
+          return res;
+        })
+        .subscribe(
+        (response: Order[]) => {
+          const index = response.findIndex(res => res.orderId === orderId);
+          const order: Order = new Order(orderId, Date.now(), this.shoppingCart, 'waiting for approve');
+          firebase.database().ref('orders').child(username).child(index.toString()).set(order)
+            .then(res => {
+              this.shoppingCart = [];
+              this.clearEditOrder();
+              observer.next('success');
+              this.router.navigate(['/user/orderhistory']);
+            })
+            .catch(error => {
+              observer.error(error);
+            });
+        },
+        (error) => {
+          observer.error(error);
+        });
+    });
+    return modORder;
   }
 
   destroyOrder(orderId) {
