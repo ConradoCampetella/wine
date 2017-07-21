@@ -24,6 +24,7 @@ export class UserThreadsComponent implements OnInit {
   addMsgSuccess = false;
   addMsgError = false;
   user: User;
+  spinnerVisible = true;
 
   constructor(private auths: AuthService) { }
 
@@ -40,6 +41,7 @@ export class UserThreadsComponent implements OnInit {
     this.auths.getThreads().subscribe(
       (res) => {
         this.threads = res.filter((tr) => tr.usermail === this.user.email);
+        this.spinnerVisible = false;
       },
       (err) => {
         console.log(err);

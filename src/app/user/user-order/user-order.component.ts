@@ -18,6 +18,7 @@ export class UserOrderComponent implements OnInit {
   orderDetail: Order;
   detailTotal: number;
   detailProgress = 0;
+  spinnerVisible = true;
 
   constructor(private auths: AuthService, private wineService: WinesService, private router: Router) { }
 
@@ -25,7 +26,7 @@ export class UserOrderComponent implements OnInit {
     this.username = this.auths.getUserName();
     this.wineService.obtainOrders(this.username)
       .subscribe(
-      (response: any[]) => { this.orders = response; },
+      (response: any[]) => { this.orders = response; this.spinnerVisible = false;},
       (error: any) => { console.log(error); }
       );
   }

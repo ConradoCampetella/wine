@@ -23,6 +23,7 @@ export class UserWinesComponent implements OnInit {
   userProdFilterForm: FormGroup;
   filter = false;
   filterLabel = '';
+  spinnerVisible = true;
 
 
   constructor(private wineService: WinesService) { }
@@ -30,6 +31,7 @@ export class UserWinesComponent implements OnInit {
   ngOnInit() {
     this.wineService.getAllLabels().subscribe((response: any[]) => {
       this.labels = response;
+      this.spinnerVisible = false;
     });
     this.userProdFilterForm = new FormGroup({
       'userProd-Flabel': new FormControl(null, [Validators.required])

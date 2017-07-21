@@ -16,6 +16,7 @@ export class UserWineDetailComponent implements OnInit {
   wine: Wine;
   winesAdd: Wine[] = [];
   scList: ShoppingCart[];
+  spinnerVisible = true;
 
   constructor(private wineService: WinesService, private route: ActivatedRoute, private platformStrategy: LocationStrategy) { }
 
@@ -23,6 +24,7 @@ export class UserWineDetailComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.idWine = params['id'];
       this.wine = this.wineService.getOneWineWithId(this.idWine);
+      this.spinnerVisible = false;
       this.scList = this.wineService.getShoppingCart();
       for (const sc of this.scList) {
         this.winesAdd.push(sc.wine);
