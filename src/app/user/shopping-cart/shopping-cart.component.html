@@ -44,6 +44,15 @@
       <div class="col-xs-12 text-right">
         <h2>Total:{{total | currency:'USD':true}}</h2>
       </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-3 col-sm-offset-9">
+          <span *ngIf="orderError && !edit" class="help-block bg-danger">Order NOT created - Please try again later</span>
+          <span *ngIf="orderError && edit" class="help-block bg-danger">Order NOT modified - Please try again later</span>
+          <div *ngIf="spinnerVisible" class="spinner">
+            <app-little-spinner></app-little-spinner>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row" *ngIf="!isEmpty">
       <div class="col-xs-12 text-right">

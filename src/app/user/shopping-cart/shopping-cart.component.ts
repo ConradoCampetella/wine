@@ -17,6 +17,8 @@ export class ShoppingCartComponent implements OnInit {
   total = 0;
   value = 0;
   edit: string;
+  spinnerVisible = false;
+  orderError = false;
 
 
   constructor(private wineService: WinesService) { }
@@ -69,9 +71,25 @@ export class ShoppingCartComponent implements OnInit {
     }
   }
   onConfirmOrder() {
-    this.wineService.generateOrder();
+    this.orderError = false;
+    this.spinnerVisible = true;
+    this.wineService.generateOrder().subscribe(
+      (res) => {
+        this.spinnerVisible = false;
+      },
+      (err) => {
+        this.spinnerVisible = false;
+        this.orderError = true;
+      });
   }
   onModifyOrder() {
-    this.wineService.modifyOrderConfirm(this.edit);
+    this.wineService.modifyOrderConfirm(this.edit).subscribe(
+      (res) => {
+        this.spinnerVisible = false;
+      },
+      (err) => {
+        this.spinnerVisible = false;
+        this.orderError = true;
+      });
   }
 }
