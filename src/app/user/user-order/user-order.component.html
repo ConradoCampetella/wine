@@ -24,6 +24,7 @@
         <td class="text-center"><button class="btn btn-danger" [disabled]="buttonDisabled(order.status)" (click)="onDestroy(order.orderId)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
       </tr>
     </table>
+    <div *ngIf="spinnerVisible"><app-spinner></app-spinner></div>
   </div>
 </div>
 <div class="container" *ngIf="details">

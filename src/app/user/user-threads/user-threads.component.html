@@ -27,6 +27,7 @@
           <td class="text-center"><button class="btn btn-warning" [disabled]="!thread.open" (click)="onClose(thread.idThread)">Close</button></td>
         </tr>
       </table>
+      <div *ngIf="spinnerVisible"><app-spinner></app-spinner></div>
     </div>
   </div>
 

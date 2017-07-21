@@ -63,6 +63,7 @@
         </ng-container>
       </ng-container>
     </table>
+    <div *ngIf="spinnerVisible"><app-spinner></app-spinner></div>
     <div class="text-center" *ngIf="!filter">
       <button class="btn btn-default" [ngClass]="{ 'btn-primary': butOne, 'btn-default': !butOne }" (click)="changePages(1)">1</button>
       <button class="btn btn-default" [ngClass]="{ 'btn-primary': butTwo, 'btn-default': !butTwo }" (click)="changePages(2)">2</button>
