@@ -13,6 +13,7 @@ export class WinesdetailsComponent implements OnInit {
   wine: Wine = new Wine('', '', '', '', '', 99);
   ilabel: number;
   iwine: number;
+  spinnerVisible = true;
 
   constructor(private wineService: WinesService, private route: ActivatedRoute, private router: Router) { }
 
@@ -20,9 +21,13 @@ export class WinesdetailsComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.ilabel = +params['wines'];
       this.iwine = +params['details'];
-      this.wineService.getOneWine(this.ilabel, this.iwine).subscribe((response: any) => {
-        this.wine = response;
-      });
+      this.wineService.getOneWine(this.ilabel, this.iwine).subscribe(
+        (response: any) => {
+          this.wine = response;
+          this.spinnerVisible = false;
+        }, (error) => {
+          console.log(error);
+        });
     });
   }
 

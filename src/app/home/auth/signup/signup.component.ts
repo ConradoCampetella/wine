@@ -15,6 +15,8 @@ export class SignupComponent implements OnInit {
   username: string;
   user: User;
   pending = false;
+  spinnerVisible = false;
+  singinError = false;
 
   constructor(private auths: AuthService) { }
 
@@ -43,6 +45,7 @@ export class SignupComponent implements OnInit {
     );
   }
   onSignup() {
+    this.spinnerVisible = true;
     const name = this.signupForm.get('signup-name').value;
     const sirname = this.signupForm.get('signup-sirname').value;
     const username = this.signupForm.get('signup-username').value;
@@ -52,7 +55,13 @@ export class SignupComponent implements OnInit {
     const city = this.signupForm.get('signup-city').value;
     const country = this.signupForm.get('signup-country').value;
     this.user = new User(name, sirname, username, email, adress, city, country, password, 'false');
-    this.auths.signupUser(this.user);
+    this.auths.signupUser(this.user).subscribe(
+      (res) => {
+        this.spinnerVisible = false;
+      },
+      (err) => {
+        this.singinError = true;
+      });
 
   }
 
@@ -77,5 +86,9 @@ export class SignupComponent implements OnInit {
       }, 1000);
     });
     return promise;
+  }
+  onReset() {
+    this.singinError = false;
+    this.signupForm.reset();
   }
 }

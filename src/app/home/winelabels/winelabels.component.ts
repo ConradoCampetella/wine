@@ -14,14 +14,20 @@ export class WinelabelsComponent implements OnInit {
 
   labels: Label[];
   wine: Wine[];
+  spinnerVisible = true;
 
 
   constructor(private wineService: WinesService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.wineService.getAllLabels().subscribe(
-      (response: any[]) => { this.labels = response; },
-      (error: Error) => { console.log(error); }
+      (response: any[]) => {
+        this.labels = response;
+        this.spinnerVisible = false;
+      },
+      (error: Error) => {
+        console.log(error);
+      }
     );
   }
 

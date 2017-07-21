@@ -30,7 +30,7 @@
           <input type="text" id="signup-username" formControlName="signup-username" class="form-control">
           <span *ngIf="!pending && !signupForm.get('signup-username').valid && signupForm.get('signup-username').touched" class="help-block">
             <span *ngIf="!pending && signupForm.get('signup-username').errors['required']">Please input your User Name</span>
-            <span *ngIf="!pending && signupForm.get('signup-username').errors['minlength']">The password must contain at least four characters</span>
+          <span *ngIf="!pending && signupForm.get('signup-username').errors['minlength']">The password must contain at least four characters</span>
           </span>
           <span *ngIf="pending"><img src="../../../../assets/img/pending.png" alt="pending-orange"></span>
           <span *ngIf="signupForm.get('signup-username').valid && signupForm.get('signup-username').touched && signupForm.get('signup-username').dirty"
@@ -55,7 +55,7 @@
           <input type="password" id="signup-password" formControlName="signup-password" class="form-control">
           <span *ngIf="!signupForm.get('signup-password').valid && signupForm.get('signup-password').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-password').errors['required']">Please input your password</span>
-            <span *ngIf="signupForm.get('signup-password').errors['minlength']">The password must contain at least six characters</span>
+          <span *ngIf="signupForm.get('signup-password').errors['minlength']">The password must contain at least six characters</span>
           </span>
           <span *ngIf="signupForm.get('signup-password').valid && signupForm.get('signup-password').touched && signupForm.get('signup-password').dirty"
             class="help-block">
@@ -106,10 +106,14 @@
             class="help-block">
             <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
           </span>
+          <span *ngIf="singinError" class="help-block bg-danger">Something went wrong - Please try again later</span>
+        </div>
+        <div *ngIf="spinnerVisible" class="spinner">
+          <app-little-spinner></app-little-spinner>
         </div>
         <div class="text-center">
           <button type="submit" [disabled]="!signupForm.valid" class="btn btn-success">Send</button>
-          <button type="reset" class="btn btn-warning">Clear</button>
+          <button type="reset" class="btn btn-warning" (click)="onReset()">Clear</button>
         </div>
       </form>
     </div>
