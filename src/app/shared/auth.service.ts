@@ -123,6 +123,7 @@ export class AuthService {
     return this.token != null;
   }
 
+
   userNameExists(username: string) {
     const response = Observable.create((observer: Observer<string>) => {
       this.http.get('https://ng-wine-app.firebaseio.com/users/' + username + '.json')

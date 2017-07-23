@@ -12,10 +12,10 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse" [ngClass]="{ 'in': isIn }">
       <ul class="nav navbar-nav">
-        <li routerLinkActive="active"><a routerLink="/user/index">Overview</a></li>
-        <li routerLinkActive="active"><a routerLink="/user/wines">Wines</a></li>
-        <li routerLinkActive="active"><a routerLink="/user/shoppingcart">Shopping Cart</a></li>
-        <li routerLinkActive="active"><a routerLink="/user/orderhistory">Order History</a></li>
+        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/user/index">Overview</a></li>
+        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/user/wines">Products</a></li>
+        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/user/shoppingcart">Shopping Cart</a></li>
+        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/user/orderhistory">Order History</a></li>
 
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -24,8 +24,8 @@
           <ul class="dropdown-menu">
             <li><a>Signed as: <strong>{{username}}</strong></a></li>
             <hr>
-            <li><a class="cursor_pointer" routerLink="/user/settings">Settings</a></li>
-            <li><a class="cursor_pointer" routerLink="/user/threads">Manage Threads</a></li>
+            <li><a (click)="changeInClass()" class="cursor_pointer" routerLink="/user/settings">Settings</a></li>
+            <li><a (click)="changeInClass()" class="cursor_pointer" routerLink="/user/threads">Manage Threads</a></li>
             <hr>
             <li><a class="cursor_pointer" (click)="onLogOut()">Log out</a></li>
           </ul>

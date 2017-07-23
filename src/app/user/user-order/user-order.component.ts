@@ -26,7 +26,7 @@ export class UserOrderComponent implements OnInit {
     this.username = this.auths.getUserName();
     this.wineService.obtainOrders(this.username)
       .subscribe(
-      (response: any[]) => { this.orders = response; this.spinnerVisible = false;},
+      (response: any[]) => { this.orders = response; this.spinnerVisible = false; },
       (error: any) => { console.log(error); }
       );
   }
@@ -114,7 +114,7 @@ export class UserOrderComponent implements OnInit {
     this.wineService.modifyOrder(orderM);
   }
   onDestroy(orderId) {
-    if (confirm('ARE YOU SURE THAT YOU WANT TO DELETE THE ORDER')) {
+    if (confirm('ARE YOU SURE THAT YOU WANT TO DELETE THE ORDER?')) {
       this.wineService.destroyOrder(orderId);
       const index = this.orders.findIndex(order => order.orderId === orderId);
       this.orders.splice(index);
