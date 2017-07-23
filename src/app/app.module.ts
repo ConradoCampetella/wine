@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { AuthService } from './shared/auth.service';
 import { AdminComponent } from './admin/admin.component';
 import { WinesService } from './shared/wines.service';
+import { AuthGuard } from './shared/auth-guard.service';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { WinesService } from './shared/wines.service';
   ],
   providers: [
     AuthService,
-    WinesService
+    WinesService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

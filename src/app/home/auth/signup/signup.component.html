@@ -15,7 +15,7 @@
           </span>
         </div>
         <div class="form-group">
-          <label for="signup-sirname">Sirname</label>
+          <label for="signup-sirname">Surname</label>
           <input type="text" id="signup-sirname" formControlName="signup-sirname" class="form-control">
           <span *ngIf="!signupForm.get('signup-sirname').valid && signupForm.get('signup-sirname').touched" class="help-block">
             <span *ngIf="signupForm.get('signup-sirname').errors['required']">Please input your sirname</span>

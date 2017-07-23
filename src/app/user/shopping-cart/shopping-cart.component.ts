@@ -36,9 +36,11 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   onDelete(sc) {
-    this.wineService.removeFromShoppingCart(sc);
-    this.scList = this.wineService.getShoppingCart();
-    this.calculateTotal();
+    if (confirm("Are you sure you want to remove the product from the cart?")) {
+      this.wineService.removeFromShoppingCart(sc);
+      this.scList = this.wineService.getShoppingCart();
+      this.calculateTotal();
+    }
   }
 
   plusValue(wine) {
