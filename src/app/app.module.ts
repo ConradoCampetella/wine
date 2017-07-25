@@ -7,23 +7,24 @@ import { AppComponent } from './app.component';
 
 import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
+import { AdminModule } from './admin/admin.module';
+
 import { AuthService } from './shared/auth.service';
-import { AdminComponent } from './admin/admin.component';
 import { WinesService } from './shared/wines.service';
 import { AuthGuard } from './shared/auth-guard.service';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AdminComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     AppRoutingModule,
     HomeModule,
-    UserModule
+    UserModule,
+    AdminModule
   ],
   providers: [
     AuthService,
