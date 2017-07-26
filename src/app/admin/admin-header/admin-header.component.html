@@ -10,13 +10,14 @@
           </button>
       <a class="navbar-brand" routerLink="/admin">The Best Wines</a>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
+    <div id="navbar" class="navbar-collapse collapse" [ngClass]="{ 'in': isIn }">
       <ul class="nav navbar-nav navbar-right">
         <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/index">Overview</a></li>
         <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/reports">Reports</a></li>
+        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/orders">Orders</a></li>
+        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/threads">Threads</a></li>
         <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/products">Products</a></li>
         <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/users">Users</a></li>
-        <li routerLinkActive="active"><a (click)="changeInClass()" routerLink="/admin/threads">Threads</a></li>
         <ul class="navbar-form navbar-right">
           <a class="btn btn-danger cursor_pointer" (click)="onLogOut()">Log out</a>
         </ul>
