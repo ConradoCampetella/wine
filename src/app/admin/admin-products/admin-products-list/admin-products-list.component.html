@@ -1,0 +1,61 @@
+<div class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>Products</h2>
+    </div>
+  </div>
+  <hr>
+  <form [formGroup]="pListFilterForm" class="form-inline">
+    <div class="form-group">
+      <label for="pListFilterLabel">Filter by Label:</label>
+      <select name="pListFilterLabel" id="pListFilterLabel" class="form-control" formControlName="pListFilterLabel">
+        <option value="NoFilter"></option>
+        <option *ngFor="let label of labels; index as il" value="{{label.name}}">{{label.name}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="">Minimun price:</label>
+      <input type="number" class="form-control" id="pListFilterMinP" name="pListFilterMinP" formControlName="pListFilterMinP">
+    </div>
+    <div class="form-group">
+      <label for="">Maximun price:</label>
+      <input type="number" class="form-control" id="pListFilterMaxP" name="pListFilterMaxP" formControlName="pListFilterMaxP">
+    </div>
+
+  </form>
+  <div class="row">
+    <table class="table table-bordered">
+      <tr class="info">
+        <th>Label</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Variety</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Modify</th>
+        <th>Delete</th>
+      </tr>
+      <ng-container *ngFor="let label of labels; index as il">
+        <ng-container *ngIf="label.name === filter || filter === 'NoFilter'">
+          <ng-container *ngFor="let wine of label.wines; index as iw">
+            <tr  *ngIf="showWine(wine.price)">
+              <td>{{label.name}}</td>
+              <td>{{wine.wineId}}</td>
+              <td>{{wine.name}}</td>
+              <td>{{wine.variety}}</td>
+              <td>{{wine.description}}</td>
+              <td><img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive img-thumbnail center-block"></td>
+              <td>{{wine.price | currency:'USD':true}}</td>
+              <td><button class="btn btn-primary"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  Modify</button></td>
+              <td><button class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  Delete</button></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </table>
+    <div *ngIf="spinnerVisible">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</div>
