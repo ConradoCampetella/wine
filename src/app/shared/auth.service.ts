@@ -224,6 +224,14 @@ export class AuthService {
       });
   }
 
+  getAllUsers() {
+    return this.http.get('https://ng-wine-app.firebaseio.com/users.json?auth=' + this.token)
+      .map((response: Response) => {
+        const res = Object.getOwnPropertyNames(response.json());
+        return res;
+      });
+  }
+
   // ---------------------------------
   openNewThread(type: string, description: string, message: Message) {
     const threadId = this.getUserName() + Date.now();

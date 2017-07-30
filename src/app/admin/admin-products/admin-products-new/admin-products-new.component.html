@@ -1,3 +1,41 @@
-<p>
-  admin-products-new works!
-</p>
+<div class="row">
+  <div class="col-xs-12">
+    <h2>New Product</h2>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <form [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="newProductId">Id</label>
+        <input type="text" class="form-control" id="newProductId" name="newProductId" formControlName="newProductId">
+      </div>
+      <div class="form-group">
+        <label for="newProductName">Name</label>
+        <input type="text" class="form-control" id="newProductName" name="newProductName" formControlName="newProductName">
+      </div>
+      <div class="form-group">
+        <label for="newProductVariety">Variety</label>
+        <input type="text" class="form-control" id="newProductVariety" name="newProductVariety" formControlName="newProductVariety">
+      </div>
+      <div class="form-group">
+        <label for="newProductImg">Image</label>
+        
+        <input type="file" class="form-control" id="newProductImg" name="newProductImg" formControlName="newProductImg" (change)="onFileChange($event)">
+      </div>
+      <div class="form-group">
+        <label for="newProductPrice">Price</label>
+        <input type="text" class="form-control" id="newProductPrice" name="newProductPrice" formControlName="newProductPrice">
+      </div>
+      <div class="form-group">
+        <label for="newProductDescription">Description</label>
+        <input type="text" class="form-control" id="newProductDescription" name="newProductDescription" formControlName="newProductDescription">
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-success" [disabled]="!newProductForm.valid">Send</button>
+        <button type="reset" class="btn btn-warning">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
