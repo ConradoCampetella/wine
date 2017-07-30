@@ -11,6 +11,7 @@ import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 import { ShoppingCart } from 'app/shared/shoppingCart.model';
 import { Order } from 'app/shared/orders.model';
+import { User } from "app/shared/user.model";
 
 
 @Injectable()
@@ -18,6 +19,7 @@ export class WinesService {
   shoppingCart: ShoppingCart[] = [];
   label: Label[] = [];
   edit: string;
+  allOrders: Order[] = [];
 
   constructor(private http: Http, private router: Router, private auths: AuthService) { }
 
@@ -157,7 +159,39 @@ export class WinesService {
     });
     return genOrd;
   }
-
+  getAllOrders() {
+    const allOrders = Observable.create((observer: Observer<string>) => {
+      this.auths.getAllUsers().subscribe(
+        (res) => {
+          const lastName = res[res.length - 1];
+          res.forEach(user => {
+            this.http.get('https://ng-wine-app.firebaseio.com/orders/' + user + '.json')
+              .map((response: Response) => {
+                const orders: Order[] = response.json();
+                return orders;
+              })
+              .subscribe(
+              (orders: Order[]) => {
+                if (orders) {
+                  orders.forEach(order => {
+                    this.allOrders.push(order);
+                  });
+                }
+                if (user === lastName) {
+                  observer.next('success');
+                }
+              },
+              (error => {
+                observer.error(error);
+              }));
+          });
+        },
+        (err) => {
+          observer.error('No Users were Found');
+        });
+    });
+    return allOrders;
+  }
   obtainOrders(username: string) {
     return this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
       .map((response: Response) => {
