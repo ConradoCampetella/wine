@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
+const router = express.Router();
 const path = require('path');
+const multer = require ('multer');
+
+
 
 // Run the app by serving the static files
 // in the dist directory
@@ -27,3 +31,11 @@ app.get('/*', function (req, res) {
 });
 
 app.use(forceSSL());
+
+//upload img into server
+//var fs = require ('fs');
+var upload = multer({dest:'./dist/assets/img'});
+
+router.post('/upload', upload.any(), (req, res)=>{
+    return 'success';
+});
