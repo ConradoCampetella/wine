@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
-const router = express.Router();
 const path = require('path');
-const multer = require ('multer');
+const multer = require('multer');
+const fs = require('fs');
+const cors = require('cors');
 
 
 
@@ -13,6 +14,7 @@ app.use(express.static(__dirname + '/dist'));
 
 // Start the app by listening on the default
 // Heroku port
+app.use(cors());
 
 app.listen(process.env.PORT || 8080);
 
@@ -30,12 +32,19 @@ app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname + '/dist/index.html'));
 });
 
-app.use(forceSSL());
+//app.use(forceSSL());
 
 //upload img into server
-//var fs = require ('fs');
-var upload = multer({dest:'./dist/assets/img'});
+var upload = multer({ dest: './uploads/' });
 
-router.post('/upload', upload.any(), (req, res)=>{
-    return 'success';
-});
+var filename = '';
+var originalname = '';
+app.post('/upload', upload.single('img'), (req, res, err) => {
+    res => {
+        const name = req.file.filename;
+        const type = req.file.mimetype;
+        res.send({ name: req.file.filename, type: type });
+    }, (err) => {
+        res.sendStatus(400);
+    }
+})

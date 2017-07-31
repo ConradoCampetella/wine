@@ -76,7 +76,28 @@ export class WinesService {
     }
   }
 
-  // shopping cart list service
+  addNewWine(wine: Wine, ilabel: number, iwine: number, imgFile: File) {
+    const token = this.auths.getToken();
+    const newWine = Observable.create((observer: Observer<string>) => {
+      this.http.put('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines/' + iwine + '.json?auth=' + token, wine)
+        .subscribe(
+        (res: Response) => {
+          this.http.post('http://localhost:8080/upload', imgFile).subscribe(
+            resp => {
+              observer.next('success');
+            },
+            err => {
+              observer.error(err);
+            });
+        },
+        (error) => {
+          observer.error(error);
+        });
+    });
+    return newWine;
+  }
+
+  // shopping cart list service -------------------------------------------------------------------------
 
   addToShoppingCart(wine: Wine, i: number) {
     const sc = new ShoppingCart(wine, i);
@@ -118,7 +139,7 @@ export class WinesService {
     this.router.navigate(['/user/wines']);
   }
 
-  // making orders
+  // making orders --------------------------------------------------------------------------------------------
   generateOrder() {
     const username = this.auths.getUserName();
     const orderID: string = username + Date.now();
