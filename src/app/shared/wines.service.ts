@@ -82,9 +82,12 @@ export class WinesService {
       this.http.put('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines/' + iwine + '.json?auth=' + token, wine)
         .subscribe(
         (res: Response) => {
-          this.http.post('http://localhost:8080/upload', imgFile).subscribe(
+          let fData = new FormData();
+          fData.append('img', imgFile);
+          this.http.post('http://localhost:8080/upload', fData).subscribe(
             resp => {
               observer.next('success');
+              this.router.navigate(['/admin/products/list']);
             },
             err => {
               observer.error(err);

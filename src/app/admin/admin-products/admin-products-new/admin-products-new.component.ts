@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FileUploader } from 'ng2-file-upload';
+
 
 import { WinesService } from '../../../shared/wines.service';
 import { Label } from '../../../shared/label.model';
@@ -12,7 +12,6 @@ import { Wine } from '../../../shared/wine.model';
   styleUrls: ['./admin-products-new.component.css']
 })
 export class AdminProductsNewComponent implements OnInit {
-  public uploader:FileUploader = new FileUploader({url:'http://localhost:8080/upload'});
 
   labels: Label[];
   newProductForm: FormGroup;
@@ -20,9 +19,8 @@ export class AdminProductsNewComponent implements OnInit {
   productImgName = '';
   productImgType = '';
   productImgSize = -1;
-  extError = true;
-  sizeError = true;
-
+  spinnerVisible = false;
+  postError = false;
 
 
   constructor(private winesService: WinesService) { }
@@ -81,23 +79,27 @@ export class AdminProductsNewComponent implements OnInit {
   }
 
   onSubmit() {
+    this.spinnerVisible = true;
+    this.postError = false;
     const labelName = this.newProductForm.get('newProductLabel').value;
     const ilabel = this.labels.findIndex(lb => lb.name === labelName);
     const iwine = this.labels[ilabel].wines.length;
     const id = this.newProductForm.get('newProductId').value;
     const name = this.newProductForm.get('newProductName').value;
     const variety = this.newProductForm.get('newProductVariety').value;
-    const img = this.productImgName;
+    const img = '../../assets/img/'+this.productImgName;
     const price = this.newProductForm.get('newProductPrice').value;
     const description = this.newProductForm.get('newProductDescription').value;
     const wine = new Wine(id, name, variety, img, description, price, 0);
     var imgFile = this.productImg;
     this.winesService.addNewWine(wine, ilabel, iwine, this.productImg).subscribe(
       (res) => {
+        this.spinnerVisible = false;
         console.log(res);
       },
       (err) => {
         console.log(err);
+        this.postError = true;
       });
   }
 

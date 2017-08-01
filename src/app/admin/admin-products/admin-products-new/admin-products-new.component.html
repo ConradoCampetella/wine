@@ -87,6 +87,10 @@
           class="help-block">
             <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
         </span>
+        <span *ngIf="postError" class="help-block bg-danger">Could NOT create de Product - Please try again later</span>
+      </div>
+      <div *ngIf="spinnerVisible" class="spinner">
+        <app-little-spinner></app-little-spinner>
       </div>
       <div class="text-center">
         <button type="submit" class="btn btn-success" [disabled]="!newProductForm.valid">Send</button>
