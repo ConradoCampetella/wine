@@ -6,7 +6,7 @@
 <hr>
 <div class="row">
   <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-    <form [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="newProductForm">
       <div class="form-group">
         <label for="newProductLabel">Label</label>
         <select name="newProductLabel" id="newProductLabel" class="form-control" formControlName="newProductLabel">
@@ -25,6 +25,7 @@
         <input type="text" class="form-control" id="newProductId" name="newProductId" formControlName="newProductId">
         <span *ngIf="!newProductForm.get('newProductId').valid && newProductForm.get('newProductId').touched" class="help-block">
             <span *ngIf="newProductForm.get('newProductId').errors['required']">Please input the product ID</span>
+        <span *ngIf="newProductForm.get('newProductId').errors['wineIdExists']">The ID is in use - Please input another</span>
         </span>
         <span *ngIf="newProductForm.get('newProductId').valid && newProductForm.get('newProductId').touched && newProductForm.get('newProductId').dirty"
           class="help-block">
@@ -93,7 +94,7 @@
         <app-little-spinner></app-little-spinner>
       </div>
       <div class="text-center">
-        <button type="submit" class="btn btn-success" [disabled]="!newProductForm.valid">Send</button>
+        <button type="button" class="btn btn-success" [disabled]="!newProductForm.valid"  (click)="onSubmit()">Send</button>
         <button type="reset" class="btn btn-warning">Reset</button>
       </div>
     </form>

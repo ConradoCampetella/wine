@@ -3,6 +3,7 @@ var path = require('path');
 var multer = require('multer');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var cors = require('cors');
 
 
 var app = express();
@@ -11,6 +12,8 @@ var app = express();
 
 // Run the app by serving the static files
 // in the dist directory
+
+app.use(cors());
 
 app.use(express.static(__dirname + '/dist'));
 
@@ -39,7 +42,7 @@ var upload = multer({ dest: 'uploads/' });
 app.post('/upload', upload.single('img'), function (req, res, next) {
     console.log('originalname: ' + req.file.originalname);
     console.log('type: ' + req.file.mimetype);
-    fs.createReadStream('./uploads/' + req.file.filename).pipe(fs.createWriteStream('./dist/assets/img/' + req.file.originalname));
+    //fs.createReadStream('./uploads/' + req.file.filename).pipe(fs.createWriteStream('./dist/assets/img/' + req.file.originalname));
     fs.createReadStream('./uploads/' + req.file.filename).pipe(fs.createWriteStream('./src/assets/img/' + req.file.originalname));
     res.send('success');
     // req.file is the `avatar` file

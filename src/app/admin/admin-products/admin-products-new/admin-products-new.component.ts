@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { Router } from '@angular/router';
 
 import { WinesService } from '../../../shared/wines.service';
 import { Label } from '../../../shared/label.model';
@@ -23,7 +23,7 @@ export class AdminProductsNewComponent implements OnInit {
   postError = false;
 
 
-  constructor(private winesService: WinesService) { }
+  constructor(private winesService: WinesService, private router: Router) { }
 
   ngOnInit() {
     this.winesService.getAllLabels().subscribe(
@@ -35,7 +35,7 @@ export class AdminProductsNewComponent implements OnInit {
       });
     this.newProductForm = new FormGroup({
       'newProductLabel': new FormControl(null, Validators.required),
-      'newProductId': new FormControl(null, Validators.required),
+      'newProductId': new FormControl(null, [Validators.required, this.wineIdValidator.bind(this)]),
       'newProductName': new FormControl(null, Validators.required),
       'newProductVariety': new FormControl(null, Validators.required),
       'newProductImg': new FormControl(null, Validators.required),
@@ -78,6 +78,25 @@ export class AdminProductsNewComponent implements OnInit {
     }
   }
 
+  wineIdValidator(control: FormControl): { [s: string]: boolean } {
+    let index = -1;
+    if (control.dirty) {
+      this.labels.forEach(lb => {
+        const i = lb.wines.findIndex(wn => wn.wineId === control.value);
+        if (i !== -1) {
+          index = i;
+        }
+      });
+      if (index === -1) {
+        return null;
+      } else {
+        return { 'wineIdExists': true }
+      }
+    } else {
+      return null;
+    }
+  }
+
   onSubmit() {
     this.spinnerVisible = true;
     this.postError = false;
@@ -95,7 +114,7 @@ export class AdminProductsNewComponent implements OnInit {
     this.winesService.addNewWine(wine, ilabel, iwine, this.productImg).subscribe(
       (res) => {
         this.spinnerVisible = false;
-        console.log(res);
+        this.router.navigate(['/admin/products/list']);
       },
       (err) => {
         console.log(err);
