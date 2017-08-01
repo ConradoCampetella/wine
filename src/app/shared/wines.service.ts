@@ -84,7 +84,7 @@ export class WinesService {
         (res: Response) => {
           let fData = new FormData();
           fData.append('img', imgFile);
-          this.http.post('http://localhost:8080/upload', fData).subscribe(
+          this.http.post('http://ng-wine.herokuapp.com/upload', fData).subscribe(
             resp => {
               observer.next('success');
               this.router.navigate(['/admin/products/list']);
