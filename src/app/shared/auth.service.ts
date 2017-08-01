@@ -225,6 +225,7 @@ export class AuthService {
   }
 
   getAllUsers() {
+    this.getToken();
     return this.http.get('https://ng-wine-app.firebaseio.com/users.json?auth=' + this.token)
       .map((response: Response) => {
         const res = Object.getOwnPropertyNames(response.json());

@@ -69,6 +69,7 @@ export class AdminProductsListComponent implements OnInit {
         this.numberOfPages();
       });
   }
+
   // Filter
   showWine(price: number) {
     if (price >= this.min && price <= this.max) {
@@ -131,24 +132,53 @@ export class AdminProductsListComponent implements OnInit {
     return show;
   }
   // Delete Products
-  onDeleteWine(wId) {
+  onDeleteWine(wId: string, ilabel: number, iwine: number) {
     const allOrders: Order[] = [];
-    this.auths.getAllUsers().subscribe((users) => {
-      this.wineService.getAllOrders().subscribe(
-        (res) => {
-          this.wineService.allOrders.forEach(order => {
-            order.sclOrder.forEach(shc => {
-              if (shc.wine.wineId === wId) {
-                alert("NO SE PUEDE BORRAR, VINO EN PEDIDO!!!!!!!");
-              }
+    if (confirm("Are you sure you want to delet the product?")) {
+      this.auths.getAllUsers().subscribe((users) => {
+        this.wineService.getAllOrders().subscribe(
+          (res) => {
+            let canDelete = true;
+            this.wineService.allOrders.forEach(order => {
+              order.sclOrder.forEach(shc => {
+                if (shc.wine.wineId === wId) {
+                  canDelete = false;
+                }
+              });
             });
+            if (canDelete) {
+              this.deleteWine(ilabel, iwine);
+            } else {
+              alert("The product CANNOT be eliminated because a client order it");
+            }
+          },
+          (err) => {
+            console.log(err);
+            // alert("NO SE PUEDE CONECTAR CON EL SERVIDOR, INTENTELO MAS TARDE");
           });
-        },
-        (err) => {
-          console.log(err);
-          alert("NO SE PUEDE CONECTAR CON EL SERVIDOR, INTENTELO MAS TARDE");
-        });
-    });
+      });
+    }
   }
+  deleteWine(ilabel: number, iwine: number) {
+    console.log('ilabel: ' + ilabel + 'iwine: ' + iwine);
+    this.wineService.deleteWine(ilabel, iwine).subscribe(
+      (res) => {
+        this.spinnerVisible = true;
+        this.wineService.getAllLabels().subscribe(
+          (res) => {
+            this.spinnerVisible = false;
+            this.labels = res;
+            this.numberOfPages();
+          },
+          (err) => {
+            this.spinnerVisible = false;
+            console.log(err);
+          });
+      },
+      (err) => {
+        console.log(err);
+      });
+  }
+
 
 }

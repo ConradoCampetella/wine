@@ -87,8 +87,8 @@ export class WinesService {
           this.http.put('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines/' + iwine + '.json?auth=' + token, wine)
             .subscribe(
             resp => {
+              const token = this.auths.getToken();
               observer.next('success');
-              this.router.navigate(['/admin/products/list']);
             },
             err => {
               observer.error(err);
@@ -99,6 +99,36 @@ export class WinesService {
         });
     });
     return newWine;
+  }
+
+  deleteWine(ilabel: number, iwine: number) {
+    const token = this.auths.getToken();
+    let wines: Wine[] = [];
+    const delWine = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines.json')
+        .map((res: Response) => {
+          const ws: Wine[] = res.json();
+          return ws;
+        })
+        .subscribe(
+        (resp) => {
+          wines = resp;
+          wines.splice(iwine, 1);
+          firebase.database().ref('labels').child(ilabel.toString()).child('wines').set(wines)
+            .then(
+            (respo) => {
+              observer.next('success');
+            })
+            .catch(
+            (err) => {
+              observer.error(err);
+            });
+        },
+        (err) => {
+          observer.error(err);
+        });
+    });
+    return delWine;
   }
 
   // shopping cart list service -------------------------------------------------------------------------
