@@ -8,29 +8,89 @@
   <div class="col-xs-12 col-sm-10 col-sm-offset-1">
     <form [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
+        <label for="newProductLabel">Label</label>
+        <select name="newProductLabel" id="newProductLabel" class="form-control" formControlName="newProductLabel">
+          <option *ngFor="let label of labels" value="{{label.name}}">{{label.name}}</option>
+        </select>
+        <span *ngIf="!newProductForm.get('newProductLabel').valid && newProductForm.get('newProductLabel').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductLabel').errors['required']">Please select a Label</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductLabel').valid && newProductForm.get('newProductLabel').touched && newProductForm.get('newProductLabel').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
         <label for="newProductId">Id</label>
         <input type="text" class="form-control" id="newProductId" name="newProductId" formControlName="newProductId">
+        <span *ngIf="!newProductForm.get('newProductId').valid && newProductForm.get('newProductId').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductId').errors['required']">Please input the product ID</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductId').valid && newProductForm.get('newProductId').touched && newProductForm.get('newProductId').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
       </div>
       <div class="form-group">
         <label for="newProductName">Name</label>
         <input type="text" class="form-control" id="newProductName" name="newProductName" formControlName="newProductName">
+        <span *ngIf="!newProductForm.get('newProductName').valid && newProductForm.get('newProductName').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductName').errors['required']">Please input the product Name</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductName').valid && newProductForm.get('newProductName').touched && newProductForm.get('newProductName').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
       </div>
       <div class="form-group">
         <label for="newProductVariety">Variety</label>
         <input type="text" class="form-control" id="newProductVariety" name="newProductVariety" formControlName="newProductVariety">
+        <span *ngIf="!newProductForm.get('newProductVariety').valid && newProductForm.get('newProductVariety').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductVariety').errors['required']">Please input the wine Variety</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductVariety').valid && newProductForm.get('newProductVariety').touched && newProductForm.get('newProductVariety').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
       </div>
       <div class="form-group">
         <label for="newProductImg">Image</label>
-        
         <input type="file" class="form-control" id="newProductImg" name="newProductImg" formControlName="newProductImg" (change)="onFileChange($event)">
+        <span *ngIf="!newProductForm.get('newProductImg').valid && newProductForm.get('newProductImg').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductImg').errors['required']">Please select the wine Image</span>
+        <span *ngIf="newProductForm.get('newProductImg').errors['extension'] && !newProductForm.get('newProductImg').errors['required']">Please a valid format file - the suported images are png or jpg</span>
+        <span *ngIf="newProductForm.get('newProductImg').errors['size'] && !newProductForm.get('newProductImg').errors['required']">The size of the file excedes maximun admited (10 MB)</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductImg').valid && newProductForm.get('newProductImg').touched && newProductForm.get('newProductImg').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
       </div>
       <div class="form-group">
         <label for="newProductPrice">Price</label>
-        <input type="text" class="form-control" id="newProductPrice" name="newProductPrice" formControlName="newProductPrice">
+        <input type="number" class="form-control" id="newProductPrice" name="newProductPrice" formControlName="newProductPrice">
+        <span *ngIf="!newProductForm.get('newProductPrice').valid && newProductForm.get('newProductPrice').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductPrice').errors['required']">Please enter the wine Price</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductPrice').valid && newProductForm.get('newProductPrice').touched && newProductForm.get('newProductPrice').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
       </div>
       <div class="form-group">
         <label for="newProductDescription">Description</label>
         <input type="text" class="form-control" id="newProductDescription" name="newProductDescription" formControlName="newProductDescription">
+        <span *ngIf="!newProductForm.get('newProductDescription').valid && newProductForm.get('newProductDescription').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductDescription').errors['required']">Please enter the wine Description</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductDescription').valid && newProductForm.get('newProductDescription').touched && newProductForm.get('newProductDescription').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+        <span *ngIf="postError" class="help-block bg-danger">Could NOT create de Product - Please try again later</span>
+      </div>
+      <div *ngIf="spinnerVisible" class="spinner">
+        <app-little-spinner></app-little-spinner>
       </div>
       <div class="text-center">
         <button type="submit" class="btn btn-success" [disabled]="!newProductForm.valid">Send</button>
