@@ -87,7 +87,7 @@ export class AdminProductsNewComponent implements OnInit {
     const id = this.newProductForm.get('newProductId').value;
     const name = this.newProductForm.get('newProductName').value;
     const variety = this.newProductForm.get('newProductVariety').value;
-    const img = '../../assets/img/'+this.productImgName;
+    const img = '../../assets/img/' + this.productImgName;
     const price = this.newProductForm.get('newProductPrice').value;
     const description = this.newProductForm.get('newProductDescription').value;
     const wine = new Wine(id, name, variety, img, description, price, 0);
@@ -99,6 +99,7 @@ export class AdminProductsNewComponent implements OnInit {
       },
       (err) => {
         console.log(err);
+        this.spinnerVisible = false;
         this.postError = true;
       });
   }

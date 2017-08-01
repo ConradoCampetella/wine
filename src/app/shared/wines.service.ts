@@ -79,12 +79,13 @@ export class WinesService {
   addNewWine(wine: Wine, ilabel: number, iwine: number, imgFile: File) {
     const token = this.auths.getToken();
     const newWine = Observable.create((observer: Observer<string>) => {
-      this.http.put('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines/' + iwine + '.json?auth=' + token, wine)
+      let fData = new FormData();
+      fData.append('img', imgFile);
+      this.http.post('http://localhost:8080/upload', fData)
         .subscribe(
         (res: Response) => {
-          let fData = new FormData();
-          fData.append('img', imgFile);
-          this.http.post('http://ng-wine.herokuapp.com/upload', fData).subscribe(
+          this.http.put('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines/' + iwine + '.json?auth=' + token, wine)
+            .subscribe(
             resp => {
               observer.next('success');
               this.router.navigate(['/admin/products/list']);
