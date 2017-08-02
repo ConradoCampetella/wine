@@ -1,3 +1,75 @@
-<p>
-  admin-threads-new works!
-</p>
+<div class="row">
+  <div class="col-xs-12">
+    <h2>New Thread</h2>
+  </div>
+</div>
+<hr>
+<div *ngIf="spinnerVisible">
+  <app-spinner></app-spinner>
+</div>
+<div *ngIf="!spinnerVisible" class="col-xs-12">
+  <form [formGroup]="adminThreadForm" (ngSubmit)="onSubmitThread()">
+    <div class="form-group">
+      <label for="adminThreadUser">User</label>
+      <select name="adminThreadUser" id="adminThreadUser" class="form-control" formControlName="adminThreadUser">
+            <option *ngFor="let user of users" value="{{user.email}}">{{user.email}}</option>
+      </select>
+      <span *ngIf="!adminThreadForm.get('adminThreadUser').valid && adminThreadForm.get('adminThreadUser').touched" class="help-block">
+            <span *ngIf="adminThreadForm.get('adminThreadUser').errors['required']">Please select the user to open the Thread</span>
+      </span>
+      <span *ngIf="adminThreadForm.get('adminThreadUser').valid && adminThreadForm.get('adminThreadUser').touched && adminThreadForm.get('adminThreadUser').dirty"
+        class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="adminThreadType">Type</label>
+      <select name="adminThreadType" id="adminThreadType" class="form-control" formControlName="adminThreadType">
+            <option value="Information">Information</option>
+            <option value="Query">Query</option>
+            <option value="Problem with the web">Problem with the web</option>
+            <option value="Problem with an order">Problem with an order</option>
+            <option value="Problem with a product">Problem with a product</option>
+          </select>
+      <span *ngIf="!adminThreadForm.get('adminThreadType').valid && adminThreadForm.get('adminThreadType').touched" class="help-block">
+            <span *ngIf="adminThreadForm.get('adminThreadType').errors['required']">Please select the type of Thread</span>
+      </span>
+      <span *ngIf="adminThreadForm.get('adminThreadType').valid && adminThreadForm.get('adminThreadType').touched && adminThreadForm.get('adminThreadType').dirty"
+        class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="adminThreadDescription">Description</label>
+      <input type="text" name="adminThreadDescription" id="adminThreadDescription" class="form-control" formControlName="adminThreadDescription">
+      <span *ngIf="!adminThreadForm.get('adminThreadDescription').valid && adminThreadForm.get('adminThreadDescription').touched"
+        class="help-block">
+            <span *ngIf="adminThreadForm.get('adminThreadDescription').errors['required']">Please enter the description of the Thread</span>
+      </span>
+      <span *ngIf="adminThreadForm.get('adminThreadDescription').valid && adminThreadForm.get('adminThreadDescription').touched && adminThreadForm.get('adminThreadDescription').dirty"
+        class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="adminThreadMessage">Message</label>
+      <textarea name="adminThreadMessage" id="adminThreadMessage" cols="30" rows="10" class="form-control" formControlName="adminThreadMessage"></textarea>
+      <span *ngIf="!adminThreadForm.get('adminThreadMessage').valid && adminThreadForm.get('adminThreadMessage').touched" class="help-block">
+            <span *ngIf="adminThreadForm.get('adminThreadMessage').errors['required']">Please enter a message</span>
+      </span>
+      <span *ngIf="adminThreadForm.get('adminThreadMessage').valid && adminThreadForm.get('adminThreadMessage').touched && adminThreadForm.get('adminThreadMessage').dirty"
+        class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+      </span>
+      <span *ngIf="newThreadError" class="help-block bg-danger">Couldn´t create the Thread - Please try again later</span>
+      <span *ngIf="newThreadSuccess" class="help-block bg-success">New Thread correctly opened</span>
+    </div>
+    <div *ngIf="newThreadSpinner" class="spinner">
+      <app-little-spinner></app-little-spinner>
+    </div>
+    <div class="text-center">
+      <button type="submit" [disabled]="!adminThreadForm.valid" class="btn btn-success">Open Thread</button>
+      <button type="reset" class="btn btn-warning">Clear</button>
+    </div>
+  </form>
+</div>
