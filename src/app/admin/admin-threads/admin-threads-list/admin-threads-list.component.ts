@@ -106,7 +106,7 @@ export class AdminThreadsListComponent implements OnInit {
         (resp) => {
           this.auths.getThreads().subscribe(
             (res) => {
-              this.threads = res.filter((tr) => tr.usermail === this.user.email);
+              this.threads = res;
               this.threadDetail = this.threads.find(tr => tr.idThread === this.idThreadClicked);
             },
             (err) => {
