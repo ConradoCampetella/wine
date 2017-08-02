@@ -215,8 +215,8 @@ export class WinesService {
     return genOrd;
   }
   getAllOrders() {
-    const allOrders = Observable.create((observer: Observer<string>) => {
-      this.auths.getAllUsers().subscribe(
+    const gAllOrders = Observable.create((observer: Observer<string>) => {
+      this.auths.getAllUsersNames().subscribe(
         (res) => {
           const lastName = res[res.length - 1];
           res.forEach(user => {
@@ -245,7 +245,7 @@ export class WinesService {
           observer.error('No Users were Found');
         });
     });
-    return allOrders;
+    return gAllOrders;
   }
   obtainOrders(username: string) {
     return this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')

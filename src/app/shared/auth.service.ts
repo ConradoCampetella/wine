@@ -20,6 +20,7 @@ import { Thread } from 'app/shared/thread.model';
 export class AuthService {
   token: string;
   user: User;
+  users: User[];
   orders: Order[];
   userNameHeader = new Subject();
 
@@ -224,13 +225,45 @@ export class AuthService {
       });
   }
 
-  getAllUsers() {
+  getAllUsersNames() {
     this.getToken();
     return this.http.get('https://ng-wine-app.firebaseio.com/users.json?auth=' + this.token)
       .map((response: Response) => {
         const res = Object.getOwnPropertyNames(response.json());
         return res;
       });
+  }
+
+  getAllUsers() {
+    this.getToken;
+    const allUsers = Observable.create((observer: Observer<string>) => {
+      this.getAllUsersNames().subscribe(
+        (res) => {
+          const userNames = res;
+          const lastname = res[res.length - 1];
+          userNames.forEach(userName => {
+            this.http.get('https://ng-wine-app.firebaseio.com/users/' + userName + '.json')
+              .map(res => {
+                const userInfo: User = res.json();
+                return userInfo;
+              })
+              .subscribe(
+              (resp) => {
+                this.users.push(resp);
+                if (resp.username === lastname) {
+                  observer.next('success');
+                }
+              },
+              (err) => {
+                observer.error(err);
+              });
+          });
+        },
+        (err) => {
+          observer.error(err);
+        });
+    });
+    return allUsers;
   }
 
   // ---------------------------------

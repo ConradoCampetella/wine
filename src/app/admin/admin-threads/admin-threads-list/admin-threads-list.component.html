@@ -1,3 +1,106 @@
-<p>
-  admin-threads-list works!
-</p>
+<div class="row">
+  <div class="col-xs-12">
+    <h2>Threads</h2>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <table class="table table-bordered table-responsive">
+      <tr>
+        <th>Email</th>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>State</th>
+        <th>Details</th>
+        <th>Close</th>
+      </tr>
+      <tr *ngFor="let thread of threads" [ngClass]="onClassActive(thread.idThread)">
+        <td>{{thread.usermail}}</td>
+        <td>{{thread.idThread}}</td>
+        <td>{{thread.type}}</td>
+        <td>{{thread.description}}</td>
+        <td *ngIf="thread.open">Open</td>
+        <td *ngIf="!thread.open">Close</td>
+        <td class="text-center"><button class="btn btn-info" (click)="onDetails(thread.idThread)">Details  <span [ngClass]="onClickedButton(thread.idThread)"  aria-hidden="true"></span></button></td>
+        <td class="text-center"><button class="btn btn-warning" (click)="onClose(thread.idThread)" [disabled]="!thread.open">Close</button></td>
+      </tr>
+    </table>
+    <div *ngIf="spinnerVisible">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</div>
+
+<!-- Details -->
+
+<div *ngIf="details">
+  <div class="row" *ngFor="let msg of threadDetail.messages; index as i">
+
+    <div *ngIf="msg.usermail === threadDetail.usermail" class="col-xs-12 col-sm-5 col-md-4 col-sm-offset-2 col-md-offset-2">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Send by: {{msg.usermail}}</h3>
+        </div>
+        <div class="panel-body">
+          <p>{{msg.message}}</p>
+        </div>
+        <div class="panel-footer">
+          Send on: {{msg.date | date:'medium'}}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="msg.usermail !== threadDetail.usermail" class="col-xs-12 col-sm-5 col-md-4 col-sm-offset-5 col-md-offset-6">
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Send by: {{msg.usermail}}</h3>
+        </div>
+        <div class="panel-body">
+          <p>{{msg.message}}</p>
+        </div>
+        <div class="panel-footer">
+          Send on: {{msg.date | date:'medium'}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 text-right">
+      <button class="btn btn-primary" [disabled]="!threadDetail.open" (click)="onAddMessage()">Add Message    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <hr>
+</div>
+
+<!-- Add Messages -->
+
+<div *ngIf="addMsg">
+  <div class="col-xs-12">
+    <form [formGroup]="adminMsgForm" (ngSubmit)="onConfimrMsg()">
+      <div class="form-group">
+        <label for="adminMsgMessage">Message</label>
+        <textarea name="adminMsgMessage" id="adminMsgMessage" cols="30" rows="10" class="form-control" formControlName="adminMsgMessage"></textarea>
+        <span *ngIf="!adminMsgForm.get('adminMsgMessage').valid && adminMsgForm.get('adminMsgMessage').touched" class="help-block">
+            <span *ngIf="adminMsgForm.get('adminMsgMessage').errors['required']">Please enter a message</span>
+        </span>
+        <span *ngIf="adminMsgForm.get('adminMsgMessage').valid && adminMsgForm.get('adminMsgMessage').touched && adminMsgForm.get('adminMsgMessage').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+        <span *ngIf="addMsgError" class="help-block bg-danger">Couldn´t send the message - Please try again later</span>
+        <span *ngIf="addMsgSuccess" class="help-block bg-success">New Message correctly send</span>
+      </div>
+      <div *ngIf="addMsgSpinner" class="spinner">
+        <app-little-spinner></app-little-spinner>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-success">Send Message</button>
+        <button type="reset" class="btn btn-warning">Clear</button>
+      </div>
+    </form>
+  </div>
+</div>
