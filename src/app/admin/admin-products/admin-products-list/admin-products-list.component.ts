@@ -135,28 +135,26 @@ export class AdminProductsListComponent implements OnInit {
   onDeleteWine(wId: string, ilabel: number, iwine: number) {
     const allOrders: Order[] = [];
     if (confirm("Are you sure you want to delet the product?")) {
-      this.auths.getAllUsers().subscribe((users) => {
-        this.wineService.getAllOrders().subscribe(
-          (res) => {
-            let canDelete = true;
-            this.wineService.allOrders.forEach(order => {
-              order.sclOrder.forEach(shc => {
-                if (shc.wine.wineId === wId) {
-                  canDelete = false;
-                }
-              });
+      this.wineService.getAllOrders().subscribe(
+        (res) => {
+          let canDelete = true;
+          this.wineService.allOrders.forEach(order => {
+            order.sclOrder.forEach(shc => {
+              if (shc.wine.wineId === wId) {
+                canDelete = false;
+              }
             });
-            if (canDelete) {
-              this.deleteWine(ilabel, iwine);
-            } else {
-              alert("The product CANNOT be eliminated because a client order it");
-            }
-          },
-          (err) => {
-            console.log(err);
-            // alert("NO SE PUEDE CONECTAR CON EL SERVIDOR, INTENTELO MAS TARDE");
           });
-      });
+          if (canDelete) {
+            this.deleteWine(ilabel, iwine);
+          } else {
+            alert("The product CANNOT be eliminated because a client order it");
+          }
+        },
+        (err) => {
+          console.log(err);
+          // alert("NO SE PUEDE CONECTAR CON EL SERVIDOR, INTENTELO MAS TARDE");
+        });
     }
   }
   deleteWine(ilabel: number, iwine: number) {
