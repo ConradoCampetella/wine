@@ -30,7 +30,7 @@
           <input type="text" id="signup-username" formControlName="signup-username" class="form-control">
           <span *ngIf="!pending && !signupForm.get('signup-username').valid && signupForm.get('signup-username').touched" class="help-block">
             <span *ngIf="!pending && signupForm.get('signup-username').errors['required']">Please input your User Name</span>
-          <span *ngIf="!pending && signupForm.get('signup-username').errors['minlength']">The password must contain at least four characters</span>
+          <span *ngIf="!pending && signupForm.get('signup-username').errors['minlength']">The Username must contain at least four characters</span>
           </span>
           <span *ngIf="pending"><img src="../../../../assets/img/pending.png" alt="pending-orange"></span>
           <span *ngIf="signupForm.get('signup-username').valid && signupForm.get('signup-username').touched && signupForm.get('signup-username').dirty"

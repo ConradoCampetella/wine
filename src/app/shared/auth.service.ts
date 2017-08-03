@@ -20,11 +20,12 @@ import { Thread } from 'app/shared/thread.model';
 export class AuthService {
   token: string;
   user: User;
-  allUsers: User[]=[];
+  allUsers: User[] = [];
   orders: Order[];
   userNameHeader = new Subject();
 
   constructor(private router: Router, private http: Http) { }
+
   signupUser(user: User) {
     const singUp = Observable.create((observer: Observer<string>) => {
       firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
@@ -140,6 +141,72 @@ export class AuthService {
         );
     });
     return response;
+  }
+
+  userMailExists(usermail: string) {
+    const response = Observable.create((observer: Observer<string>) => {
+      this.getAllUsers().subscribe(
+        (res) => {
+          let exists = false;
+          this.allUsers.forEach(user => {
+            if (user.email === usermail) {
+              exists = true;
+            }
+          });
+          if (exists) {
+            observer.next('true');
+          } else {
+            observer.next('false');
+          }
+        },
+        (err) => {
+          observer.error(err);
+        });
+    });
+    return response;
+  }
+
+  createNewUser(newUser: User) {
+    const cNewUser = Observable.create((observer: Observer<string>) => {
+      firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
+        .catch(error => {
+          observer.error(error);
+        })
+        .then(res => {
+          firebase.auth().signInWithEmailAndPassword(newUser.email, newUser.password)
+            .catch(error => {
+              observer.error(error);
+            })
+            .then(resp => {
+              firebase.auth().currentUser.updateProfile({ displayName: newUser.username, photoURL: '' })
+                .catch(error => {
+                  observer.error(error);
+                })
+                .then(respo => {
+                  firebase.database().ref('users').child(newUser.username).set(newUser)
+                    .catch(error => {
+                      observer.error(error);
+                    })
+                    .then((respon: Response) => {
+                      firebase.auth().signInWithEmailAndPassword(this.user.email, this.user.password)
+                        .catch(error => {
+                          observer.error(error);
+                        })
+                        .then(respons => {
+                          firebase.auth().currentUser.getIdToken()
+                            .then(
+                            (token: string) => {
+                              observer.next('log in correct, continue to redirect');
+                              this.token = token;
+                              this.router.navigate(['/admin/users/list']);
+                            });
+                        });
+                    });
+                });
+            });
+        })
+    });
+    return cNewUser;
   }
 
   getUserName() {
@@ -265,6 +332,59 @@ export class AuthService {
         });
     });
     return gAllUsers;
+  }
+
+  deleteteUser(delUser: User) {
+    const deleteUser = Observable.create((observer: Observer<string>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/orders/' + delUser.username + '.json')
+        .map((response: Response) => {
+          const userOrders: Order[] = response.json();
+          return userOrders;
+        })
+        .subscribe(
+        (res) => {
+          if (!res) {
+            firebase.auth().signInWithEmailAndPassword(delUser.email, delUser.password)
+              .catch(error => {
+                observer.error(error);
+              })
+              .then(resp => {
+                firebase.auth().currentUser.delete()
+                  .catch(error => { observer.error(error); })
+                  .then(respo => {
+                    firebase.auth().signInWithEmailAndPassword(this.user.email, this.user.password)
+                      .catch(error => {
+                        observer.error(error);
+                      })
+                      .then(respons => {
+                        firebase.auth().currentUser.getIdToken()
+                          .catch(error => {
+                            observer.error(error);
+                          })
+                          .then(
+                          (token: string) => {
+                            this.token = token;
+                            this.http.delete('https://ng-wine-app.firebaseio.com/users/' + delUser.username + '.json?auth=' + this.token)
+                              .subscribe(
+                              response => {
+                                observer.next('success');
+                              },
+                              error => {
+                                observer.error(error)
+                              });
+                          });
+                      });
+                  });
+              });
+          } else {
+            observer.next('Orders Exists');
+          }
+        },
+        (err) => {
+          observer.error(err);
+        });
+    });
+    return deleteUser;
   }
 
   // ---------------------------------

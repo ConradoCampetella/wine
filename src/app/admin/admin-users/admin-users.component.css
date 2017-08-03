@@ -1,5 +1,15 @@
 div.col-sm-3.col-md-2{
-  background-color: #F5F5F5;
   padding-left: 0;
   padding-right: 0;  
+}
+div.col-sm-9.col-md-10{
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: white;
+}
+div.row{
+  background-color: #F5F5F5;
 }

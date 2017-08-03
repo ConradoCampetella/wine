@@ -20,6 +20,7 @@ import { AdminProductsNewComponent } from '../admin/admin-products/admin-product
 import { AdminOrdersComponent } from '../admin/admin-orders/admin-orders.component';
 import { AdminOrdersCellarComponent } from '../admin/admin-orders/admin-orders-cellar/admin-orders-cellar.component';
 import { AdminOrdersUsersComponent } from '../admin/admin-orders/admin-orders-users/admin-orders-users.component';
+import { AdminUsersEditComponent } from '../admin/admin-users/admin-users-edit/admin-users-edit.component';
 
 import { AdminThreadsComponent } from './admin-threads/admin-threads.component';
 import { AdminThreadsListComponent } from '../admin/admin-threads/admin-threads-list/admin-threads-list.component';
@@ -50,7 +51,8 @@ const adminRoutes: Routes = [
                 path: 'users', component: AdminUsersComponent, children: [
                     { path: '', redirectTo: '/admin/users/list', pathMatch: 'full' },
                     { path: 'list', component: AdminUsersListComponent },
-                    { path: 'new', component: AdminUsersNewComponent }
+                    { path: 'new', component: AdminUsersNewComponent },
+                    { path: 'edit/:usermail', component: AdminUsersEditComponent },
                 ]
             },
             {
