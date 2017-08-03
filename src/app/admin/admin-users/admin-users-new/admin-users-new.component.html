@@ -1,3 +1,167 @@
-<p>
-  admin-users-new works!
-</p>
+<!--Header -->
+<div class="row">
+  <div class="col-xs-12">
+    <h2>New User</h2>
+  </div>
+</div>
+<hr>
+
+<!--Form -->
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="adminNewUserForm" (ngSubmit)="onSignup()">
+      <!-- Email -->
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="form-group">
+          <label for="adminNewUser-email">Email</label>
+          <input type="text" id="adminNewUser-email" formControlName="adminNewUser-email" class="form-control">
+          <span *ngIf="!pendingUserMail && !adminNewUserForm.get('adminNewUser-email').valid && adminNewUserForm.get('adminNewUser-email').touched"
+            class="help-block">
+            <span *ngIf="!pendingUserMail && adminNewUserForm.get('adminNewUser-email').errors['required']">Please input your User Name</span>
+          <span *ngIf="!pendingUserMail && adminNewUserForm.get('adminNewUser-email').errors['email']">Please enter a valid email</span>
+          <span *ngIf="!pendingUserMail && adminNewUserForm.get('adminNewUser-email').errors['userMailExists']">The email is already in use</span>
+          </span>
+          <span *ngIf="pendingUserMail"><img src="../../../../assets/img/pending.png" alt="pending-orange"></span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-email').valid && adminNewUserForm.get('adminNewUser-email').touched && adminNewUserForm.get('adminNewUser-email').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <!-- Username -->
+        <div class="form-group">
+          <label for="adminNewUser-username">User Name</label>
+          <input type="text" id="adminNewUser-username" formControlName="adminNewUser-username" class="form-control">
+          <span *ngIf="!pendingUserName && !adminNewUserForm.get('adminNewUser-username').valid && adminNewUserForm.get('adminNewUser-username').touched"
+            class="help-block">
+            <span *ngIf="!pendingUserName && adminNewUserForm.get('adminNewUser-username').errors['required']">Please input your User Name</span>
+          <span *ngIf="!pendingUserName && adminNewUserForm.get('adminNewUser-username').errors['minlength']">The Username must contain at least four characters</span>
+          <span *ngIf="!pendingUserName && adminNewUserForm.get('adminNewUser-username').errors['userNameExists']">The username is already in use</span>
+          </span>
+          <span *ngIf="pendingUserName"><img src="../../../../assets/img/pending.png" alt="pending-orange"></span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-username').valid && adminNewUserForm.get('adminNewUser-username').touched && adminNewUserForm.get('adminNewUser-username').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <hr>
+        <!-- Password -->
+        <div class="form-group">
+          <label for="adminNewUser-password">Password</label>
+          <input type="password" id="adminNewUser-password" formControlName="adminNewUser-password" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-password').valid && adminNewUserForm.get('adminNewUser-password').touched"
+            class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-password').errors['required']">Please input your password</span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-password').errors['minlength']">The password must contain at least six characters</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-password').valid && adminNewUserForm.get('adminNewUser-password').touched && adminNewUserForm.get('adminNewUser-password').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="adminNewUser-passwordconfirm"> Confirm your Password</label>
+          <input type="password" id="adminNewUser-passwordconfirm" formControlName="adminNewUser-passwordconfirm" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-passwordconfirm').valid && adminNewUserForm.get('adminNewUser-passwordconfirm').touched"
+            class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-passwordconfirm').errors['required']">Please confirm your password</span>
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-passwordconfirm').errors['required'] && adminNewUserForm.get('adminNewUser-passwordconfirm').errors['passwordsDoNotMatch']">The passwords must match</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-passwordconfirm').valid && adminNewUserForm.get('adminNewUser-passwordconfirm').touched && adminNewUserForm.get('adminNewUser-passwordconfirm').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <!-- Admin -->
+        <hr>
+        <div class="form-group">
+          <label for="adminNewUser-rights"> User Group - User rights</label>
+          <select name="adminNewUser-rights" id="adminNewUser-rights" class="form-control">
+            <option value="false">User</option>
+            <option value="true">Admin</option>
+          </select>
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-rights').valid && adminNewUserForm.get('adminNewUser-rights').touched" class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-rights').errors['required']">Please input the user rights</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-rights').valid && adminNewUserForm.get('adminNewUser-rights').touched && adminNewUserForm.get('adminNewUser-rights').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+      </div>
+      <!--General Info -->
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <!-- Name -->
+        <div class="form-group">
+          <label for="adminNewUser-name">Name</label>
+          <input type="text" id="adminNewUser-name" formControlName="adminNewUser-name" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-name').valid && adminNewUserForm.get('adminNewUser-name').touched" class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-name').errors['required']">Please input your name</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-name').valid && adminNewUserForm.get('adminNewUser-name').touched && adminNewUserForm.get('adminNewUser-name').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <!-- SurName -->
+        <div class="form-group">
+          <label for="adminNewUser-sirname">Surname</label>
+          <input type="text" id="adminNewUser-sirname" formControlName="adminNewUser-sirname" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-sirname').valid && adminNewUserForm.get('adminNewUser-sirname').touched"
+            class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-sirname').errors['required']">Please input your sirname</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-sirname').valid && adminNewUserForm.get('adminNewUser-sirname').touched && adminNewUserForm.get('adminNewUser-sirname').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <!-- Adress -->
+        <div class="form-group">
+          <label for="adminNewUser-adress">Adress</label>
+          <input type="text" id="adminNewUser-adress" formControlName="adminNewUser-adress" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-adress').valid && adminNewUserForm.get('adminNewUser-adress').touched" class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-adress').errors['required']">Please input your adress</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-adress').valid && adminNewUserForm.get('adminNewUser-adress').touched && adminNewUserForm.get('adminNewUser-adress').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <!-- City -->
+        <div class="form-group">
+          <label for="adminNewUser-city">City</label>
+          <input type="text" id="adminNewUser-city" formControlName="adminNewUser-city" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-city').valid && adminNewUserForm.get('adminNewUser-city').touched" class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-city').errors['required']">Please input your city</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-city').valid && adminNewUserForm.get('adminNewUser-city').touched && adminNewUserForm.get('adminNewUser-city').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <!-- Country -->
+        <div class="form-group">
+          <label for="adminNewUser-country">Country</label>
+          <input type="text" id="adminNewUser-country" formControlName="adminNewUser-country" class="form-control">
+          <span *ngIf="!adminNewUserForm.get('adminNewUser-country').valid && adminNewUserForm.get('adminNewUser-country').touched"
+            class="help-block">
+            <span *ngIf="adminNewUserForm.get('adminNewUser-country').errors['required']">Please input your country</span>
+          </span>
+          <span *ngIf="adminNewUserForm.get('adminNewUser-country').valid && adminNewUserForm.get('adminNewUser-country').touched && adminNewUserForm.get('adminNewUser-country').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <span *ngIf="singinError" class="help-block bg-danger">Something went wrong - Please try again later</span>
+        <div class="text-center">
+          <div *ngIf="spinnerVisible" class="spinner">
+            <app-little-spinner></app-little-spinner>
+          </div>
+          <button type="submit" [disabled]="!adminNewUserForm.valid" class="btn btn-success">Create User</button>
+          <button type="reset" class="btn btn-warning">Clear</button>
+        </div>
+      </div>
+    </form>
+  </div>

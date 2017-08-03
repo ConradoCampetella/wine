@@ -9,7 +9,3 @@ select.ng-touched.ng-invalid{
 textarea.ng-touched.ng-invalid{
     border: 1px solid red;
 }
-
-form {
-    margin-bottom: 10px;
-}

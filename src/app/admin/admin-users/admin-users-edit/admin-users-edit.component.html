@@ -1,0 +1,200 @@
+<!--Header -->
+<div class="row">
+  <div class="col-xs-12">
+    <h2>Modify User</h2>
+  </div>
+</div>
+<hr>
+
+<!--Form -->
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="adminUserForm">
+      <!-- Email and Username -->
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="form-group">
+          <label for="adminUser-email">Email</label>
+          <input type="text" id="adminUser-email" formControlName="adminUser-email" class="form-control">
+          <span *ngIf="!adminUserForm.get('adminUser-email').valid && adminUserForm.get('adminUser-email').touched" class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-email').errors['required']">Please input your email</span>
+          <span *ngIf="adminUserForm.get('adminUser-email').errors['email'] && !adminUserForm.get('adminUser-email').errors['required']">Please enter a valid email</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-email').valid && adminUserForm.get('adminUser-email').touched && adminUserForm.get('adminUser-email').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="adminUser-username">User Name</label>
+          <input type="text" id="adminUser-username" formControlName="adminUser-username" class="form-control">
+          <span *ngIf="modifyUser && !userAsync &&!adminUserForm.get('adminUser-username').valid && adminUserForm.get('adminUser-username').touched"
+            class="help-block">
+              <span *ngIf="adminUserForm.get('adminUser-username').errors['required']">Please input your User Name</span>
+          <span *ngIf="adminUserForm.get('adminUser-username').errors['minlength']">The password must contain at least four characters</span>
+          </span>
+          <span *ngIf="pending"><img src="../../../../assets/img/pending.png" alt="pending-orange"></span>
+          <span *ngIf="modifyUser && userAsync && adminUserForm.get('adminUser-username').valid && adminUserForm.get('adminUser-username').touched && adminUserForm.get('adminUser-username').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+          <div *ngIf="updateUserNameSuccess" class="help-block bg-success">
+            <p>User Name Updated Correctly</p>
+          </div>
+          <div *ngIf="updateUserNameError" class="help-block bg-warning">
+            <p>User Name couldn´t Update - Please try again later</p>
+          </div>
+        </div>
+        <div *ngIf="updateUserNameSpinner" class="spinner">
+          <app-little-spinner></app-little-spinner>
+        </div>
+        <button *ngIf="!modifyUser" type="button" class="btn btn-primary mod-user" (click)="onModifyUser()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit your User</button>
+        <button *ngIf="modifyUser" type="button" class="btn btn-primary mod-user" (click)="onModifyUser()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Cancel Edition</button>
+        <button *ngIf="modifyUser" type="button" [disabled]="!adminUserForm.get('adminUser-username').valid" class="btn btn-success"
+          (click)="onUpdateUserName()">Update User Name</button>
+        <button *ngIf="modifyUser" type="button" class="btn btn-warning" (click)="onClearUser()">Clear</button>
+        <hr>
+        <!-- Password -->
+        <div class="form-group">
+          <label for="adminUser-password">Password</label>
+          <input type="password" id="adminUser-password" formControlName="adminUser-password" class="form-control">
+          <span *ngIf="!adminUserForm.get('adminUser-password').valid && adminUserForm.get('adminUser-password').touched" class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-password').errors['required']">Please input your password</span>
+          <span *ngIf="adminUserForm.get('adminUser-password').errors['minlength']">The password must contain at least six characters</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-password').valid && adminUserForm.get('adminUser-password').touched && adminUserForm.get('adminUser-password').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <button *ngIf="!modifyPassword" type="button" class="btn btn-primary" (click)="onModifyPassword()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit your Password</button>
+        <button *ngIf="modifyPassword" type="button" class="btn btn-primary" (click)="onModifyPassword()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Cancel Edition</button>
+        <div *ngIf="modifyPassword">
+          <div class="form-group">
+            <label for="adminUser-oldpassword">Old Password</label>
+            <input type="password" id="adminUser-oldpassword" formControlName="adminUser-oldpassword" class="form-control">
+            <span *ngIf="modifyPassword && !adminUserForm.get('adminUser-oldpassword').valid && adminUserForm.get('adminUser-oldpassword').touched"
+              class="help-block">
+                <span *ngIf="adminUserForm.get('adminUser-oldpassword').errors['required']">Please input your password</span>
+            <span *ngIf="adminUserForm.get('adminUser-oldpassword').errors['minlength']">The password must contain at least six characters</span>
+            <span *ngIf="!adminUserForm.get('adminUser-oldpassword').errors['required'] && adminUserForm.get('adminUser-oldpassword').errors['passwordsDoNotMatch']">The password must match the old password</span>
+            </span>
+            <span *ngIf="adminUserForm.get('adminUser-oldpassword').valid && adminUserForm.get('adminUser-oldpassword').touched && adminUserForm.get('adminUser-oldpassword').dirty"
+              class="help-block">
+                <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="adminUser-newpassword">New Password</label>
+            <input type="password" id="adminUser-newpassword" formControlName="adminUser-newpassword" class="form-control">
+            <span *ngIf="modifyPassword && !adminUserForm.get('adminUser-newpassword').valid && adminUserForm.get('adminUser-newpassword').touched"
+              class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-newpassword').errors['required']">Please input your password</span>
+            <span *ngIf="adminUserForm.get('adminUser-newpassword').errors['minlength']">The password must contain at least six characters</span>
+            </span>
+            <span *ngIf="adminUserForm.get('adminUser-newpassword').valid && adminUserForm.get('adminUser-newpassword').touched && adminUserForm.get('adminUser-newpassword').dirty"
+              class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="modifyPassword && adminUser-passwordconfirm"> Confirm your Password</label>
+            <input type="password" id="adminUser-passwordconfirm" formControlName="adminUser-passwordconfirm" class="form-control">
+            <span *ngIf="!adminUserForm.get('adminUser-passwordconfirm').valid && adminUserForm.get('adminUser-passwordconfirm').touched"
+              class="help-block">
+                <span *ngIf="adminUserForm.get('adminUser-passwordconfirm').errors['required']">Please confirm your password</span>
+            <span *ngIf="!adminUserForm.get('adminUser-passwordconfirm').errors['required'] && adminUserForm.get('adminUser-passwordconfirm').errors['passwordsDoNotMatch']">The passwords must match</span>
+            </span>
+            <span *ngIf="adminUserForm.get('adminUser-passwordconfirm').valid && adminUserForm.get('adminUser-passwordconfirm').touched && adminUserForm.get('adminUser-passwordconfirm').dirty"
+              class="help-block">
+                <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+            </span>
+            <div *ngIf="updatePasswordSuccess" class="help-block bg-success">
+              <p>User Password Updated Correctly</p>
+            </div>
+            <div *ngIf="updatePasswordError" class="help-block bg-warning">
+              <p>User Password couldn´t Update - Please try again later</p>
+            </div>
+          </div>
+          <div *ngIf="updatePasswordSpinner" class="spinner">
+            <app-little-spinner></app-little-spinner>
+          </div>
+          <button *ngIf="modifyPassword" type="button" [disabled]="modifyPasswordValid()" class="btn btn-success" (click)="onUpdatePassword()">Update your Password</button>
+          <button *ngIf="modifyPassword" type="button" class="btn btn-warning" (click)="onClearPassword()">Clear</button>
+        </div>
+      </div>
+      <!--General Info -->
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="form-group">
+          <label for="adminUser-name">Name</label>
+          <input type="text" id="adminUser-name" formControlName="adminUser-name" class="form-control">
+          <span *ngIf="modify && !adminUserForm.get('adminUser-name').valid && adminUserForm.get('adminUser-name').touched" class="help-block">
+              <span *ngIf="adminUserForm.get('adminUser-name').errors['required']">Please input your name</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-name').valid && adminUserForm.get('adminUser-name').touched && adminUserForm.get('adminUser-name').dirty"
+            class="help-block">
+              <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="adminUser-sirname">Surname</label>
+          <input type="text" id="adminUser-sirname" formControlName="adminUser-sirname" class="form-control">
+          <span *ngIf="modify && !adminUserForm.get('adminUser-sirname').valid && adminUserForm.get('adminUser-sirname').touched" class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-sirname').errors['required']">Please input your sirname</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-sirname').valid && adminUserForm.get('adminUser-sirname').touched && adminUserForm.get('adminUser-sirname').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="adminUser-adress">Adress</label>
+          <input type="text" id="adminUser-adress" formControlName="adminUser-adress" class="form-control">
+          <span *ngIf="modify && !adminUserForm.get('adminUser-adress').valid && adminUserForm.get('adminUser-adress').touched" class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-adress').errors['required']">Please input your adress</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-adress').valid && adminUserForm.get('adminUser-adress').touched && adminUserForm.get('adminUser-adress').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="adminUser-city">City</label>
+          <input type="text" id="adminUser-city" formControlName="adminUser-city" class="form-control">
+          <span *ngIf="modify && !adminUserForm.get('adminUser-city').valid && adminUserForm.get('adminUser-city').touched" class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-city').errors['required']">Please input your city</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-city').valid && adminUserForm.get('adminUser-city').touched && adminUserForm.get('adminUser-city').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="adminUser-country">Country</label>
+          <input type="text" id="adminUser-country" formControlName="adminUser-country" class="form-control">
+          <span *ngIf="modify && !adminUserForm.get('adminUser-country').valid && adminUserForm.get('adminUser-country').touched" class="help-block">
+            <span *ngIf="adminUserForm.get('adminUser-country').errors['required']">Please input your country</span>
+          </span>
+          <span *ngIf="adminUserForm.get('adminUser-country').valid && adminUserForm.get('adminUser-country').touched && adminUserForm.get('adminUser-country').dirty"
+            class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+          </span>
+          <div *ngIf="updateInfoSuccess" class="help-block bg-success">
+            <p>User Info Updated Correctly</p>
+          </div>
+          <div *ngIf="updateInfoError" class="help-block bg-warning">
+            <p>User Info couldn´t Update - Please try again later</p>
+          </div>
+        </div>
+        <div *ngIf="updateInfoSpinner" class="spinner">
+          <app-little-spinner></app-little-spinner>
+        </div>
+        <div class="text-center">
+          <button *ngIf="!modify" type="button" class="btn btn-primary" (click)="onModify()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Modify</button>
+          <button *ngIf="modify" type="button" class="btn btn-primary" (click)="onModify()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Cancel Edition</button>
+          <button *ngIf="modify" type="submit" [disabled]="modifyValid()" class="btn btn-success" (click)="onUpdateInfo()">Update your info</button>
+          <button *ngIf="modify" type="button" class="btn btn-warning" (click)="onClear()">Clear</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
