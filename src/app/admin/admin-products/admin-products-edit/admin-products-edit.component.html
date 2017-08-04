@@ -56,11 +56,9 @@
       </div>
       <div class="form-group">
         <label for="editProductImg">Image</label>
-        <input type="text" class="form-control" id="editProductImg" name="editProductImg" formControlName="editProductImg" (change)="onFileChange($event)">
+        <input type="text" class="form-control" id="editProductImg" name="editProductImg" formControlName="editProductImg">
         <span *ngIf="!editProductForm.get('editProductImg').valid && editProductForm.get('editProductImg').touched" class="help-block">
             <span *ngIf="editProductForm.get('editProductImg').errors['required']">Please select the wine Image</span>
-        <span *ngIf="editProductForm.get('editProductImg').errors['extension'] && !editProductForm.get('editProductImg').errors['required']">Please a valid format file - the suported images are png or jpg</span>
-        <span *ngIf="editProductForm.get('editProductImg').errors['size'] && !editProductForm.get('editProductImg').errors['required']">The size of the file excedes maximun admited (10 MB)</span>
         </span>
         <span *ngIf="editProductForm.get('editProductImg').valid && editProductForm.get('editProductImg').touched && editProductForm.get('editProductImg').dirty"
           class="help-block">
@@ -81,7 +79,8 @@
       <div class="form-group">
         <label for="editProductDescription">Description</label>
         <input type="text" class="form-control" id="editProductDescription" name="editProductDescription" formControlName="editProductDescription">
-        <span *ngIf="!editProductForm.get('editProductDescription').valid && editProductForm.get('editProductDescription').touched" class="help-block">
+        <span *ngIf="!editProductForm.get('editProductDescription').valid && editProductForm.get('editProductDescription').touched"
+          class="help-block">
             <span *ngIf="editProductForm.get('editProductDescription').errors['required']">Please enter the wine Description</span>
         </span>
         <span *ngIf="editProductForm.get('editProductDescription').valid && editProductForm.get('editProductDescription').touched && editProductForm.get('editProductDescription').dirty"
@@ -94,7 +93,7 @@
         <app-little-spinner></app-little-spinner>
       </div>
       <div class="text-center">
-        <button type="button" class="btn btn-success" [disabled]="!editProductForm.valid || editProductForm.pristine"  (click)="onSubmit()">Send</button>
+        <button type="button" class="btn btn-success" [disabled]="!editProductForm.valid || editProductForm.pristine" (click)="onSubmit()">Send</button>
         <button type="reset" class="btn btn-warning">Reset</button>
       </div>
     </form>
