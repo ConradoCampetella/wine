@@ -40,7 +40,7 @@ export class AdminUsersNewComponent implements OnInit {
       'adminNewUser-password': new FormControl('', [Validators.required, Validators.minLength(6)]),
       'adminNewUser-passwordconfirm': new FormControl('', [Validators.required,
       this.passwordMatchValidator.bind(this)]),
-      'adminNewUser-rights': new FormControl('false', [Validators.required]),
+      'adminNewUser-rights': new FormControl('false', [Validators.required])
     });
     this.adminNewUserForm.statusChanges.subscribe(
       (status) => {

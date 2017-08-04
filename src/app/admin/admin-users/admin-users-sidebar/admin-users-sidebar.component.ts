@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -8,7 +8,6 @@ import { Router, ActivatedRoute } from "@angular/router";
 })
 export class AdminUsersSidebarComponent implements OnInit {
   userRoute: string;
-  subscription;
 
   constructor(private router: Router, private route: ActivatedRoute) { }
 

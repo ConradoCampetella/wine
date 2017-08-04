@@ -16,6 +16,7 @@ import { AdminUsersNewComponent } from '../admin/admin-users/admin-users-new/adm
 import { AdminProductsComponent } from './admin-products/admin-products.component';
 import { AdminProductsListComponent } from '../admin/admin-products/admin-products-list/admin-products-list.component';
 import { AdminProductsNewComponent } from '../admin/admin-products/admin-products-new/admin-products-new.component';
+import { AdminProductsEditComponent } from '../admin/admin-products/admin-products-edit/admin-products-edit.component';
 
 import { AdminOrdersComponent } from '../admin/admin-orders/admin-orders.component';
 import { AdminOrdersCellarComponent } from '../admin/admin-orders/admin-orders-cellar/admin-orders-cellar.component';
@@ -44,7 +45,8 @@ const adminRoutes: Routes = [
                 path: 'products', component: AdminProductsComponent, children: [
                     { path: '', redirectTo: '/admin/products/list', pathMatch: 'full' },
                     { path: 'list', component: AdminProductsListComponent },
-                    { path: 'new', component: AdminProductsNewComponent }
+                    { path: 'new', component: AdminProductsNewComponent },
+                    { path: 'edit/:wineId', component: AdminProductsEditComponent }
                 ]
             },
             {
@@ -52,7 +54,7 @@ const adminRoutes: Routes = [
                     { path: '', redirectTo: '/admin/users/list', pathMatch: 'full' },
                     { path: 'list', component: AdminUsersListComponent },
                     { path: 'new', component: AdminUsersNewComponent },
-                    { path: 'edit/:usermail', component: AdminUsersEditComponent },
+                    { path: 'edit/:usermail', component: AdminUsersEditComponent }
                 ]
             },
             {
