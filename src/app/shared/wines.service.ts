@@ -131,6 +131,21 @@ export class WinesService {
     return delWine;
   }
 
+  modifyWine(wine: Wine, ilabel: number, iwine: number) {
+    const token = this.auths.getToken();
+    const modWine = Observable.create((observer: Observer<string>) => {
+      this.http.patch('https://ng-wine-app.firebaseio.com/labels/' + ilabel + '/wines/' + iwine + '.json?auth=' + token, wine)
+        .subscribe(
+        (res) => {
+          observer.next('success');
+        },
+        (err) => {
+          observer.error('error');
+        });
+    });
+    return modWine;
+  }
+
   // shopping cart list service -------------------------------------------------------------------------
 
   addToShoppingCart(wine: Wine, i: number) {

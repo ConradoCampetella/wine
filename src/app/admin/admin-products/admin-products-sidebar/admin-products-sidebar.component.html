@@ -1,6 +1,13 @@
 <div class="sidebar">
   <ul class="nav nav-pills nav-stacked">
-    <li role="presentation" routerLinkActive="active"><a routerLink="/admin/products/new">New</a></li>
+    <ng-container *ngIf="!newProducts()">
+      <li role="presentation" routerLinkActive="active"><a routerLink="/admin/products/new">New</a></li>
+    </ng-container>
+    <ng-container *ngIf="newProducts()">
+      <li role="presentation" class="active"><a role="button">Modify</a></li>
+      <hr>
+      <li role="presentation"><a routerLink="/admin/products/new">New</a></li>
+    </ng-container>
     <li role="presentation" routerLinkActive="active"><a routerLink="/admin/products/list">List</a></li>
   </ul>
 </div>

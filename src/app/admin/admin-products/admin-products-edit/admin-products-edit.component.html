@@ -1,0 +1,102 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h2>Edit Product</h2>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <form [formGroup]="editProductForm">
+      <div class="form-group">
+        <label for="editProductLabel">Label</label>
+        <select name="editProductLabel" id="editProductLabel" class="form-control" formControlName="editProductLabel">
+          <option *ngFor="let label of labels" value="{{label.name}}">{{label.name}}</option>
+        </select>
+        <span *ngIf="!editProductForm.get('editProductLabel').valid && editProductForm.get('editProductLabel').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductLabel').errors['required']">Please select a Label</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductLabel').valid && editProductForm.get('editProductLabel').touched && editProductForm.get('editProductLabel').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="editProductId">Id</label>
+        <input type="text" class="form-control" id="editProductId" name="editProductId" formControlName="editProductId">
+        <span *ngIf="!editProductForm.get('editProductId').valid && editProductForm.get('editProductId').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductId').errors['required']">Please input the product ID</span>
+        <span *ngIf="editProductForm.get('editProductId').errors['wineIdExists']">The ID is in use - Please input another</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductId').valid && editProductForm.get('editProductId').touched && editProductForm.get('editProductId').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="editProductName">Name</label>
+        <input type="text" class="form-control" id="editProductName" name="editProductName" formControlName="editProductName">
+        <span *ngIf="!editProductForm.get('editProductName').valid && editProductForm.get('editProductName').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductName').errors['required']">Please input the product Name</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductName').valid && editProductForm.get('editProductName').touched && editProductForm.get('editProductName').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="editProductVariety">Variety</label>
+        <input type="text" class="form-control" id="editProductVariety" name="editProductVariety" formControlName="editProductVariety">
+        <span *ngIf="!editProductForm.get('editProductVariety').valid && editProductForm.get('editProductVariety').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductVariety').errors['required']">Please input the wine Variety</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductVariety').valid && editProductForm.get('editProductVariety').touched && editProductForm.get('editProductVariety').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="editProductImg">Image</label>
+        <input type="text" class="form-control" id="editProductImg" name="editProductImg" formControlName="editProductImg" (change)="onFileChange($event)">
+        <span *ngIf="!editProductForm.get('editProductImg').valid && editProductForm.get('editProductImg').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductImg').errors['required']">Please select the wine Image</span>
+        <span *ngIf="editProductForm.get('editProductImg').errors['extension'] && !editProductForm.get('editProductImg').errors['required']">Please a valid format file - the suported images are png or jpg</span>
+        <span *ngIf="editProductForm.get('editProductImg').errors['size'] && !editProductForm.get('editProductImg').errors['required']">The size of the file excedes maximun admited (10 MB)</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductImg').valid && editProductForm.get('editProductImg').touched && editProductForm.get('editProductImg').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="editProductPrice">Price</label>
+        <input type="number" class="form-control" id="editProductPrice" name="editProductPrice" formControlName="editProductPrice">
+        <span *ngIf="!editProductForm.get('editProductPrice').valid && editProductForm.get('editProductPrice').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductPrice').errors['required']">Please enter the wine Price</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductPrice').valid && editProductForm.get('editProductPrice').touched && editProductForm.get('editProductPrice').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="editProductDescription">Description</label>
+        <input type="text" class="form-control" id="editProductDescription" name="editProductDescription" formControlName="editProductDescription">
+        <span *ngIf="!editProductForm.get('editProductDescription').valid && editProductForm.get('editProductDescription').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductDescription').errors['required']">Please enter the wine Description</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductDescription').valid && editProductForm.get('editProductDescription').touched && editProductForm.get('editProductDescription').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+        <span *ngIf="postError" class="help-block bg-danger">Could NOT modify the Product - Please try again later</span>
+      </div>
+      <div *ngIf="spinnerVisible" class="spinner">
+        <app-little-spinner></app-little-spinner>
+      </div>
+      <div class="text-center">
+        <button type="button" class="btn btn-success" [disabled]="!editProductForm.valid || editProductForm.pristine"  (click)="onSubmit()">Send</button>
+        <button type="reset" class="btn btn-warning">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>

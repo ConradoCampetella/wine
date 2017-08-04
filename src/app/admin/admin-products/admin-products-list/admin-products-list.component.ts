@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Wine } from '../../../shared/wine.model';
 import { WinesService } from '../../../shared/wines.service';
 import { Label } from '../../../shared/label.model';
-import { Order } from "app/shared/orders.model";
-import { AuthService } from "app/shared/auth.service";
+import { Order } from '../../../shared/orders.model';
+import { AuthService } from '../../../shared/auth.service';
 
 @Component({
   selector: 'app-admin-products-list',
@@ -26,7 +27,7 @@ export class AdminProductsListComponent implements OnInit {
   page = 1;
 
 
-  constructor(private wineService: WinesService, private auths: AuthService) { }
+  constructor(private wineService: WinesService, private auths: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.spinnerVisible = true;
@@ -134,7 +135,7 @@ export class AdminProductsListComponent implements OnInit {
   // Delete Products
   onDeleteWine(wId: string, ilabel: number, iwine: number) {
     const allOrders: Order[] = [];
-    if (confirm("Are you sure you want to delet the product?")) {
+    if (confirm('Are you sure you want to delet the product?')) {
       this.wineService.getAllOrders().subscribe(
         (res) => {
           let canDelete = true;
@@ -148,12 +149,12 @@ export class AdminProductsListComponent implements OnInit {
           if (canDelete) {
             this.deleteWine(ilabel, iwine);
           } else {
-            alert("The product CANNOT be eliminated because a client order it");
+            alert('The product CANNOT be eliminated because a client order it');
           }
         },
         (err) => {
           console.log(err);
-          // alert("NO SE PUEDE CONECTAR CON EL SERVIDOR, INTENTELO MAS TARDE");
+          // alert('NO SE PUEDE CONECTAR CON EL SERVIDOR, INTENTELO MAS TARDE');
         });
     }
   }
@@ -177,6 +178,9 @@ export class AdminProductsListComponent implements OnInit {
         console.log(err);
       });
   }
+    onModify(wineId){
+      this.router.navigate(['/admin/products/edit', wineId]);
+    }
 
 
 }

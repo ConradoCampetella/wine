@@ -29,6 +29,7 @@ import { AdminThreadsSidebarComponent } from './admin-threads/admin-threads-side
 import { AdminThreadsListComponent } from './admin-threads/admin-threads-list/admin-threads-list.component';
 import { AdminThreadsNewComponent } from './admin-threads/admin-threads-new/admin-threads-new.component';
 import { AdminUsersEditComponent } from './admin-users/admin-users-edit/admin-users-edit.component';
+import { AdminProductsEditComponent } from './admin-products/admin-products-edit/admin-products-edit.component';
 
 
 
@@ -59,7 +60,8 @@ import { AdminUsersEditComponent } from './admin-users/admin-users-edit/admin-us
         AdminThreadsSidebarComponent,
         AdminThreadsListComponent,
         AdminThreadsNewComponent,
-        AdminUsersEditComponent
+        AdminUsersEditComponent,
+        AdminProductsEditComponent
     ],
     imports: [
         ReactiveFormsModule,
