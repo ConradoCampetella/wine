@@ -104,7 +104,9 @@ export class AdminOrdersUsersComponent implements OnInit {
   }
 
   pageActive(p: number) {
-    if (p === this.page) {
+    if (this.orderPages.length === 1) {
+      return 'active';
+    } else if (p === this.page) {
       return 'active';
     }
   }

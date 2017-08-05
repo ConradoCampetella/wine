@@ -12,6 +12,7 @@ import { AdminReportsThreadsComponent } from './admin-reports/admin-reports-thre
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { AdminUsersListComponent } from '../admin/admin-users/admin-users-list/admin-users-list.component';
 import { AdminUsersNewComponent } from '../admin/admin-users/admin-users-new/admin-users-new.component';
+import { AdminUsersEditComponent } from '../admin/admin-users/admin-users-edit/admin-users-edit.component';
 
 import { AdminProductsComponent } from './admin-products/admin-products.component';
 import { AdminProductsListComponent } from '../admin/admin-products/admin-products-list/admin-products-list.component';
@@ -21,7 +22,7 @@ import { AdminProductsEditComponent } from '../admin/admin-products/admin-produc
 import { AdminOrdersComponent } from '../admin/admin-orders/admin-orders.component';
 import { AdminOrdersCellarComponent } from '../admin/admin-orders/admin-orders-cellar/admin-orders-cellar.component';
 import { AdminOrdersUsersComponent } from '../admin/admin-orders/admin-orders-users/admin-orders-users.component';
-import { AdminUsersEditComponent } from '../admin/admin-users/admin-users-edit/admin-users-edit.component';
+import { AdminOrdersNewComponent } from '../admin/admin-orders/admin-orders-new/admin-orders-new.component';
 
 import { AdminThreadsComponent } from './admin-threads/admin-threads.component';
 import { AdminThreadsListComponent } from '../admin/admin-threads/admin-threads-list/admin-threads-list.component';
@@ -68,7 +69,8 @@ const adminRoutes: Routes = [
                 path: 'orders', component: AdminOrdersComponent, children: [
                     { path: '', redirectTo: '/admin/orders/users', pathMatch: 'full' },
                     { path: 'users', component: AdminOrdersUsersComponent },
-                    { path: 'cellar', component: AdminOrdersCellarComponent }
+                    { path: 'cellar', component: AdminOrdersCellarComponent },
+                    { path: 'new', component: AdminOrdersNewComponent }
                 ]
             }
         ]

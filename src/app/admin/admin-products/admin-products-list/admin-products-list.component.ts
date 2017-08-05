@@ -105,7 +105,9 @@ export class AdminProductsListComponent implements OnInit {
   }
 
   pageActive(p: number) {
-    if (p === this.page) {
+    if (this.winesPages.length === 1) {
+      return 'active';
+    } else if (p === this.page) {
       return 'active';
     }
   }
@@ -178,9 +180,9 @@ export class AdminProductsListComponent implements OnInit {
         console.log(err);
       });
   }
-    onModify(wineId){
-      this.router.navigate(['/admin/products/edit', wineId]);
-    }
+  onModify(wineId) {
+    this.router.navigate(['/admin/products/edit', wineId]);
+  }
 
 
 }

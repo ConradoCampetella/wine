@@ -79,6 +79,17 @@
         </span>
       </div>
       <div class="form-group">
+        <label for="newProductCost">Cost</label>
+        <input type="number" class="form-control" id="newProductCost" name="newProductCost" formControlName="newProductCost">
+        <span *ngIf="!newProductForm.get('newProductCost').valid && newProductForm.get('newProductCost').touched" class="help-block">
+            <span *ngIf="newProductForm.get('newProductCost').errors['required']">Please enter the wine Cost</span>
+        </span>
+        <span *ngIf="newProductForm.get('newProductCost').valid && newProductForm.get('newProductCost').touched && newProductForm.get('newProductCost').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
         <label for="newProductDescription">Description</label>
         <input type="text" class="form-control" id="newProductDescription" name="newProductDescription" formControlName="newProductDescription">
         <span *ngIf="!newProductForm.get('newProductDescription').valid && newProductForm.get('newProductDescription').touched" class="help-block">
@@ -94,7 +105,7 @@
         <app-little-spinner></app-little-spinner>
       </div>
       <div class="text-center">
-        <button type="button" class="btn btn-success" [disabled]="!newProductForm.valid"  (click)="onSubmit()">Send</button>
+        <button type="button" class="btn btn-success" [disabled]="!newProductForm.valid" (click)="onSubmit()">Send</button>
         <button type="reset" class="btn btn-warning">Reset</button>
       </div>
     </form>

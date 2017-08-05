@@ -1,0 +1,160 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h2> New Order</h2>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="newOrderFilterForm">
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="newOrderFilterForm-label">Filter by Label: </label>
+          <select name="newOrderFilterForm-label" id="newOrderFilterForm-label" class="form-control" formControlName="newOrderFilterForm-label">
+            <option value="NoFilter"></option>
+            <option *ngFor="let label of labels; index as il" value="{{label.name}}">{{label.name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="newOrderFilterForm-min">Minimun price:</label>
+          <input type="number" class="form-control" id="newOrderFilterForm-min" name="newOrderFilterForm-min" formControlName="newOrderFilterForm-min">
+        </div>
+        <div class="form-group">
+          <label for="newOrderFilterForm-max">Maximun price:</label>
+          <input type="number" class="form-control" id="newOrderFilterForm-max" name="newOrderFilterForm-max" formControlName="newOrderFilterForm-max">
+        </div>
+        <div class="form-group">
+          <label for="">Wines per Page</label>
+          <input type="number" class="form-control" id="newOrderFilterForm-wpp" name="newOrderFilterForm-wpp" formControlName="newOrderFilterForm-wpp">
+        </div>
+      </div>
+      <label> Order by: </label>
+      <label class="radio-inline">
+        <input type="radio" name="newOrderFilterForm-order" id="newOrderFilterForm-order1" formControlName="newOrderFilterForm-order" value="Label"> Label
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="newOrderFilterForm-order" id="newOrderFilterForm-order2" formControlName="newOrderFilterForm-order" value="Variety"> Variety
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="newOrderFilterForm-order" id="newOrderFilterForm-order3" formControlName="newOrderFilterForm-order" value="Price"> Price
+      </label>
+    </form>
+  </div>
+</div>
+<!-- Pagination -->
+<div class="row">
+  <div class="col-xs-12 text-center">
+    <nav aria-label="...">
+      <ul class="pagination">
+        <li *ngFor="let wP of winesPages" [ngClass]="pageActive(wP)"><a role="button" (click)="onPage(wP)">{{wP}}</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<!-- Table of content -->
+<div class="row">
+  <div class="col-xs-12">
+    <table *ngIf="numberOfWines !== 0" class="table table-bordered table-responsive">
+      <tr class="info">
+        <th>Label</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Variety</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Cost</th>
+        <th>Stock</th>
+        <th>Order</th>
+      </tr>
+      <ng-container *ngFor="let wine of wineList; index as index">
+        <ng-container *ngIf="wine.label === filter || filter === 'NoFilter'">
+          <ng-container *ngIf="filterByPage(index)">
+            <tr *ngIf="showWine(wine.price)">
+              <td>{{wine.label}}</td>
+              <td>{{wine.wineId}}</td>
+              <td>{{wine.name}}</td>
+              <td>{{wine.variety}}</td>
+              <td>{{wine.description}}</td>
+              <td><img src="{{wine.img}}" alt="{{wine.name}}" class="img-responsive img-thumbnail center-block"></td>
+              <td>{{wine.price | currency:'USD':true}}</td>
+              <td>{{wine.cost | currency:'USD':true}}</td>
+              <td>{{wine.stock}}</td>
+              <td *ngIf="!classSuccess(wine)"><button class="btn btn-primary" (click)=onAdd(wine)><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Add</button></td>
+              <td *ngIf="classSuccess(wine)"><button class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Added</button></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </table>
+    <div *ngIf="numberOfWines === 0 && !spinnerVisible" class="row">
+      <div class="col-xs-12">
+        <h3> No orders match the filters </h3>
+      </div>
+    </div>
+    <div *ngIf="spinnerVisible">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</div>
+<!-- Shoppin cart -->
+<div *ngIf="scList.length !== 0">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>Shopping Cart</h2>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <table class="table table-bordered">
+      <tr class="info">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Variety</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+        <th>Remove</th>
+      </tr>
+      <tr *ngFor="let sc of scList">
+        <td><a [routerLink]="['/wines', sc.wine.wineId]" class="btn btn-info" role="button">{{sc.wine.wineId}}</a></td>
+        <td>{{sc.wine.name}}</td>
+        <td>{{sc.wine.variety}}</td>
+        <td>{{sc.wine.description}}</td>
+        <td>
+          <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <button type="button" class="btn btn-default" (click)="reduceValue(sc.wine)">-</button>
+            <button type="button" class="btn btn-default">{{sc.quantity}}</button>
+            <button type="button" class="btn btn-default" (click)="plusValue(sc.wine)">+</button>
+          </div>
+        </td>
+        <td>{{sc.wine.price | currency:'USD':true}}</td>
+        <td>{{sc.quantity*sc.wine.price | currency:'USD':true}}</td>
+        <td class="text-center"><button class="btn btn-danger" (click)="onDelete(sc)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+      </tr>
+    </table>
+    <div class="row" *ngIf="!isEmpty">
+      <div class="col-xs-12 text-right">
+        <h2>Total:{{total | currency:'USD':true}}</h2>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-3 col-sm-offset-9">
+          <span *ngIf="orderError && !edit" class="help-block bg-danger">Order NOT created - Please try again later</span>
+          <span *ngIf="orderError && edit" class="help-block bg-danger">Order NOT modified - Please try again later</span>
+          <div *ngIf="littleSpinner" class="spinner">
+            <app-little-spinner></app-little-spinner>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!isEmpty">
+      <div class="col-xs-12 text-right">
+        <button *ngIf="edit" class="btn btn-warning" (click)="onModifyOrder()">Modify Order</button>
+        <button *ngIf="!edit" class="btn btn-success" (click)="onConfirmOrder()">Confirm Order</button>
+        <button *ngIf="edit" class="btn btn-danger" (click)="onClearCart()">Cancel</button>
+        <button *ngIf="!edit" class="btn btn-danger" (click)="onClearCart()">Clear Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
