@@ -13,6 +13,7 @@ export class SigninComponent implements OnInit {
   loggingError = false;
   errorMessage = '';
   spinnerVisible = false;
+  hint = false;
 
   constructor(private auths: AuthService) { }
 
@@ -42,5 +43,9 @@ export class SigninComponent implements OnInit {
   onClear() {
     this.loggingError = false;
     this.signinForm.reset();
+  }
+
+  onHint(){
+    this.hint = !this.hint;
   }
 }

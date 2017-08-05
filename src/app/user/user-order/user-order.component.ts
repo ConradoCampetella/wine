@@ -102,8 +102,6 @@ export class UserOrderComponent implements OnInit {
   buttonDisabled(status) {
     if (status === 'waiting for approve') {
       return false;
-    } else if (status === 'Approved') {
-      return false;
     } else {
       return true;
     }
