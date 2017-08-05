@@ -11,7 +11,8 @@ import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
 import { ShoppingCart } from 'app/shared/shoppingCart.model';
 import { Order } from 'app/shared/orders.model';
-import { User } from "app/shared/user.model";
+import { User } from 'app/shared/user.model';
+import { OrdersList } from 'app/shared/ordersList.model';
 
 
 @Injectable()
@@ -229,6 +230,7 @@ export class WinesService {
     });
     return genOrd;
   }
+
   getAllOrders() {
     const gAllOrders = Observable.create((observer: Observer<string>) => {
       this.auths.getAllUsersNames().subscribe(
@@ -262,6 +264,7 @@ export class WinesService {
     });
     return gAllOrders;
   }
+
   obtainOrders(username: string) {
     return this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
       .map((response: Response) => {
@@ -312,7 +315,6 @@ export class WinesService {
     });
     return modORder;
   }
-
   destroyOrder(orderId) {
     const username = this.auths.getUserName();
     this.http.get('https://ng-wine-app.firebaseio.com/orders/' + username + '.json')
@@ -325,4 +327,155 @@ export class WinesService {
         firebase.database().ref('orders').child(username).child(index.toString()).remove();
       });
   }
+  //---- Admin Orders Function
+  //--- Generate Order List with all users for de Admin Order Section ----
+  getOrderList() {
+    let ordersList: OrdersList[] = [];
+    const gOrderList = Observable.create((observer: Observer<OrdersList[]>) => {
+      this.auths.getAllUsersNames().subscribe(
+        (res) => {
+          const lastName = res[res.length - 1];
+          res.forEach(user => {
+            this.http.get('https://ng-wine-app.firebaseio.com/orders/' + user + '.json')
+              .map((response: Response) => {
+                const orders: Order[] = response.json();
+                return orders;
+              })
+              .subscribe(
+              (orders: Order[]) => {
+                if (orders) {
+                  orders.forEach(order => {
+                    const ol = new OrdersList(user, order.orderId, order.date, order.sclOrder, order.status);
+                    ordersList.push(ol);
+                  });
+                }
+                if (user === lastName) {
+                  observer.next(ordersList);
+                }
+              },
+              (error => {
+                observer.error(error);
+              }));
+          });
+        },
+        (err) => {
+          observer.error('No Users were Found');
+        });
+    });
+    return gOrderList;
+  }
+  //--- Update Order for de Admin Order Section ----
+  adminUpdateORder(updateOrder: OrdersList) {
+    const token = this.auths.getToken();
+    const adUpOr = Observable.create((observer: Observer<OrdersList[]>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/orders/' + updateOrder.userId + '.json?auth=' + token)
+        .map((res: Response) => {
+          const orders: Order[] = res.json();
+          return orders;
+        })
+        .subscribe(
+        (resp) => {
+          const index = resp.findIndex(orderResponse => orderResponse.orderId === updateOrder.orderId);
+          const order = new Order(updateOrder.orderId, updateOrder.date, updateOrder.sclOrder, updateOrder.status);
+          this.http.patch('https://ng-wine-app.firebaseio.com/orders/' + updateOrder.userId + '/' + index + '.json?auth=' + token, order)
+            .subscribe(
+            (respo) => {
+              this.getOrderList().subscribe(
+                (respon) => {
+                  observer.next(respon);
+                },
+                (error) => {
+                  observer.error(error);
+                });
+            },
+            (error) => {
+              observer.error(error);
+            });
+        },
+        (err) => {
+          observer.error(err);
+        });
+
+    });
+    return adUpOr;
+  }
+
+  //--- Aprobe users orders and update wines stock service
+
+  adminAprobeOrder(aprobeOrder: OrdersList) {
+    const token = this.auths.getToken();
+    let allLabels: Label[] = []
+    const aAproOrder = Observable.create((observer: Observer<OrdersList>) => {
+      this.getAllLabels().subscribe(
+        (res) => {
+          allLabels = res;
+          allLabels.forEach(aL => {
+            aprobeOrder.sclOrder.forEach(sc => {
+              aL.wines.forEach(wn => {
+                if (sc.wine.wineId === wn.wineId) {
+                  wn.stock = wn.stock - sc.quantity;
+                }
+              });
+            });
+          });
+          this.http.put('https://ng-wine-app.firebaseio.com/labels/.json?auth=' + token, allLabels)
+            .subscribe(
+            (resp) => {
+              this.label = allLabels;
+              this.adminUpdateORder(aprobeOrder)
+                .subscribe((respo) => {
+                  observer.next(respo);
+                },
+                (err) => { observer.error(err); });
+            },
+            (err) => {
+              observer.error(err);
+            });
+        },
+        (err) => {
+          observer.error(err);
+        });
+    });
+    return aAproOrder;
+  }
+
+  //--- Destroy Order for de Admin Order Section ----
+  adminDestroyOrder(updateOrder: OrdersList) {
+    const token = this.auths.getToken();
+    const adUpOr = Observable.create((observer: Observer<OrdersList[]>) => {
+      this.http.get('https://ng-wine-app.firebaseio.com/orders/' + updateOrder.userId + '.json?auth=' + token)
+        .map((res: Response) => {
+          const orders: Order[] = res.json();
+          return orders;
+        })
+        .subscribe(
+        (resp) => {
+          const index = resp.findIndex(orderResponse => orderResponse.orderId === updateOrder.orderId);
+          let orders: Order[] = resp;
+          orders.splice(index, 1);
+          this.http.put('https://ng-wine-app.firebaseio.com/orders/' + updateOrder.userId + '.json?auth=' + token, orders)
+            .subscribe(
+            (respo) => {
+              this.getOrderList().subscribe(
+                (respon) => {
+                  observer.next(respon);
+                },
+                (error) => {
+                  observer.error(error);
+                });
+            },
+            (error) => {
+              observer.error(error);
+            });
+        },
+        (err) => {
+          observer.error(err);
+        });
+
+    });
+    return adUpOr;
+  }
+
+
+
 }

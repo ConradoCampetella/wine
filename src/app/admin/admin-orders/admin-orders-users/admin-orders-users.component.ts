@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../shared/auth.service';
 import { WinesService } from '../../../shared/wines.service';
 import { Order } from '../../../shared/orders.model';
+import { ShoppingCart } from '../../../shared/shoppingCart.model';
+import { OrdersList } from '../../../shared/ordersList.model';
 
 @Component({
   selector: 'app-admin-orders-users',
@@ -12,37 +15,140 @@ import { Order } from '../../../shared/orders.model';
 })
 export class AdminOrdersUsersComponent implements OnInit {
 
-  orders: Order[];
+  orderList: OrdersList[];
+  users: string[] = [];
+  status: string[] = [];
   username: string;
   details = false;
   clickedBtn: string;
-  orderDetail: Order;
+  orderDetail: OrdersList;
   detailTotal: number;
   detailProgress = 0;
   spinnerVisible = true;
+  orderFilterForm: FormGroup;
+  orderPages: number[];
+  numberOfOrders = 0;
+  ordersForPage = 9;
+  page = 1
+  userFilter: string;
+  statusFilter: string;
+  orderStatusForm: FormGroup;
 
   constructor(private auths: AuthService, private wineService: WinesService, private router: Router) { }
 
   ngOnInit() {
-    this.wineService.getAllOrders().subscribe(
-      (response: any[]) => {
-        this.orders = this.wineService.allOrders;
+    this.wineService.getOrderList().subscribe(
+      (response: OrdersList[]) => {
+        this.orderList = response;
         this.spinnerVisible = false;
+        this.orderList.forEach(ol => {
+          let uflag = true;
+          this.users.forEach(user => {
+            if (ol.userId === user) {
+              uflag = false;
+            }
+          });
+          if (uflag) {
+            this.users.push(ol.userId);
+          }
+        });
+        this.numberOfPages();
       },
-      (error: any) => {
+      (error) => {
         console.log(error);
+        this.spinnerVisible = false;
+      });
+    this.orderFilterForm = new FormGroup({
+      'orderFilter-user': new FormControl('NoFilter'),
+      'orderFilter-status': new FormControl('NoFilter'),
+      'orderFilter-order': new FormControl('User'),
+      'orderFilter-opp': new FormControl(this.ordersForPage)
+    });
+    this.userFilter = this.orderFilterForm.get('orderFilter-user').value;
+    this.statusFilter = this.orderFilterForm.get('orderFilter-status').value;
+    this.orderFilterForm.valueChanges.subscribe((st) => {
+      this.userFilter = this.orderFilterForm.get('orderFilter-user').value;
+      this.statusFilter = this.orderFilterForm.get('orderFilter-status').value;
+      if (this.orderFilterForm.get('orderFilter-opp').value < 1) {
+        this.orderFilterForm.get('orderFilter-opp').setValue(1);
       }
-      );
-  }
-  userId(orderId:string){
-    const large = orderId.length;
-    return orderId.substring(0, large-13);
+      this.ordersForPage = this.orderFilterForm.get('orderFilter-opp').value;
+      this.numberOfPages();
+      this.sortOrderList(this.orderFilterForm.get('orderFilter-order').value);
+    });
+
   }
 
+  // Pagination  ----
+
+  numberOfPages() {
+    this.orderPages = null;
+    this.orderPages = [];
+    this.numberOfOrders = 0;
+    let nOfPages = 0;
+    this.orderList.forEach(ol => {
+      if (ol.userId === this.userFilter || this.userFilter === 'NoFilter') {
+        if (ol.status === this.statusFilter || this.statusFilter === 'NoFilter') {
+          this.numberOfOrders++;
+        }
+      }
+    });
+    if (this.numberOfOrders % this.ordersForPage === 0) {
+      nOfPages = Math.trunc(this.numberOfOrders / this.ordersForPage);
+    } else {
+      nOfPages = Math.trunc(this.numberOfOrders / this.ordersForPage) + 1;
+    }
+    for (let i = 0; i < nOfPages; i++) {
+      this.orderPages.push(i + 1);
+    }
+  }
+
+  pageActive(p: number) {
+    if (p === this.page) {
+      return 'active';
+    }
+  }
+
+  onPage(p: number) {
+    this.page = p;
+  }
+
+  filterByPage(index: number) {
+    const max = this.page * this.ordersForPage;
+    const min = (this.page - 1) * this.ordersForPage;
+    let show = false;
+    if (this.numberOfOrders <= this.ordersForPage) {
+      show = true;
+    } else if (min <= index && index < max) {
+      show = true;
+    } else {
+      show = false;
+    }
+    return show;
+  }
+  // Order the table ----
+
+  sortOrderList(criterion: string) {
+    switch (criterion) {
+      case 'User':
+        this.orderList.sort((a, b) => { return a.userId.localeCompare(b.userId) });
+        break;
+      case 'Date':
+        this.orderList.sort((a, b) => b.date - a.date);
+        break;
+      case 'Status':
+        this.orderList.sort((a, b) => { return a.status.localeCompare(b.status) });
+        break;
+    }
+
+  }
+
+  // Handle details section -----
   onDetails(orderClicked: string) {
-    this.orderDetail = this.orders.find(order => order.orderId === orderClicked);
+    this.orderDetail = this.orderList.find(order => order.orderId === orderClicked);
     this.calculateDetailTotal();
-    this.calculateDetailProgress()
+    this.calculateDetailProgress();
+    this.updateStatusForm();
     if (this.clickedBtn === orderClicked) {
       this.clickedBtn = '';
       this.details = false;
@@ -51,7 +157,7 @@ export class AdminOrdersUsersComponent implements OnInit {
       this.details = true;
     }
   }
-
+  // Class of Detail button in table
   onClickedButton(orderId) {
     if (this.clickedBtn === orderId) {
       return 'glyphicon glyphicon-arrow-up';
@@ -59,6 +165,7 @@ export class AdminOrdersUsersComponent implements OnInit {
       return 'glyphicon glyphicon-arrow-down';
     }
   }
+  // Class for the selected row in the table
   onClassActive(orderId) {
     if (this.clickedBtn === orderId) {
       return 'active';
@@ -66,7 +173,7 @@ export class AdminOrdersUsersComponent implements OnInit {
       return null;
     }
   }
-
+  // Function to calculate the total of the order detail
   calculateDetailTotal() {
     if (this.orderDetail) {
       this.detailTotal = 0;
@@ -75,7 +182,7 @@ export class AdminOrdersUsersComponent implements OnInit {
       }
     }
   }
-
+  // Function to calculate the progress of the progress bar
   calculateDetailProgress() {
     switch (this.orderDetail.status) {
       case 'waiting for approve': {
@@ -107,32 +214,76 @@ export class AdminOrdersUsersComponent implements OnInit {
       }
     }
   }
+  // Disabled the delete button if the order is paid-- 
   buttonDisabled(status) {
     if (status === 'waiting for approve') {
-      return false;
-    } else if (status === 'Approved') {
       return false;
     } else {
       return true;
     }
   }
 
-  onModify(orderId) {
-    const orderM = this.orders.find(order => order.orderId === orderId);
-    this.wineService.modifyOrder(orderM);
-  }
+  // Destroy the order and regain the list of orders
   onDestroy(orderId) {
     if (confirm('ARE YOU SURE THAT YOU WANT TO DELETE THE ORDER?')) {
-      this.wineService.destroyOrder(orderId);
-      const index = this.orders.findIndex(order => order.orderId === orderId);
-      this.orders.splice(index);
+      const orderDestroy = this.orderList.find(ol => ol.orderId === orderId);
+      this.wineService.adminDestroyOrder(orderDestroy).subscribe(
+        (res) => {
+          this.orderList = res;
+          this.numberOfPages();
+          this.sortOrderList(this.orderFilterForm.get('orderFilter-order').value);
+          this.details = false;
+        },
+        (err) => {
+          console.log(err);
+          alert("Something went wrong - could NOT delete order - Please try again later");
+        });
     }
 
   }
-  onOrderToCart() {
-    for (const mySL of this.orderDetail.sclOrder) {
-      this.wineService.addToShoppingCart(mySL.wine, mySL.quantity);
-      this.router.navigate(['/user/shoppingcart']);
-    }
+
+  // Init the update Form
+  updateStatusForm() {
+    this.orderStatusForm = new FormGroup({
+      'orderStatus-status': new FormControl(this.orderDetail.status)
+    });
   }
+  // Update the status of the order
+  onUpdateOrderStatus(orderId) {
+    let orderUpdate = this.orderList.find(ol => ol.orderId === orderId);
+    orderUpdate.status = this.orderStatusForm.get('orderStatus-status').value;
+    this.wineService.adminUpdateORder(orderUpdate).subscribe(
+      (res) => {
+        this.orderList = res;
+        this.numberOfPages();
+        this.sortOrderList(this.orderFilterForm.get('orderFilter-order').value);
+        this.orderDetail = this.orderList.find(ol => ol.orderId === orderId);
+        this.calculateDetailTotal();
+        this.calculateDetailProgress();
+      },
+      (err) => {
+        console.log(err);
+        alert("Something went wrong - could NOT Update order - Please try again later");
+      });
+  }
+
+  // Aprobe the order and update the wines stock
+  onAprobeOrder(orderId) {
+    let orderUpdate = this.orderList.find(ol => ol.orderId === orderId);
+    orderUpdate.status = 'Approved';
+    this.wineService.adminAprobeOrder(orderUpdate).subscribe(
+      (res) => {
+        this.orderList = res;
+        this.numberOfPages();
+        this.sortOrderList(this.orderFilterForm.get('orderFilter-order').value);
+        this.orderDetail = this.orderList.find(ol => ol.orderId === orderId);
+        this.calculateDetailTotal();
+        this.calculateDetailProgress();
+      },
+      (err) => {
+        console.log(err);
+        alert("Something went wrong - could NOT Aprobe order - Please try again later");
+      });
+  }
+
 }
