@@ -77,6 +77,17 @@
         </span>
       </div>
       <div class="form-group">
+        <label for="editProductCost">Cost</label>
+        <input type="number" class="form-control" id="editProductCost" name="editProductCost" formControlName="editProductCost">
+        <span *ngIf="!editProductForm.get('editProductCost').valid && editProductForm.get('editProductCost').touched" class="help-block">
+            <span *ngIf="editProductForm.get('editProductCost').errors['required']">Please enter the wine Cost</span>
+        </span>
+        <span *ngIf="editProductForm.get('editProductCost').valid && editProductForm.get('editProductCost').touched && editProductForm.get('editProductCost').dirty"
+          class="help-block">
+            <span><img src="../../../../assets/img/ok-green.png" alt="ok-green"></span>
+        </span>
+      </div>
+      <div class="form-group">
         <label for="editProductDescription">Description</label>
         <input type="text" class="form-control" id="editProductDescription" name="editProductDescription" formControlName="editProductDescription">
         <span *ngIf="!editProductForm.get('editProductDescription').valid && editProductForm.get('editProductDescription').touched"

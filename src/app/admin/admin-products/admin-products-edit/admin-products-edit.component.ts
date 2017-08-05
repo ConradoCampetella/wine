@@ -40,6 +40,7 @@ export class AdminProductsEditComponent implements OnInit {
         'editProductVariety': new FormControl(this.wine.variety, Validators.required),
         'editProductImg': new FormControl(this.wine.img, Validators.required),
         'editProductPrice': new FormControl(this.wine.price, Validators.required),
+        'editProductCost': new FormControl(this.wine.cost, Validators.required),
         'editProductDescription': new FormControl(this.wine.description, Validators.required)
       });
 
@@ -77,8 +78,9 @@ export class AdminProductsEditComponent implements OnInit {
     const variety = this.editProductForm.get('editProductVariety').value;
     const img = this.editProductForm.get('editProductImg').value;
     const price = this.editProductForm.get('editProductPrice').value;
+    const cost = this.editProductForm.get('editProductCost').value;
     const description = this.editProductForm.get('editProductDescription').value;
-    const wineMod = new Wine(id, name, variety, img, description, price, this.wine.stock);
+    const wineMod = new Wine(id, name, variety, img, description, price, cost ,this.wine.stock);
     this.winesService.modifyWine(wineMod, ilabel, iwine).subscribe(
       (res) => {
         this.winesService.getAllLabels().subscribe(

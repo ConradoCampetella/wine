@@ -40,6 +40,7 @@ export class AdminProductsNewComponent implements OnInit {
       'newProductVariety': new FormControl(null, Validators.required),
       'newProductImg': new FormControl(null, Validators.required),
       'newProductPrice': new FormControl(null, Validators.required),
+      'newProductCost': new FormControl(null, Validators.required),
       'newProductDescription': new FormControl(null, Validators.required)
     });
 
@@ -108,8 +109,9 @@ export class AdminProductsNewComponent implements OnInit {
     const variety = this.newProductForm.get('newProductVariety').value;
     const img = '../../assets/img/' + this.productImgName;
     const price = this.newProductForm.get('newProductPrice').value;
+    const cost = this.newProductForm.get('newProductCost').value;
     const description = this.newProductForm.get('newProductDescription').value;
-    const wine = new Wine(id, name, variety, img, description, price, 0);
+    const wine = new Wine(id, name, variety, img, description, price, cost, 0);
     var imgFile = this.productImg;
     this.winesService.addNewWine(wine, ilabel, iwine, this.productImg).subscribe(
       (res) => {
