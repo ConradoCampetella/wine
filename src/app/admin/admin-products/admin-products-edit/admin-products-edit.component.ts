@@ -80,11 +80,11 @@ export class AdminProductsEditComponent implements OnInit {
     const price = this.editProductForm.get('editProductPrice').value;
     const cost = this.editProductForm.get('editProductCost').value;
     const description = this.editProductForm.get('editProductDescription').value;
-    const wineMod = new Wine(id, name, variety, img, description, price, cost ,this.wine.stock);
+    const wineMod = new Wine(id, name, variety, img, description, price, cost, this.wine.stock);
     this.winesService.modifyWine(wineMod, ilabel, iwine).subscribe(
       (res) => {
         this.winesService.getAllLabels().subscribe(
-          (res) => {
+          () => {
             this.labels = res;
             this.wine = this.labels[ilabel].wines[iwine];
             this.spinnerVisible = false;

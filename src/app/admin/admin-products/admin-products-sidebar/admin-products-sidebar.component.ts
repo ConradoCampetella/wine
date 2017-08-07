@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin-products-sidebar',
@@ -19,7 +19,10 @@ export class AdminProductsSidebarComponent implements OnInit {
   }
 
   newProducts() {
-    if (this.userRoute === '/admin/products/new' || this.userRoute === '/admin/products/list' || this.userRoute === '/admin/products' || !this.userRoute) {
+    if (this.userRoute === '/admin/products/new' ||
+      this.userRoute === '/admin/products/list' ||
+      this.userRoute === '/admin/products' ||
+      !this.userRoute) {
       return false;
     } else {
       return true;

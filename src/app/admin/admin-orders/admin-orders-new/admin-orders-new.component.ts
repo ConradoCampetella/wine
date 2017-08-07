@@ -56,7 +56,7 @@ export class AdminOrdersNewComponent implements OnInit {
         this.spinnerVisible = false;
         console.log(err);
       });
-    //form init
+    // form init
     this.newOrderFilterForm = new FormGroup({
       'newOrderFilterForm-label': new FormControl(this.filter),
       'newOrderFilterForm-min': new FormControl(this.min),
@@ -67,7 +67,7 @@ export class AdminOrdersNewComponent implements OnInit {
     this.filter = this.newOrderFilterForm.get('newOrderFilterForm-label').value;
     this.min = this.newOrderFilterForm.get('newOrderFilterForm-min').value;
     this.max = this.newOrderFilterForm.get('newOrderFilterForm-max').value;
-    //subscribe to form changes
+    // subscribe to form changes
     this.newOrderFilterForm.valueChanges.subscribe(
       (status) => {
         if (this.newOrderFilterForm.get('newOrderFilterForm-min').value >= this.newOrderFilterForm.get('newOrderFilterForm-max').value) {
@@ -159,10 +159,10 @@ export class AdminOrdersNewComponent implements OnInit {
   sortWineList(criterion: string) {
     switch (criterion) {
       case 'Label':
-        this.wineList.sort((a, b) => { return a.label.localeCompare(b.label) });
+        this.wineList.sort((a, b) => a.label.localeCompare(b.label));
         break;
       case 'Variety':
-        this.wineList.sort((a, b) => { return a.variety.localeCompare(b.variety) });
+        this.wineList.sort((a, b) => a.variety.localeCompare(b.variety));
         break;
       case 'Price':
         this.wineList.sort((a, b) => b.price - a.price);
@@ -187,7 +187,7 @@ export class AdminOrdersNewComponent implements OnInit {
   // Shopping list functions
 
   onDelete(sc) {
-    if (confirm("Are you sure you want to remove the product from the cart?")) {
+    if (confirm('Are you sure you want to remove the product from the cart?')) {
       this.wineService.removeFromShoppingCart(sc);
       this.scList = this.wineService.getShoppingCart();
       this.calculateTotal();

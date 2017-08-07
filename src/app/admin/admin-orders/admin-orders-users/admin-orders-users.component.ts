@@ -133,13 +133,13 @@ export class AdminOrdersUsersComponent implements OnInit {
   sortOrderList(criterion: string) {
     switch (criterion) {
       case 'User':
-        this.orderList.sort((a, b) => { return a.userId.localeCompare(b.userId) });
+        this.orderList.sort((a, b) => a.userId.localeCompare(b.userId));
         break;
       case 'Date':
         this.orderList.sort((a, b) => b.date - a.date);
         break;
       case 'Status':
-        this.orderList.sort((a, b) => { return a.status.localeCompare(b.status) });
+        this.orderList.sort((a, b) => a.status.localeCompare(b.status));
         break;
     }
 
@@ -216,7 +216,7 @@ export class AdminOrdersUsersComponent implements OnInit {
       }
     }
   }
-  // Disabled the delete button if the order is paid-- 
+  // Disabled the delete button if the order is paid--
   buttonDisabled(status) {
     if (status === 'waiting for approve') {
       return false;
@@ -238,7 +238,7 @@ export class AdminOrdersUsersComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-          alert("Something went wrong - could NOT delete order - Please try again later");
+          alert('Something went wrong - could NOT delete order - Please try again later');
         });
     }
 
@@ -252,7 +252,7 @@ export class AdminOrdersUsersComponent implements OnInit {
   }
   // Update the status of the order
   onUpdateOrderStatus(orderId) {
-    let orderUpdate = this.orderList.find(ol => ol.orderId === orderId);
+    const orderUpdate = this.orderList.find(ol => ol.orderId === orderId);
     orderUpdate.status = this.orderStatusForm.get('orderStatus-status').value;
     this.wineService.adminUpdateORder(orderUpdate).subscribe(
       (res) => {
@@ -265,13 +265,13 @@ export class AdminOrdersUsersComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        alert("Something went wrong - could NOT Update order - Please try again later");
+        alert('Something went wrong - could NOT Update order - Please try again later');
       });
   }
 
   // Aprobe the order and update the wines stock
   onAprobeOrder(orderId) {
-    let orderUpdate = this.orderList.find(ol => ol.orderId === orderId);
+    const orderUpdate = this.orderList.find(ol => ol.orderId === orderId);
     orderUpdate.status = 'Approved';
     this.wineService.adminAprobeOrder(orderUpdate).subscribe(
       (res) => {
@@ -284,7 +284,7 @@ export class AdminOrdersUsersComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        alert("Something went wrong - could NOT Aprobe order - Please try again later");
+        alert('Something went wrong - could NOT Aprobe order - Please try again later');
       });
   }
 

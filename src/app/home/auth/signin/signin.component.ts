@@ -45,7 +45,7 @@ export class SigninComponent implements OnInit {
     this.signinForm.reset();
   }
 
-  onHint(){
+  onHint() {
     this.hint = !this.hint;
   }
 }

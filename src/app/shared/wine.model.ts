@@ -8,7 +8,15 @@ export class Wine {
     public cost: number;
     public stock: number;
 
-    constructor(wineId: string, name: string, variety: string, img: string, description: string, price: number, cost: number,stock: number) {
+    constructor(wineId: string,
+        name: string,
+        variety: string,
+        img: string,
+        description: string,
+        price: number,
+        cost: number,
+        stock: number) {
+
         this.name = name;
         this.variety = variety;
         this.img = img;
