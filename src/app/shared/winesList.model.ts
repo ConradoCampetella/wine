@@ -9,7 +9,15 @@ export class WinesList {
     public cost: number;
     public stock: number;
 
-    constructor(label: string, wineId: string, name: string, variety: string, img: string, description: string, price: number, cost: number,stock: number) {
+    constructor(label: string,
+        wineId: string,
+        name: string,
+        variety: string,
+        img: string,
+        description: string,
+        price: number,
+        cost: number,
+        stock: number) {
         this.label = label;
         this.name = name;
         this.variety = variety;

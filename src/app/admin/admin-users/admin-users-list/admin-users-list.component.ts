@@ -40,7 +40,7 @@ export class AdminUsersListComponent implements OnInit {
             alert('You can´t Delete Users that have Orders in the site');
           } else {
             this.auths.getAllUsers().subscribe(
-              (res) => {
+              () => {
                 this.allUsers = this.auths.allUsers;
               },
               (err) => {

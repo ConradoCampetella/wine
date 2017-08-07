@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin-users-sidebar',
@@ -20,7 +20,10 @@ export class AdminUsersSidebarComponent implements OnInit {
 
 
   newUser() {
-    if (this.userRoute === '/admin/users/new' || this.userRoute === '/admin/users/list' || this.userRoute === '/admin/users' || !this.userRoute) {
+    if (this.userRoute === '/admin/users/new' ||
+      this.userRoute === '/admin/users/list' ||
+      this.userRoute === '/admin/users' ||
+      !this.userRoute) {
       return false;
     } else {
       return true;

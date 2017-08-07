@@ -46,7 +46,7 @@ export class AdminThreadsNewComponent implements OnInit {
     this.newThreadError = false;
     this.newThreadSpinner = true;
     const threadId = '';
-    const email = this.adminThreadForm.get('adminThreadUser').value; 
+    const email = this.adminThreadForm.get('adminThreadUser').value;
     const type = this.adminThreadForm.get('adminThreadType').value;
     const description = this.adminThreadForm.get('adminThreadDescription').value;
     const msg = this.adminThreadForm.get('adminThreadMessage').value;

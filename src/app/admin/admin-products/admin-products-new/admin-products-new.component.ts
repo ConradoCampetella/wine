@@ -64,8 +64,7 @@ export class AdminProductsNewComponent implements OnInit {
   fileExtValidator() {
     if (this.productImgType === 'image/jpg' || this.productImgType === 'image/png' || this.productImgType === 'image/jpeg') {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -73,8 +72,7 @@ export class AdminProductsNewComponent implements OnInit {
   fileSizeValidator() {
     if (this.productImgSize <= 100000) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -112,7 +110,7 @@ export class AdminProductsNewComponent implements OnInit {
     const cost = this.newProductForm.get('newProductCost').value;
     const description = this.newProductForm.get('newProductDescription').value;
     const wine = new Wine(id, name, variety, img, description, price, cost, 0);
-    var imgFile = this.productImg;
+    const imgFile = this.productImg;
     this.winesService.addNewWine(wine, ilabel, iwine, this.productImg).subscribe(
       (res) => {
         this.spinnerVisible = false;

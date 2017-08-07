@@ -166,7 +166,7 @@ export class AdminProductsListComponent implements OnInit {
       (res) => {
         this.spinnerVisible = true;
         this.wineService.getAllLabels().subscribe(
-          (res) => {
+          () => {
             this.spinnerVisible = false;
             this.labels = res;
             this.numberOfPages();
